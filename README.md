@@ -11,6 +11,7 @@ This is my resume and portfolio site content for [brandonsanders.org](https://br
 ## Hosting
 
 [brandonsanders.org](https://brandonsanders.org) is hosted on Kubernetes using the Docker image built from the `dockerfile` in this repository.
+A prebuilt image is also available on Docker Hub at `brandonsanders/resumeportfolio`.
 
 ## Live Editing
 
