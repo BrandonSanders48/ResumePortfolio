@@ -24,4 +24,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: brandonsanders/resumeportfolio:latest
+          tags: |
+            brandonsanders/resumeportfolio:latest
+            brandonsanders/resumeportfolio:${{ github.sha }}
