@@ -75,6 +75,7 @@ Tokens, secrets, and private configuration are controlled through Kubernetes env
 |---|---|---|---|
 | `RESUME_EDITOR_USERNAME` | Yes (for editor login) | Username for `/editor` authentication | `admin` |
 | `RESUME_EDITOR_PASSWORD_HASH` | Yes (for editor login) | Password hash verified by `password_verify` | `$2y$10$...` |
+| `RESUME_EDITOR_BYPASS_LOGIN` | Optional | Bypasses editor login page and treats all editor requests as authenticated (use only in trusted/private environments) | `false` |
 | `RESUME_EDITOR_COOKIE_SECURE` | Optional | Forces secure editor session cookies (`true`/`false`) | `true` |
 | `CONTACT_MAIL_USERNAME` | Yes (for contact form) | SMTP sender/recipient mailbox used by `contact.php` | `you@example.com` |
 | `CONTACT_MAIL_APP_PASSWORD_B64` | Yes (for contact form) | Base64-encoded mail app password | `YXBwLXBhc3N3b3Jk` |

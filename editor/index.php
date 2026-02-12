@@ -4,6 +4,9 @@ require_once __DIR__ . '/../config.php';
 if (!defined('RESUME_EDITOR_COOKIE_SECURE')) {
   define('RESUME_EDITOR_COOKIE_SECURE', false);
 }
+if (!defined('RESUME_EDITOR_BYPASS_LOGIN')) {
+  define('RESUME_EDITOR_BYPASS_LOGIN', false);
+}
 define('RESUME_EDITOR_SESSION_NAME', 'resume_editor');
 
 function resume_editor_start_session(): void {
@@ -43,6 +46,9 @@ function resume_editor_verify_csrf(): void {
 }
 
 function resume_editor_is_logged_in(): bool {
+  if (RESUME_EDITOR_BYPASS_LOGIN) {
+    return true;
+  }
     resume_editor_start_session();
     return !empty($_SESSION['resume_editor_logged_in']);
 }

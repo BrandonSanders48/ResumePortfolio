@@ -10,6 +10,7 @@ function bs_env(string $key, ?string $default = null): ?string {
 // Resume editor credentials configuration.
 define('RESUME_EDITOR_USERNAME', bs_env('RESUME_EDITOR_USERNAME'));
 define('RESUME_EDITOR_PASSWORD_HASH', bs_env('RESUME_EDITOR_PASSWORD_HASH'));
+define('RESUME_EDITOR_BYPASS_LOGIN', filter_var(bs_env('RESUME_EDITOR_BYPASS_LOGIN', '0'), FILTER_VALIDATE_BOOL));
 
 // Resume editor cookie security:
 // If RESUME_EDITOR_COOKIE_SECURE is set in the environment, use it.
