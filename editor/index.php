@@ -328,6 +328,7 @@ if ($action === 'export') {
     $content = (string)($_POST['content'] ?? '');
     $exportMode = (string)($_POST['export_mode'] ?? 'current');
     $exportOther = resume_editor_pick_doc($docs, (string)($_POST['export_other'] ?? ''));
+    $enablePdfAlert = !empty($_POST['export_pdf_alert']);
     $jobName = trim((string)($_POST['job_name'] ?? ($_POST['job_title'] ?? '')));
     $companyName = trim((string)($_POST['company_name'] ?? ''));
 
@@ -432,51 +433,53 @@ if ($action === 'export') {
         exit;
       }
 
-      $pdfAlertMessage = '';
-      $pdfAlertMessageB64 = (string)(getenv('PDF_OPEN_ALERT_MESSAGE_B64') ?: '');
-      if ($pdfAlertMessageB64 !== '') {
-        $decoded = base64_decode($pdfAlertMessageB64, true);
-        if ($decoded !== false) {
-          $pdfAlertMessage = (string)$decoded;
+      if ($enablePdfAlert) {
+        $pdfAlertMessage = '';
+        $pdfAlertMessageB64 = (string)(getenv('PDF_OPEN_ALERT_MESSAGE_B64') ?: '');
+        if ($pdfAlertMessageB64 !== '') {
+          $decoded = base64_decode($pdfAlertMessageB64, true);
+          if ($decoded !== false) {
+            $pdfAlertMessage = (string)$decoded;
+          }
         }
-      }
-      if ($pdfAlertMessage === '') {
-        $pdfAlertMessage = (string)(getenv('PDF_OPEN_ALERT_MESSAGE') ?: '');
-      }
-
-      if ($pdfAlertMessage !== '') {
-        $pdfAlertMessage = str_replace(
-          ["\r\n", "\r", "\\r\\n", "\\n", "\\r", "\\\\r\\\\n", "\\\\n", "\\\\r"],
-          ["\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n"],
-          $pdfAlertMessage
-        );
-        if ($jobName !== '') {
-          $pdfAlertMessage = str_replace('IT', $jobName, $pdfAlertMessage);
+        if ($pdfAlertMessage === '') {
+          $pdfAlertMessage = (string)(getenv('PDF_OPEN_ALERT_MESSAGE') ?: '');
         }
-      }
 
-      if ($pdfAlertMessage !== '') {
-        $tmpPdfWithAlert = tempnam(sys_get_temp_dir(), 'resume_pdf_alert_') . '.pdf';
-        $cmdAlert = 'node /app-source/pdf-add-alert.mjs '
-          . escapeshellarg($tmpPdf) . ' '
-          . escapeshellarg($tmpPdfWithAlert) . ' '
-          . escapeshellarg($pdfAlertMessage);
+        if ($pdfAlertMessage !== '') {
+          $pdfAlertMessage = str_replace(
+            ["\r\n", "\r", "\\r\\n", "\\n", "\\r", "\\\\r\\\\n", "\\\\n", "\\\\r"],
+            ["\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n"],
+            $pdfAlertMessage
+          );
+          if ($jobName !== '') {
+            $pdfAlertMessage = str_replace('IT', $jobName, $pdfAlertMessage);
+          }
+        }
 
-        $alertOutput = [];
-        $alertExitCode = 0;
-        exec($cmdAlert . ' 2>&1', $alertOutput, $alertExitCode);
+        if ($pdfAlertMessage !== '') {
+          $tmpPdfWithAlert = tempnam(sys_get_temp_dir(), 'resume_pdf_alert_') . '.pdf';
+          $cmdAlert = 'node /app-source/pdf-add-alert.mjs '
+            . escapeshellarg($tmpPdf) . ' '
+            . escapeshellarg($tmpPdfWithAlert) . ' '
+            . escapeshellarg($pdfAlertMessage);
 
-        if ($alertExitCode !== 0 || !file_exists($tmpPdfWithAlert)) {
-          http_response_code(500);
-          header('Content-Type: text/plain; charset=utf-8');
-          echo "PDF export failed (alert injection error).\n" . implode("\n", $alertOutput);
+          $alertOutput = [];
+          $alertExitCode = 0;
+          exec($cmdAlert . ' 2>&1', $alertOutput, $alertExitCode);
+
+          if ($alertExitCode !== 0 || !file_exists($tmpPdfWithAlert)) {
+            http_response_code(500);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo "PDF export failed (alert injection error).\n" . implode("\n", $alertOutput);
+            @unlink($tmpPdf);
+            @unlink($tmpHtml);
+            exit;
+          }
+
           @unlink($tmpPdf);
-          @unlink($tmpHtml);
-          exit;
+          $tmpPdf = $tmpPdfWithAlert;
         }
-
-        @unlink($tmpPdf);
-        $tmpPdf = $tmpPdfWithAlert;
       }
 
       header('Content-Type: application/pdf');
@@ -1159,6 +1162,12 @@ $csrf = resume_editor_csrf_token();
                   <i class="fa-solid fa-file-pdf me-2" aria-hidden="true"></i>Export PDF
                 </button>
               </div>
+            </div>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" name="export_pdf_alert" id="exportPdfAlert" value="1" checked>
+              <label class="form-check-label re-small" for="exportPdfAlert">
+                Enable PDF app alert (when configured)
+              </label>
             </div>
             <div class="re-small mt-2">If server-side PDF export isn’t configured, this will open a print-friendly page.</div>
           </form>
