@@ -17,6 +17,8 @@ A prebuilt image is also available on Docker Hub at `brandonsanders/resumeportfo
 
 This project allows me to edit my resume and cover letter on the fly through the built-in editor pages, so I can quickly update content without a full rebuild workflow.
 
+![alt text](image-1.png)
+
 ## Technical Details
 
 ### Stack and Runtime
