@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brandon Sanders – Cover Letter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@page { margin: 0; }
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #1f2a33;
+}
+
+.page {
+  width: 8.5in;
+  height: 11in;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER (match resume) ===== */
+.header {
+  background: #1f3553;
+  color: #ffffff;
+  padding: 22px 34px;
+  box-shadow: inset 0 -12px 0 #cfeedd;
+  height: 1.85in;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headshot {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.headshot .headshot-fallback {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.logo span {
+  color: #9fe0c3;
+}
+
+.name-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.name-title h2 {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255,255,255,0.5);
+  padding-top: 8px;
+}
+
+/* CONTENT */
+.cover-content {
+  padding: 42px 64px;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.cover-content p {
+  margin-bottom: 28px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">B<span>/</span>S</div>
+      <div class="name-title">
+        <h1>Brandon Sanders</h1>
+        <h2>Certified Information Systems Security Professional</h2>
+      </div>
+    </div>
+
+    <div class="headshot" aria-label="Headshot">
+      <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" />
+    </div>
+  </header>
+
+  <main class="cover-content">
+    <p>
+      Dear Hiring Team{{TARGET_HIRING_TEAM_AT}},
+    </p>
+
+    <p>
+      Thank you for the opportunity to apply for this {{TARGET_JOB_TITLE}} position. After reviewing the role, I am confident that my experience and leadership approach align strongly with your organization’s needs.
+    </p>
+
+    <p>
+      I am a results-driven IT professional with experience across network administration, cybersecurity, systems architecture, and operational improvement. Beyond implementing technical solutions, I provide strategic direction by identifying infrastructure risks, eliminating inefficiencies, and leading initiatives that strengthen security posture while improving reliability and performance.
+    </p>
+
+    <p>
+      In my current role, I lead infrastructure and security initiatives that support both daily operations and long-term organizational resilience. From disaster recovery planning and systems optimization to security hardening and vendor coordination, I approach IT as a business enabler, balancing technical excellence with cost-effectiveness and risk management.
+    </p>
+
+    <p>
+      I keep my work grounded in evidence and continuous learning. My portfolio and professional highlights at <strong><a href="https://brandonsanders.org">brandonsanders.org</a></strong> show technical wins across networking, segmentation, firewall/VPN work, vulnerability remediation, and a home lab where I evaluate tooling and deployment practices (including Kubernetes) before applying changes in production.
+    </p>
+
+    <p>
+      I would welcome the opportunity to bring this same level of strategic and operational leadership to your organization. Thank you for your time and consideration. I look forward to discussing how my experience can contribute to your continued success.
+    </p> 
+
+    <p>
+      I’d welcome the chance to discuss how I can help your team improve security posture and operational reliability. I can be reached at <strong><a href="tel:{{CONTACT_PHONE_NUMBER_TEL}}">{{CONTACT_PHONE_NUMBER}}</a></strong> or <strong><a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></strong>.
+    </p>
+
+    <p>
+      Sincerely,<br>
+      <strong>Brandon Sanders, CISSP</strong>
+    </p>
+  </main>
+
+</div>
+</body>
+</html>

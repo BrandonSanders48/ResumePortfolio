@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brandon Sanders – Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@page { margin: 0; }
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #1f2a33;
+}
+
+.resume {
+  width: 8.5in;
+  height: 11in;
+  margin: 0 auto;
+  background: linear-gradient(to right, #f2f3f1 0, #f2f3f1 2.6in, #ffffff 2.6in, #ffffff 100%);
+}
+
+.resume::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* ===== HEADER (match resume) ===== */
+.header {
+  background: #1f3553;
+  color: #ffffff;
+  padding: 22px 34px;
+  box-shadow: inset 0 -12px 0 #cfeedd;
+  height: 1.85in;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headshot {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.headshot .headshot-fallback {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.logo span {
+  color: #9fe0c3;
+}
+
+.name-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+.name-title h2 {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255,255,255,0.5);
+  padding-top: 8px;
+}
+
+/* ===== LEFT COLUMN ===== */
+.sidebar {
+  background: transparent;
+  padding: 22px 20px;
+  float: left;
+  width: 2.6in;
+  box-sizing: border-box;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.section {
+  margin-top: 24px;
+}
+
+.section-title {
+  font-size: 11px;
+  letter-spacing: 3.2px;
+  color: #1f3553;
+  margin-bottom: 10px;
+}
+
+.skill {
+  margin-bottom: 10px;
+}
+
+.skill-bar {
+  position: relative;
+  height: 18px;
+  border-radius: 4px;
+  overflow: hidden;
+  /* Remaining portion */
+  background: #cfeedd;
+}
+
+.skill-fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+
+.skill-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.skill-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: var(--pct, 0%);
+  /* Filled portion */
+  background: #1f3553;
+}
+
+.skill-label {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.education p,
+.certifications p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.mini-list p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+/* ===== RIGHT COLUMN ===== */
+.content {
+  padding: 22px 30px;
+  margin-left: 2.7in; /* slightly more than sidebar width for gutter */
+  box-sizing: border-box;
+}
+
+.summary {
+  font-size: 13px;
+  line-height: 1.42;
+  border-bottom: 2px solid #cfeedd;
+  padding-bottom: 12px;
+}
+
+.job {
+  margin-top: 18px;
+}
+
+.job h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.job h4 {
+  margin: 3px 0 8px;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.job p,
+.job ul {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.job ul {
+  margin-left: 16px;
+}
+</style>
+</head>
+
+<body>
+<div class="resume">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">B<span>/</span>S</div>
+      <div class="name-title">
+        <h1>Brandon Sanders</h1>
+        <h2>Certified Information Systems Security Professional</h2>
+      </div>
+    </div>
+
+    <div class="headshot" aria-label="Headshot">
+      <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" />
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>
+      <span>Salina, KS USA</span>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3.9 12a5 5 0 0 1 1.46-3.54l2.12-2.12a5 5 0 0 1 7.07 7.07l-1.06 1.06-1.41-1.41 1.06-1.06a3 3 0 1 0-4.24-4.24L6.78 9.88a3 3 0 1 0 4.24 4.24l.53-.53 1.41 1.41-.53.53A5 5 0 0 1 3.9 12zm16.2 0a5 5 0 0 1-1.46 3.54l-2.12 2.12a5 5 0 1 1-7.07-7.07l1.06-1.06 1.41 1.41-1.06 1.06a3 3 0 1 0 4.24 4.24l2.12-2.12a3 3 0 0 0-4.24-4.24l-.53.53-1.41-1.41.53-.53A5 5 0 0 1 20.1 12z"/></svg>
+      <a href="https://brandonsanders.org">BrandonSanders.org</a>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.56 3.58.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.3 21 3 13.7 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.19 2.46.56 3.58a1 1 0 0 1-.24 1.01l-2.2 2.2z"/></svg>
+      <a href="tel:{{CONTACT_PHONE_NUMBER_TEL}}">{{CONTACT_PHONE_NUMBER}}</a>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
+      <a href="mailto:{{CONTACT_EMAIL_MAILTO}}">{{CONTACT_EMAIL}}</a>
+    </div>
+
+    <div class="section">
+      <div class="section-title">SELF ASSESSMENT</div>
+
+      <div class="skill">
+        <div class="skill-bar" style="--pct: 95%;">
+          <div class="skill-fill">95%</div>
+          <div class="skill-bg"></div>
+        </div>
+        <div class="skill-label">Network Security & Infrastructure</div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-bar" style="--pct: 92%;">
+          <div class="skill-fill">92%</div>
+          <div class="skill-bg"></div>
+        </div>
+        <div class="skill-label">Security Operations & Hardening</div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-bar" style="--pct: 92%;">
+          <div class="skill-fill">92%</div>
+          <div class="skill-bg"></div>
+        </div>
+        <div class="skill-label">Vulnerability & Risk Management</div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-bar" style="--pct: 90%;">
+          <div class="skill-fill">90%</div>
+          <div class="skill-bg"></div>
+        </div>
+        <div class="skill-label">Identity Security (SSO/MFA)</div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-bar" style="--pct: 88%;">
+          <div class="skill-fill">88%</div>
+          <div class="skill-bg"></div>
+        </div>
+        <div class="skill-label">Cloud, Kubernetes & Automation</div>
+      </div>
+    </div>
+
+    <div class="section education">
+      <div class="section-title">CORE PLATFORMS</div>
+      <div class="mini-list">
+        <p>Azure / Microsoft 365 / AWS</p>
+        <p>Fortinet / Sophos / pfSense / Cisco</p>
+        <p>VMware / Proxmox / Veeam</p>
+        <p>Kubernetes / Docker / Git</p>
+        <p><em>Plus additional platforms and tools across networking, security, and cloud.</em></p>
+      </div>
+    </div>
+
+    <div class="section education">
+      <div class="section-title">High School</div>
+      <p><em>Salina Central High School</em></p>
+      <p>Class of 2014</p>
+    </div>
+
+    <div class="section certifications">
+      <div class="section-title">CERTIFICATIONS</div>
+      <p>(ISC)² CISSP</p>
+      <p>COMPTIA Security+</p>
+      <p>(ISC)² CC</p>
+      <br>
+      <p>View all my certifications on Credly</p>
+      <p><a href="https://credly.com/users/brandonsanders">https://credly.com/users/brandonsanders</a></p>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="summary">
+      I am a results-driven IT Security leader with extensive experience across Information Technology and multiple professional certifications. I bring strong expertise in application administration, security and compliance oversight, system analysis, and process development. I provide strategic direction by assessing existing systems and workflows to identify operational inefficiencies and security exposures, driving targeted improvements that strengthen organizational security posture and increase operational accuracy and efficiency. I hold the ISC2 CISSP certification, among others.
+    </div>
+
+    <div class="job">
+      <h3>Salina Health Education Foundation</h3>
+      <h4>Network Administrator / Jan 2023 – Present</h4>
+      <p>
+        I've led numerous initiatives to optimize IT infrastructure, from installing switches to enhancing security measures. Highlights include seamless integration of new phone systems, robust disaster recovery solutions, and negotiating cost-effective solutions. With a proactive approach, I've addressed issues ranging from Windows 11 bugs to routing discrepancies, always aiming to improve system functionality and security. Additionally, I've facilitated transitions to enhanced protocols like HTTPS and Azure single sign-on.
+      </p>
+    </div>
+
+    <div class="job">
+      <h3>Saint Francis Ministries</h3>
+      <h4>Cybersecurity Analyst / May 2021 – Oct 2022</h4>
+      <p>
+        Ensured the integrity and security of data on host computers, multiple databases, and during data transfer in accordance with business needs and industry best practices regarding privacy, security, and regulatory compliance requirements.
+      </p>
+    </div>
+
+    <div class="job">
+      <h3>SMG Unlimited LLC</h3>
+      <h4>Network Administrator / Feb 2020 – May 2021</h4>
+      <p>
+        Provided technical support, responded to work orders and tickets from the users, analyzed and solved reported network problems. Assisted with configuring firewalls, and network technology upgrade or expansion projects.
+      </p>
+    </div>
+
+    <div class="job">
+      <h3>Blue Beacon International</h3>
+      <h4>Information Technology Intern / Oct 2013 – Dec 2016</h4>
+      <ul>
+        <li>Diagnosed problems and helped develop solutions.</li>
+        <li>Supported PC hardware components, desktop operating system software and application software.</li>
+        <li>Handled equipment repairs and arranged servicing, alongside additional assigned duties/projects.</li>
+      </ul>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>
