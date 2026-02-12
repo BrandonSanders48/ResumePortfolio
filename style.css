@@ -278,6 +278,50 @@ header { padding: 120px 0 70px; text-align: center; color: #fff; }
   overflow: hidden;
 }
 
+.bs-hosting-modal .bs-modal-card {
+  border: 1px solid var(--bs-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--bs-shadow);
+}
+
+.bs-hosting-modal .modal-header {
+  background: linear-gradient(180deg, rgba(191, 243, 230, 0.95), rgba(191, 243, 230, 0.80));
+  border-bottom: 1px solid var(--bs-border);
+}
+
+.bs-hosting-modal .modal-title {
+  color: var(--bs-brand);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.bs-hosting-modal .modal-body {
+  color: var(--bs-text);
+}
+
+.bs-hosting-points {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.bs-hosting-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.45;
+}
+
+.bs-hosting-point i {
+  color: var(--bs-brand);
+  width: 1rem;
+  margin-top: 0.15rem;
+}
+
+.bs-hosting-cloudflare {
+  max-width: 92px;
+}
+
   /* Footer */
   footer { background-color: #0f172a; color: rgba(255,255,255,0.78); padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.08); }
   footer a { color: rgba(205, 237, 218, 0.92); }

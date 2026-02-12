@@ -1,4 +1,4 @@
-# ResumePortfolio
+# My Cover Letter/Resume/Portfolio
 
 This repository powers my personal resume website.
 

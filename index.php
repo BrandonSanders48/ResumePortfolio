@@ -88,17 +88,33 @@
     </footer>
 
     <!-- Modal (opens once every 6 hours) -->
-    <div class="modal fade" id="hostingModal" tabindex="-1" aria-labelledby="hostingModalLabel" aria-hidden="true">
+    <div class="modal fade bs-hosting-modal" id="hostingModal" tabindex="-1" aria-labelledby="hostingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header text-white" style="background:#CDEDDA;">
-                    <h5 class="modal-title" id="hostingModalLabel" style="color:#253B5B">Powered by Modern Infrastructure</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="color:#253B5B" aria-label="Close"></button>
+            <div class="modal-content bs-modal-card">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hostingModalLabel">Powered by Modern Infrastructure</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <p>This website is hosted on <strong>my Kubernetes cluster at home</strong> for high availability and scalability.</p>
-                    <p>All traffic is securely proxied through <strong>Cloudflare</strong> to ensure fast, reliable, and protected access.</p>
-                    <img src="/files/images/cloudflare.png" alt="Kubernetes & Cloudflare" class="img-fluid mt-3" style="max-width:100px;">
+                <div class="modal-body">
+                    <p class="mb-3">This website is built, deployed, and maintained by Brandon Sanders.</p>
+                    <div class="bs-hosting-points">
+                        <div class="bs-hosting-point">
+                            <i class="fa-solid fa-cubes" aria-hidden="true"></i>
+                            <span>Runs as a <strong>Kubernetes container</strong> on my home cluster for reliability and fast updates.</span>
+                        </div>
+                        <div class="bs-hosting-point">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                            <span>Traffic is routed through <strong>Cloudflare</strong> for secure delivery, caching, and edge protection.</span>
+                        </div>
+                        <div class="bs-hosting-point">
+                            <i class="fa-brands fa-github" aria-hidden="true"></i>
+                            <span>The full source is publicly available on GitHub.</span>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="https://github.com/brandonsanders48/ResumePortfolio" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">View Project on GitHub</a>
+                    </div>
+                    <img src="/files/images/cloudflare.png" alt="Kubernetes and Cloudflare" style="width:100px;" class="text-center img-fluid mt-3 mx-auto d-block bs-hosting-cloudflare">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
