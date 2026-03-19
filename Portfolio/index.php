@@ -292,7 +292,7 @@
         <div class="card p-4 bs-card">
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
             <h5 class="mb-0">Network Administrator — SMG Unlimited</h5>
-            <span class="bs-badge">2019 – 2021</span>
+            <span class="bs-badge">2020 – 2021</span>
           </div>
           <ul class="bs-list bs-list--compact mt-3">
             <li>Provided technical support to users</li>
