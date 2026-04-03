@@ -2,15 +2,15 @@
     // Turn off display of errors/warnings to users
     ini_set('display_errors', 0);
     ini_set('display_startup_errors', 0);
-    
+
     // Report all errors internally (so they still appear in server logs)
     error_reporting(E_ALL);
-    
+
     header("X-Content-Type-Options: nosniff");
     header("X-Frame-Options: DENY");
     header("X-XSS-Protection: 1; mode=block"); // legacy but still useful
     header("Content-Security-Policy: default-src 'self'; script-src 'self'");
-    
+
     if (
         !isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
         $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'fetch'
@@ -20,130 +20,223 @@
         exit;
     }
 ?>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top bs-navbar">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#home" aria-label="Home">
-      <img src="/files/images/myself.png" alt="BS" class="bs-avatar">
-      <span class="bs-brand-text">Brandon Sanders</span>
+
+<!-- ═══════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 h-16 bg-brand/[.96] backdrop-blur-xl border-b border-white/10">
+  <div class="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="#home" class="flex items-center gap-2.5" aria-label="Home">
+      <img src="/files/images/myself.png" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
+      <span class="text-white font-semibold text-sm tracking-tight">Brandon Sanders</span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+
+    <!-- Desktop nav links -->
+    <ul class="hidden lg:flex items-center gap-1">
+      <li><a href="#about" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">About</a></li>
+      <li><a href="#" data-load-page="/Professional-Highlights/index.php" data-scroll="" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Highlights</a></li>
+      <li><a href="#skills" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Skills</a></li>
+      <li><a href="#experience" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Experience</a></li>
+      <li><a href="#projects" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
+      <li class="ml-2">
+        <a href="#contact" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">Contact</a>
+      </li>
+    </ul>
+
+    <!-- Mobile hamburger -->
+    <button id="nav-toggle" class="lg:hidden text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars text-lg"></i>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-lg-center">
-        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Professional-Highlights/index.php" data-scroll="">Highlights</a></li>
-        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-        <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
-        <li class="nav-item"><a class="nav-link" href="#certs">Certs</a></li>
-        <li class="nav-item ms-lg-2">
-          <a class="btn btn-sm btn-light bs-cta" href="#contact">Contact</a>
-        </li>
-      </ul>
-    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="nav-menu" class="hidden lg:hidden bg-brand border-t border-white/10 px-4 pb-4">
+    <ul class="flex flex-col gap-1 pt-3">
+      <li><a href="#about" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">About</a></li>
+      <li><a href="#" data-load-page="/Professional-Highlights/index.php" data-scroll="" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Highlights</a></li>
+      <li><a href="#skills" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Skills</a></li>
+      <li><a href="#experience" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Experience</a></li>
+      <li><a href="#projects" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
+      <li class="pt-1">
+        <a href="#contact" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">Contact</a>
+      </li>
+    </ul>
   </div>
 </nav>
 
-<!-- Hero -->
-<header id="home" class="bs-hero bs-hero--flat">
-  <div class="container">
-    <div id="form-alert" style="display:none; margin-top:10px;"></div>
-    <div class="row align-items-center">
-      <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
-        <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" class="img-fluid bs-hero-image">
-      </div>
-      <div class="col-12 col-md-8 mx-auto text-center text-md-start">
-        <h1 class="display-5 typing" id="name">Brandon Sanders, CISSP</h1>
-        <p class="lead">
-          Cybersecurity & Risk Management Professional · Network Security · Cloud & Kubernetes
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<header id="home" class="bg-brand pt-16 overflow-hidden relative">
+  <!-- Background blobs -->
+  <div class="absolute top-0 left-0 w-[700px] h-[500px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[450px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="max-w-6xl mx-auto px-4 py-16 lg:py-24 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+      <!-- Text column -->
+      <div class="flex-1 text-center lg:text-left order-2 lg:order-1">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/18 rounded-full px-3 py-1.5 mb-5">
+          <span class="relative flex h-2.5 w-2.5 shrink-0">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-mint"></span>
+          </span>
+          <span class="text-white/85 text-xs sm:text-sm font-semibold tracking-wide">Open to Opportunities</span>
+        </div>
+
+        <!-- Name -->
+        <h1 class="typing text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-4" id="name">Brandon Sanders, CISSP</h1>
+
+        <!-- Tagline -->
+        <p class="text-base lg:text-lg text-white/70 font-medium mb-6 max-w-xl mx-auto lg:mx-0">
+          IT Security Leader &amp; Manager · Risk &amp; Compliance · Infrastructure Strategy · GRC
         </p>
-        <div class="mb-3">
-          <span class="chip bs-chip">Salina, KS</span>
-          <span class="chip bs-chip">Open to Opportunities</span>
-          <span class="chip bs-chip">(ISC)² CISSP</span>
-          <span class="chip bs-chip">(ISC)² CC</span>
-          <span class="chip bs-chip">CompTIA Security+</span>
+
+        <!-- Chips -->
+        <div class="flex flex-wrap gap-2 justify-center lg:justify-start mb-7">
+          <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">Salina, KS</span>
+          <span class="bg-mint/20 border border-mint/30 text-mint/90 text-xs font-semibold px-3 py-1.5 rounded-full">IT Manager / CISO Track</span>
+          <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">(ISC)² CISSP</span>
+          <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">CompTIA Security+</span>
         </div>
-        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
-          <a href="https://www.linkedin.com/in/brandonsanders48" target="_blank" rel="noopener" class="btn btn-outline-light btn-sm">
-            LinkedIn
+
+        <!-- Action buttons -->
+        <div class="flex flex-wrap gap-2.5 justify-center lg:justify-start">
+          <a href="https://www.linkedin.com/in/brandonsanders48" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
+            <i class="fa-brands fa-linkedin-in text-xs"></i> LinkedIn
           </a>
-          <a href="https://github.com/brandonsanders48" target="_blank" rel="noopener" class="btn btn-outline-light btn-sm">
-            GitHub
+          <a href="https://github.com/brandonsanders48" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
+            <i class="fa-brands fa-github text-xs"></i> GitHub
           </a>
-          <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener" class="btn btn-outline-light btn-sm">
-            Credly
+          <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
+            <i class="fa-solid fa-award text-xs"></i> Credly
           </a>
-          <a href="#contact" class="btn btn-light btn-sm">
-            Contact
+          <a href="#contact"
+             class="inline-flex items-center gap-1.5 bg-mint text-brand font-bold text-sm px-5 py-2 rounded-full hover:brightness-105 transition-all shadow-lg">
+            <i class="fa-solid fa-envelope text-xs"></i> Contact
           </a>
         </div>
       </div>
+
+      <!-- Photo column -->
+      <div class="order-1 lg:order-2 shrink-0 relative">
+        <!-- Glow ring -->
+        <div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>
+        <img src="/files/images/Brandon_Sanders-cropped.png"
+             alt="Brandon Sanders Portrait"
+             class="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-64 lg:h-64 rounded-full object-cover border-2 border-white/15 shadow-2xl">
+      </div>
+
     </div>
   </div>
 </header>
 
-<!-- About -->
-<section class="about-section slide-up bs-section bs-section--accent" id="about">
-  <div class="container">
-    <h2>
-      About
-    </h2>
-   <!-- <p>
-      I am Cybersecurity focused with extensive experience in Information Technology
-      with multiple
-      <a href="#certs" style="color:#333">Certifications</a>.
-      I am highly skilled in application administration, security and compliance,
-      as well as system analysis, process building, and troubleshooting procedures.
-      I evaluate existing systems and programs to identify inefficiencies and
-      vulnerabilities, implementing strategic program upgrades to reinforce security
-      protocol and enhance the accuracy and efficiency of operations.
-    </p>
-    <p>
-      I’ve served in nonprofit and public sectors, leveling up infrastructure,
-      tightening security baselines, and automating the boring stuff. In my lab,
-      I maintain a high-availability Kubernetes cluster and constantly test tools
-      so production changes are calm and predictable.
-    </p> -->
-    <p>I am a cybersecurity professional with a strong foundation in IT infrastructure and a growing focus on governance, risk, and compliance. With experience spanning network administration, incident response, and security hardening, I bridge the gap between technical execution and organizational security strategy. My background includes leading infrastructure projects, participating in safety and security committees, and aligning IT practices with regulatory standards such as HIPAA.<br><br>Currently, I maintain a high-availability Kubernetes lab environment to continuously evaluate tools and refine secure deployment practices. I hold multiple <a href="#certs">certifications</a>, and I am actively pursuing the CISM & others to further strengthen my expertise in security leadership, risk management, and enterprise resilience.</p>
-    <br>
-    <center>
-      <button data-load-page="/Professional-Highlights/index.php" data-scroll=""
-      class="btn btn-primary bs-primary">
-        Professional Highlights
-      </button>
-    </center>
+<!-- ═══════════════════════════════════════════════════
+     METRICS STRIP
+═══════════════════════════════════════════════════ -->
+<div class="bs-metrics-strip slide-up">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="bs-metrics-row">
+      <div class="bs-metric">
+        <span class="bs-metric-value">5+</span>
+        <span class="bs-metric-label">Years IT Leadership</span>
+      </div>
+      <div class="bs-metric-divider"></div>
+      <div class="bs-metric">
+        <span class="bs-metric-value">3</span>
+        <span class="bs-metric-label">Organizations Secured</span>
+      </div>
+      <div class="bs-metric-divider"></div>
+      <div class="bs-metric">
+        <span class="bs-metric-value">HIPAA</span>
+        <span class="bs-metric-label">&amp; SOC 2 Compliance</span>
+      </div>
+      <div class="bs-metric-divider"></div>
+      <div class="bs-metric">
+        <span class="bs-metric-value">3</span>
+        <span class="bs-metric-label">Governance Committees</span>
+      </div>
+      <div class="bs-metric-divider"></div>
+      <div class="bs-metric">
+        <span class="bs-metric-value">CISSP</span>
+        <span class="bs-metric-label">Certified · CISM Pursuing</span>
+      </div>
+    </div>
   </div>
-</section>
-<div class="alert alert-warning slide-up" role="alert">
-  <center>
-    Certified Information Systems Security Professional (CISSP), a globally respected cybersecurity credential.
-  </center>
 </div>
 
-<!-- Professional Highlights Callout -->
-<section class="slide-up bs-section" id="highlights-callout" aria-label="Professional highlights">
-  <div class="container">
-    <div class="bs-callout bs-callout--dark p-4 p-md-5">
-      <div class="row g-4 align-items-center">
-        <div class="col-12 col-lg-8">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-award"></i></div>
+<!-- ═══════════════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════════════ -->
+<section class="about-section slide-up bg-gradient-to-b from-[#e8f8f1] to-[#f0faf6] py-16 md:py-20" id="about">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">About</h2>
+    <div class="max-w-3xl">
+      <p class="text-slate-700 leading-relaxed mb-4">I'm an IT and cybersecurity leader with a track record of building secure, compliant, and resilient technology environments across healthcare and nonprofit organizations. I bridge technical depth with strategic oversight, translating organizational risk into policy, leading cross-functional security committees, and driving initiatives that align IT operations with business goals and regulatory requirements.</p>
+      <p class="text-slate-700 leading-relaxed mb-4">In my current role, I serve as the IT lead for a multi-site healthcare organization, managing infrastructure strategy, security operations, and compliance programs while sitting on the Safety and Security Committees to contribute to governance at the organizational level. I have delivered full-scope IT programs from design through implementation, including new facility buildouts, security modernization initiatives, and disaster recovery planning.</p>
+      <p class="text-slate-700 leading-relaxed mb-6">I hold the CISSP designation and am actively pursuing CISM to deepen my security management expertise. I am seeking IT Manager and CISO-track opportunities where I can combine technical credibility with risk leadership to protect the organization and enable the business.</p>
+      <div class="text-center">
+        <button data-load-page="/Professional-Highlights/index.php" data-scroll=""
+                class="rounded-full bg-brand text-white font-semibold text-sm px-6 py-3 hover:brightness-110 transition-all shadow-md">
+          Professional Highlights
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CISSP BANNER
+═══════════════════════════════════════════════════ -->
+<div class="cissp-banner slide-up" role="status" aria-label="Security certifications and career focus">
+  <div class="cissp-items">
+    <span class="cissp-item">CISSP Certified</span>
+    <span class="cissp-separator" aria-hidden="true">·</span>
+    <span class="cissp-item">Pursuing CISM</span>
+    <span class="cissp-separator" aria-hidden="true">·</span>
+    <span class="cissp-item">Targeting IT Manager &amp; CISO Roles</span>
+    <span class="cissp-separator" aria-hidden="true">·</span>
+    <span class="cissp-item">Available for Leadership Opportunities</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PROFESSIONAL HIGHLIGHTS CALLOUT
+═══════════════════════════════════════════════════ -->
+<section class="slide-up py-12 md:py-16 bg-white" id="highlights-callout" aria-label="Professional highlights">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="bg-[#0c1323] rounded-2xl border border-white/10 p-6 md:p-8">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8">
+
+        <!-- Left -->
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-mint shrink-0" aria-hidden="true">
+              <i class="fa-solid fa-award text-lg"></i>
+            </div>
             <div>
-              <div class="d-flex flex-wrap align-items-center gap-2">
-                <h3 class="mb-0">Professional Highlights</h3>
-              </div>
-              <div class="bs-subtle">Employer feedback, impact stories, and technical wins.</div>
+              <h3 class="text-white font-bold text-lg leading-tight">Professional Highlights</h3>
             </div>
           </div>
-          <div class="bs-soft-divider my-3"></div>
-          <div class="bs-subtle">If you only have a minute, start here, it’s the fastest way to understand the scope of my work.</div>
+          <div class="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mb-3"></div>
+          <p class="text-white/65 text-sm leading-relaxed">Employer feedback, impact stories, and technical wins. If you only have a minute, start here, it's the fastest way to understand the scope of my work.</p>
         </div>
-        <div class="col-12 col-lg-4 text-lg-end">
-          <a class="btn btn-light bs-cta bs-callout-btn" href="#" data-load-page="/Professional-Highlights/index.php" data-scroll="">
+
+        <!-- Right -->
+        <div class="shrink-0">
+          <a href="#" data-load-page="/Professional-Highlights/index.php" data-scroll=""
+             class="inline-block rounded-full bg-mint text-brand font-bold text-sm px-6 py-3 hover:brightness-105 transition-all shadow-lg">
             View Highlights
           </a>
         </div>
@@ -152,437 +245,535 @@
   </div>
 </section>
 
-<!-- Skills -->
-<section class="slide-up bs-section" id="skills">
-  <div class="container">
-    <h2>
-      Skills
-    </h2>
-    <div class="row g-4 align-items-stretch">
-      <div class="col-12 col-lg-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
-            <div>
-              <h5 class="mb-1">Core IT & Security</h5>
-              <div class="bs-subtle">Operations, risk-minded hardening, and reliability</div>
-            </div>
+<!-- ═══════════════════════════════════════════════════
+     SKILLS
+═══════════════════════════════════════════════════ -->
+<section class="slide-up bg-white py-16 md:py-20" id="skills">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Skills</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Leadership & Governance -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col">
+        <div class="bg-gradient-to-br from-mint to-mint-muted p-4 flex items-center gap-3 min-h-[88px]">
+          <div class="w-10 h-10 rounded-xl bg-white/30 flex items-center justify-center text-brand text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-users-gear"></i>
           </div>
-          <ul class="bs-list mt-3">
-            <li>Network Admin & Protocols (TCP/IP, DNS, DHCP, BGP)</li>
-            <li>Cybersecurity, Incident Response, and Risk Management</li>
-            <li>Patch Management & Endpoint Security</li>
-            <li>Backup & Disaster Recovery</li>
-            <li>Security Hardening & Compliance</li>
-            <li>System Monitoring & Log Analysis</li>
-            <li>User & Access Management</li>
-            <li>Configuration & Change Management</li>
-            <li>Network Segmentation & VPN/Firewall</li>
-            <li>Cloud & Virtualization (Azure, M365)</li>
-            <li>IT Policy & Documentation</li>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Leadership &amp; Governance</div>
+            <div class="text-brand/65 text-xs">Strategy, risk oversight, and organizational alignment</div>
+          </div>
+        </div>
+        <div class="p-5 flex-1">
+          <ul class="check-list">
+            <li>IT Strategy &amp; Program Management</li>
+            <li>Risk Management &amp; Governance (GRC)</li>
+            <li>HIPAA, SOC 2, NIST Framework Alignment</li>
+            <li>Security Policy &amp; Procedure Development</li>
+            <li>Vendor Management &amp; Contract Negotiation</li>
+            <li>Stakeholder Communication &amp; Executive Reporting</li>
+            <li>Safety &amp; Security Committee Leadership</li>
+            <li>Technology Procurement &amp; Budget Planning</li>
+            <li>Audit Readiness &amp; Regulatory Compliance</li>
+            <li>Cross-Functional Collaboration</li>
+            <li>IT Governance &amp; Change Management</li>
           </ul>
         </div>
       </div>
 
-      <div class="col-12 col-lg-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-cloud"></i></div>
-            <div>
-              <h5 class="mb-1">Cloud & Kubernetes</h5>
-              <div class="bs-subtle">Hands-on lab experience and deployment fundamentals</div>
-            </div>
+      <!-- Security & Risk Operations -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col">
+        <div class="bg-gradient-to-br from-mint to-mint-muted p-4 flex items-center gap-3 min-h-[88px]">
+          <div class="w-10 h-10 rounded-xl bg-white/30 flex items-center justify-center text-brand text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-shield-halved"></i>
           </div>
-          <ul class="bs-list mt-3">
-            <li>6-node Kubernetes Cluster</li>
-            <li>Ingress NGINX & MetalLB</li>
-            <li>Longhorn Storage & TrueNAS NFS</li>
-            <li>Weave CNI & Keepalived</li>
-            <li>Docker & CI/CD basics</li>
-            <li>Docker Swarm & Container Orchestration</li>
-            <li>Helm for Kubernetes package management</li>
-            <li>Rancher for cluster management</li>
-            <li>Prometheus & Grafana for monitoring</li>
-            <li>Ansible for automation & configuration management</li>
-            <li>Git & GitHub/GitLab for version control</li>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Security &amp; Risk Operations</div>
+            <div class="text-brand/65 text-xs">CISSP-aligned security program management</div>
+          </div>
+        </div>
+        <div class="p-5 flex-1">
+          <ul class="check-list">
+            <li>Cybersecurity Program Management</li>
+            <li>Incident Response &amp; Forensics</li>
+            <li>Vulnerability Assessment &amp; Remediation</li>
+            <li>Network Security Architecture</li>
+            <li>Identity &amp; Access Management (IAM / SSO / MFA)</li>
+            <li>Security Hardening &amp; Patch Management</li>
+            <li>SIEM &amp; Log Analysis (Elastic, Graylog)</li>
+            <li>Disaster Recovery &amp; Business Continuity</li>
+            <li>Cloud Security (Azure, M365, Entra ID)</li>
+            <li>Endpoint Security &amp; MDM (Intune)</li>
+            <li>Data Classification &amp; Protection</li>
           </ul>
         </div>
       </div>
 
-      <div class="col-12 col-lg-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-            <div>
-              <h5 class="mb-1">Tools & Platforms</h5>
-              <div class="bs-subtle">Practical admin tooling across infra and apps</div>
-            </div>
+      <!-- Technical Infrastructure -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col">
+        <div class="bg-gradient-to-br from-mint to-mint-muted p-4 flex items-center gap-3 min-h-[88px]">
+          <div class="w-10 h-10 rounded-xl bg-white/30 flex items-center justify-center text-brand text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-server"></i>
           </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li><strong>Networking & Security:</strong> pfSense, Fortinet, Sophos, Cisco</li>
-            <li><strong>Microsoft Platforms:</strong> M365, Exchange, Entra ID, WSUS, MDT, Intune</li>
-            <li><strong>Virtualization & Backup:</strong> Proxmox, VMware, Veeam</li>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Technical Infrastructure</div>
+            <div class="text-brand/65 text-xs">Hands-on expertise across network, cloud, and systems</div>
+          </div>
+        </div>
+        <div class="p-5 flex-1">
+          <ul class="check-list">
+            <li><strong>Network &amp; Security:</strong> pfSense, Fortinet, Sophos, Cisco, VLANs, BGP</li>
+            <li><strong>Microsoft Ecosystem:</strong> M365, Exchange, Entra ID, WSUS, Intune, MDT</li>
+            <li><strong>Virtualization &amp; Backup:</strong> Proxmox, VMware, Veeam, TrueNAS</li>
+            <li><strong>Cloud &amp; Containers:</strong> Azure, Kubernetes (6-node HA), Docker, Ansible</li>
+            <li><strong>Monitoring:</strong> Prometheus, Grafana, Elastic SIEM, Graylog</li>
+            <li><strong>Scripting &amp; Automation:</strong> PowerShell, Bash, Git</li>
             <li><strong>Databases:</strong> Microsoft SQL, MySQL</li>
-            <li><strong>Web & Development:</strong> PHP, HTML, CSS, JavaScript, VB.NET</li>
-            <li><strong>Scripting & Automation:</strong> VBScript, PowerShell, Bash</li>
-            <li><strong>Monitoring & Logging:</strong> SIEM (Elastic, Graylog)</li>
           </ul>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- Experience -->
-<section class="slide-up bs-section" id="experience">
-  <div class="container">
-    <h2>
-      Experience
-    </h2>
-    <div class="bs-timeline">
-      <article class="bs-timeline-item">
-        <div class="card p-4 bs-card">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h5 class="mb-0">Network Administrator — Salina Family Healthcare Center</h5>
-            <span class="bs-badge">2023 – Present</span>
-          </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li>Spearheaded IT infrastructure optimization initiatives, including secure network switch deployments and architecture improvements.</li>
-            <li>Seamlessly integrated and secured new VoIP and telephony systems, ensuring operational continuity and data protection.</li>
-            <li>Designed and implemented robust disaster recovery, backup and business continuity solutions, reducing risk and improving system resiliency.</li>
-            <li>Negotiated cost-effective technology solutions while maintaining compliance and security standards.</li>
-            <li>Proactively identified and resolved system vulnerabilities, from Windows 11 issues to network routing discrepancies.</li>
-            <li>Facilitated secure transitions to modern protocols and authentication frameworks, including HTTPS enforcement and Azure Single Sign-On, enhancing organizational security posture.</li>
-            <li>Designed IT infrastructure for a new healthcare facility, enabling secure operations and future growth</li>
-            <li>Elected Member - Safety Committee; Security Committee</li>
-          </ul>
-        </div>
-      </article>
+<!-- ═══════════════════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════════════════ -->
+<style>
+  /* Each item is a flex row: [dot+line col] [card] */
+  #experience .experience-list {
+    display: flex;
+    flex-direction: column;
+  }
 
-      <article class="bs-timeline-item">
-        <div class="card p-4 bs-card">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h5 class="mb-0">Systems Administrator — Salina Public Library</h5>
-            <span class="bs-badge">2022 – 2023</span>
-          </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li>Maintained servers, storage, and client fleet; modernized workflows.</li>
-            <li>Upgraded Wi-Fi coverage and security policies.</li>
-          </ul>
-        </div>
-      </article>
+  #experience .experience-item {
+    display: flex;
+    gap: 1.25rem;
+  }
 
-      <article class="bs-timeline-item">
-        <div class="card p-4 bs-card">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h5 class="mb-0">Cybersecurity Analyst — Saint Francis Ministries</h5>
-            <span class="bs-badge">2021 – 2022</span>
-          </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li>Ensured the integrity and security of data on host computers</li>
-            <li>Maintained security across multiple databases</li>
-            <li>Protected data during transfer in line with business needs</li>
-            <li>Upheld industry best practices for privacy, security, and regulatory compliance</li>
-            <li>Elected Member - HIPPA committee</li>
-          </ul>
-        </div>
-      </article>
+  /* Left column: dot on top, line stretches down to fill */
+  #experience .timeline-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1rem;
+  }
 
-      <article class="bs-timeline-item">
-        <div class="card p-4 bs-card">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h5 class="mb-0">Network Administrator — SMG Unlimited</h5>
-            <span class="bs-badge">2020 – 2021</span>
-          </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li>Provided technical support to users</li>
-            <li>Responded to work orders and support tickets</li>
-            <li>Analyzed and resolved reported network problems</li>
-            <li>Assisted with configuring firewalls</li>
-            <li>Supported network technology upgrades and expansion projects</li>
-          </ul>
-        </div>
-      </article>
+  #experience .tl-dot {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #6ee7b7;
+    flex-shrink: 0;
+    margin-top: 1.15rem;
+    box-sizing: border-box;
+  }
 
-      <article class="bs-timeline-item">
-        <div class="card p-4 bs-card">
-          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h5 class="mb-0">IT Intern — Blue Beacon International</h5>
-            <span class="bs-badge">2013 – 2016</span>
-          </div>
-          <ul class="bs-list bs-list--compact mt-3">
-            <li>Diagnosed problems and helped develop solutions</li>
-            <li>Supported PC hardware components, desktop operating systems, and application software</li>
-            <li>Handled equipment repairs and arranged servicing</li>
-            <li>Completed additional assigned duties and projects</li>
-          </ul>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
+  #experience .tl-line {
+    width: 2px;
+    background: #bbf7d0;
+    flex: 1;
+    margin-top: 4px;
+  }
 
-<!-- Projects -->
-<section class="slide-up bs-section" id="projects">
-  <div class="container">
-    <h2>
-      Featured Projects
-    </h2>
-    <div class="row g-4">
-      <div class="col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel bs-project-card">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-cubes"></i></div>
-            <h5 class="mb-0">Home Kubernetes Platform</h5>
-          </div>
-          <p class="bs-subtle">
-            6-node HA home Kubernetes cluster with enterprise-grade storage, networking, and deployments.
-          </p>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <span class="bs-pill bs-pill--tag">Keepalived for HA control plane</span>
-            <span class="bs-pill bs-pill--tag">MetalLB for load balancing</span>
-            <span class="bs-pill bs-pill--tag">Longhorn for distributed storage</span>
-            <span class="bs-pill bs-pill--tag">Ingress NGINX with TLS certificates</span>
-            <span class="bs-pill bs-pill--tag">GitOps-style automated deployments</span>
-            <span class="bs-pill bs-pill--tag">Cluster monitoring with Prometheus & Grafana</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel bs-project-card">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-scale-balanced"></i></div>
-            <h5 class="mb-0">Risk & Compliance Management - Saint Francis Ministries</h5>
-          </div>
-          <p class="bs-subtle">
-            Developing risk assessments, risk strategies, and ensuring compliance across the organization.
-          </p>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <span class="bs-pill bs-pill--tag">Risk assessments & mitigation strategies</span>
-            <span class="bs-pill bs-pill--tag">HIPAA committee participation</span>
-            <span class="bs-pill bs-pill--tag">SOC 2 readiness & audits</span>
-            <span class="bs-pill bs-pill--tag">Internal & external compliance audits</span>
-            <span class="bs-pill bs-pill--tag">Policy & procedure documentation</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel bs-project-card">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-network-wired"></i></div>
-            <h5 class="mb-0">IT Infrastructure Design - Salina Family Healthcare Center</h5>
-          </div>
-          <p class="bs-subtle">
-            Planning, designing, and implementing IT infrastructure for the new healthcare facility.
-          </p>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <span class="bs-pill bs-pill--tag">Network topology & cabling</span>
-            <span class="bs-pill bs-pill--tag">Secure Wi-Fi deployment</span>
-            <span class="bs-pill bs-pill--tag">Server room setup & redundancy</span>
-            <span class="bs-pill bs-pill--tag">Endpoint & workstation provisioning</span>
-            <span class="bs-pill bs-pill--tag">Backup & disaster recovery planning</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  /* No line after the last item */
+  #experience .experience-item:last-child .tl-line {
+    display: none;
+  }
 
-<!-- Education -->
-<section class="slide-up bs-section" id="education">
-  <div class="container">
-    <h2>
-      Education
-    </h2>
-    <div class="row g-4 align-items-stretch">
-      <div class="col-12 col-lg-7 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <div class="bs-icon" aria-hidden="true">
-              <i class="fa-solid fa-graduation-cap"></i>
+  /* Card fills remaining width; bottom padding creates spacing between cards */
+  #experience .tl-card {
+    flex: 1;
+    padding-bottom: 1.5rem;
+  }
+
+  #experience .experience-item:last-child .tl-card {
+    padding-bottom: 0;
+  }
+</style>
+
+<section class="slide-up bg-slate-50 py-16 md:py-20" id="experience">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Experience</h2>
+    <div class="experience-timeline">
+      <div class="experience-list">
+
+      <!-- Current role -->
+      <article class="experience-item">
+        <div class="timeline-col">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-card">
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — Salina Family Healthcare Center</h3>
+              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2023 – Present</span>
             </div>
-            <div>
-              <h5 class="mb-1">Salina Central High School</h5>
-              <div class="bs-subtle">High School Diploma · 2014</div>
+            <ul class="check-list">
+              <li>Own end-to-end IT operations and security program for a multi-site healthcare organization, ensuring compliance, uptime, and alignment with organizational risk posture.</li>
+              <li>Elected to both the Safety Committee and Security Committee, contributing to governance, risk oversight, and policy decisions at the organizational level.</li>
+              <li>Led a security modernization initiative, transitioning to Azure SSO with MFA enforcement and HTTPS-only policies, measurably reducing credential and access-related risk.</li>
+              <li>Designed and delivered the complete IT infrastructure for a new healthcare facility, from network topology and server room design through endpoint provisioning and disaster recovery.</li>
+              <li>Developed and implemented disaster recovery and business continuity plans, improving organizational resilience and reducing recovery time objectives.</li>
+              <li>Negotiated vendor contracts and managed technology procurement, balancing cost, compliance requirements, and long-term operational needs.</li>
+              <li>Integrated and secured VoIP and telephony systems, maintaining regulatory compliance and operational continuity throughout the transition.</li>
+              <li>Proactively identified and remediated vulnerabilities across the network and endpoint environment, maintaining a strong and measurable security baseline.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="experience-item">
+        <div class="timeline-col">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-card">
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="font-bold text-brand text-[0.95rem]">Systems Administrator — Salina Public Library</h3>
+              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2022 – 2023</span>
             </div>
-          </div>
-          <div class="bs-subtle">
-            My formal education is a high school diploma. My cybersecurity and IT expertise has been built through hands-on professional experience, certifications, continuous self-study, and lab work (including a high-availability Kubernetes environment).
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-lg-5 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <h5 class="mb-0">Professional Development</h5>
-          </div>
-          <div class="d-flex flex-wrap gap-2">
-            <span class="bs-pill">IT Leadership</span>
-            <span class="bs-pill">Cybersecurity</span>
-            <span class="bs-pill">GRC & Risk</span>
-            <span class="bs-pill">Systems & Network Engineering</span>
-            <span class="bs-pill">Cloud & Kubernetes</span>
+            <ul class="check-list">
+              <li>Managed IT systems, servers, storage, and client fleet for a public institution, ensuring reliable service delivery across all departments.</li>
+              <li>Upgraded and modernized infrastructure, improving coverage, performance, and enforcing updated security policies.</li>
+            </ul>
           </div>
         </div>
-      </div>
+      </article>
+
+      <article class="experience-item">
+        <div class="timeline-col">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-card">
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="font-bold text-brand text-[0.95rem]">Cybersecurity Analyst — Saint Francis Ministries</h3>
+              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2021 – 2022</span>
+            </div>
+            <ul class="check-list">
+              <li>Elected to the HIPAA Committee, collaborating cross-functionally to align data handling and privacy practices with regulatory requirements.</li>
+              <li>Managed security across a multi-site environment, conducting risk assessments and remediating vulnerabilities to protect sensitive organizational data.</li>
+              <li>Developed and enforced data protection policies for data in transit and at rest, aligned with HIPAA, SOC 2, and industry best practices.</li>
+              <li>Contributed to compliance audit readiness, policy documentation, and internal security reviews.</li>
+              <li>Recognized with the CEO Challenge Coin for outstanding contributions to organizational security and compliance.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="experience-item">
+        <div class="timeline-col">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-card">
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — SMG Unlimited</h3>
+              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2020 – 2021</span>
+            </div>
+            <ul class="check-list">
+              <li>Administered network infrastructure and provided technical support across the organization, resolving issues and maintaining operational continuity.</li>
+              <li>Managed work orders, support tickets, and network problem resolution.</li>
+              <li>Configured and maintained firewalls and network security appliances.</li>
+              <li>Supported technology upgrade and network expansion projects.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="experience-item">
+        <div class="timeline-col">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-card">
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h3 class="font-bold text-brand text-[0.95rem]">IT Intern — Blue Beacon International</h3>
+              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2013 – 2016</span>
+            </div>
+            <ul class="check-list">
+              <li>Provided hardware, OS, and application support across the organization.</li>
+              <li>Diagnosed and resolved technical issues; managed equipment repairs and servicing.</li>
+              <li>Completed additional IT projects as assigned.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+    </div>
     </div>
   </div>
 </section>
 
-<!-- Certifications -->
-<section class="slide-up bs-section" id="certs">
-  <div class="container">
-    <h2>
-      Certifications
-    </h2>
-    <div class="row g-4 align-items-stretch">
-      <div class="col-12 col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">CISSP</h5>
-            <span class="bs-badge">(ISC)²</span>
+<!-- ═══════════════════════════════════════════════════
+     PROJECTS
+═══════════════════════════════════════════════════ -->
+<section class="slide-up bg-white py-16 md:py-20" id="projects">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Featured Projects</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Project 1 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-hospital"></i>
           </div>
-          <div class="bs-subtle mt-2">Certified Information Systems Security Professional</div>
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="bs-pill">Risk</span>
-            <span class="bs-pill">Security Strategy</span>
-            <span class="bs-pill">Architecture</span>
-          </div>
+          <div class="font-bold text-white text-sm leading-tight">IT &amp; Network Infrastructure Design — Salina Family Healthcare Center</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Designed the complete IT and network infrastructure for a new healthcare facility, including network topology, segmentation strategy, server room layout, and security architecture, ensuring HIPAA compliance and operational resilience from day one.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Network topology &amp; segmentation design</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Server room architecture</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Security architecture</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">HIPAA-compliant design</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Redundancy &amp; failover planning</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Disaster recovery design</span>
         </div>
       </div>
-      <div class="col-12 col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">CC</h5>
-            <span class="bs-badge">(ISC)²</span>
+
+      <!-- Project 2 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-scale-balanced"></i>
           </div>
-          <div class="bs-subtle mt-2">Certified in Cybersecurity</div>
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="bs-pill">Foundations</span>
-            <span class="bs-pill">Security Controls</span>
-            <span class="bs-pill">Best Practices</span>
-          </div>
+          <div class="font-bold text-white text-sm leading-tight">Risk &amp; Compliance Program — Saint Francis Ministries</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Established and contributed to a risk and compliance program across a multi-database healthcare organization, achieving HIPAA alignment and SOC 2 audit readiness while serving as an elected HIPAA committee member.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Risk assessments &amp; mitigation</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">HIPAA committee (elected)</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">SOC 2 audit readiness</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Policy &amp; procedure documentation</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">CEO Challenge Coin recipient</span>
         </div>
       </div>
-      <div class="col-12 col-md-4 d-flex">
-        <div class="card p-4 flex-fill bs-card bs-panel">
-          <div class="d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">Security+</h5>
-            <span class="bs-badge">CompTIA</span>
+
+      <!-- Project 3 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-lock"></i>
           </div>
-          <div class="bs-subtle mt-2">Baseline cybersecurity knowledge and operations</div>
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="bs-pill">Ops</span>
-            <span class="bs-pill">Defense</span>
-            <span class="bs-pill">Incidents</span>
-          </div>
+          <div class="font-bold text-white text-sm leading-tight">Security Modernization — Salina Family Healthcare Center</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Led a targeted security modernization initiative, transitioning the organization from legacy authentication to Azure SSO with MFA and enforcing HTTPS-only policies, measurably improving the security posture.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Azure SSO &amp; MFA enforcement</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">HTTPS-only policy rollout</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Network segmentation</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Security baseline hardening</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Vulnerability remediation</span>
         </div>
       </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     EDUCATION
+═══════════════════════════════════════════════════ -->
+<section class="slide-up bg-[#f0faf6] py-16 md:py-20" id="education">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Education</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-xl bg-mint/20 flex items-center justify-center text-brand shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Salina Central High School</div>
+            <div class="text-slate-500 text-xs">High School Diploma · 2014</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">My formal education is a high school diploma. My cybersecurity and IT expertise has been built through hands-on professional experience, certifications, continuous self-study, and lab work (including a high-availability Kubernetes environment).</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="font-bold text-brand text-[0.95rem] mb-3">Professional Development</div>
+        <div class="flex flex-wrap gap-2">
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-3 py-1.5 rounded-full">IT Leadership</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-3 py-1.5 rounded-full">Cybersecurity</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-3 py-1.5 rounded-full">GRC &amp; Risk</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-3 py-1.5 rounded-full">Systems &amp; Network Engineering</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-3 py-1.5 rounded-full">Cloud &amp; Kubernetes</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     CERTIFICATIONS
+═══════════════════════════════════════════════════ -->
+<section class="slide-up bg-white py-16 md:py-20" id="certs">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Certifications</h2>
+    <div class="grid md:grid-cols-3 gap-6 mb-6">
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-bold text-brand text-lg">CISSP</div>
+          <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">(ISC)²</span>
+        </div>
+        <div class="text-slate-500 text-sm mb-4">Certified Information Systems Security Professional</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Risk</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Security Strategy</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Architecture</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-bold text-brand text-lg">CC</div>
+          <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">(ISC)²</span>
+        </div>
+        <div class="text-slate-500 text-sm mb-4">Certified in Cybersecurity</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Foundations</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Security Controls</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Best Practices</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-bold text-brand text-lg">Security+</div>
+          <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">CompTIA</span>
+        </div>
+        <div class="text-slate-500 text-sm mb-4">Baseline cybersecurity knowledge and operations</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Ops</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Defense</span>
+          <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Incidents</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-4">
-      <div class="bs-subtle">More certifications and verifications on Credly.</div>
-      <a href="https://www.credly.com/users/brandonsanders" class="btn btn-outline-dark bs-credly" target="_blank" rel="noopener">
-        <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <p class="text-slate-500 text-sm">More certifications and verifications on Credly.</p>
+      <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 border border-slate-300 text-slate-700 text-sm font-semibold px-5 py-2 rounded-full hover:bg-slate-50 transition-all">
+        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
         View on Credly
       </a>
     </div>
   </div>
 </section>
 
-<!-- Contact -->
-<section class="slide-up bs-section bs-section--accent" id="contact">
-  <div class="container">
-    <div class="row g-4 align-items-end mb-4">
-      <div class="col-12 col-lg-7">
-        <h2>Contact</h2>
-        <div class="bs-subtle">Send a message and I’ll get back to you. I’m happy to provide my resume upon request.</div>
+<!-- ═══════════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════════ -->
+<section class="slide-up bg-[#f0faf6] py-16 md:py-20" id="contact">
+  <div class="max-w-6xl mx-auto px-4">
+
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
+      <div>
+        <h2 class="section-heading">Contact</h2>
+        <p class="text-slate-600 text-sm">Send a message and I'll get back to you. I'm happy to provide my resume upon request.</p>
       </div>
-      <div class="col-12 col-lg-5">
-        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
-          <span class="bs-pill">Professional inquiries welcome</span>
-          <span class="bs-pill">Based in Salina, KS</span>
-        </div>
+      <div class="flex flex-wrap gap-2">
+        <span class="bg-white border border-slate-200 text-slate-600 text-xs font-medium px-3 py-1.5 rounded-full">Leadership &amp; management inquiries welcome</span>
+        <span class="bg-white border border-slate-200 text-slate-600 text-xs font-medium px-3 py-1.5 rounded-full">Based in Salina, KS · Remote-friendly</span>
       </div>
     </div>
 
-    <div class="row g-4 align-items-stretch">
-      <!-- Message form -->
-      <div class="col-12 col-lg-6 d-flex">
-        <div class="card p-4 p-md-5 flex-fill bs-card bs-panel bs-contact-card">
-          <div class="d-flex align-items-center gap-3 mb-4">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-paper-plane"></i></div>
+    <div class="grid lg:grid-cols-2 gap-6">
+
+      <!-- Contact form -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-xl bg-mint/20 flex items-center justify-center text-brand shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Send a message</div>
+            <div class="text-slate-500 text-xs">Short and simple is perfect.</div>
+          </div>
+        </div>
+
+        <form method="post" id="contactForm" class="flex flex-col gap-4">
+          <div id="form-alert" style="display:none;"></div>
+          <div class="grid sm:grid-cols-2 gap-4">
             <div>
-              <h5 class="mb-0">Send a message</h5>
-              <div class="bs-subtle">Short and simple is perfect.</div>
+              <label for="bs_name" class="block text-sm font-medium text-slate-700 mb-1.5">Name</label>
+              <input type="text" id="bs_name" name="bs_name" class="form-input" placeholder="Your name" autocomplete="name" required>
+            </div>
+            <div>
+              <label for="bs_email" class="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+              <input type="email" id="bs_email" name="bs_email" class="form-input" placeholder="your@email.com" autocomplete="email" required>
             </div>
           </div>
+          <div>
+            <label for="bs_company" class="block text-sm font-medium text-slate-700 mb-1.5">Company</label>
+            <input type="text" id="bs_company" name="bs_company" class="form-input" placeholder="Organization" autocomplete="organization" required>
+          </div>
+          <div>
+            <label for="bs_message" class="block text-sm font-medium text-slate-700 mb-1.5">Message</label>
+            <textarea id="bs_message" name="bs_message" maxlength="500" class="form-input" placeholder="Your message…" required></textarea>
+          </div>
 
-          <form method="post" id="contactForm" class="d-flex flex-column gap-3" style="flex-grow:1;">
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <div class="form-floating">
-                  <input type="text" id="bs_name" name="bs_name" class="form-control" placeholder="Name" autocomplete="name" required>
-                  <label for="bs_name">Name</label>
-                </div>
+          <div class="bs-captcha">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-8 h-8 rounded-lg bg-mint/20 flex items-center justify-center text-brand shrink-0" aria-hidden="true">
+                <i class="fa-solid fa-shield text-sm"></i>
               </div>
-              <div class="col-12 col-md-6">
-                <div class="form-floating">
-                  <input type="email" id="bs_email" name="bs_email" class="form-control" placeholder="Email" autocomplete="email" required>
-                  <label for="bs_email">Email</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" id="bs_company" name="bs_company" class="form-control" placeholder="Company" autocomplete="organization" required>
-                  <label for="bs_company">Company</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="bs_message" maxlength="500" name="bs_message" rows="5" placeholder="Message" style="height: 150px" required></textarea>
-                  <label for="bs_message">Message</label>
-                </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-700">Anti-spam check</div>
+                <div class="text-xs text-slate-500">What are my initials?</div>
               </div>
             </div>
+            <input type="text" class="form-input" id="captcha" name="captcha" placeholder="Initials" autocomplete="off" required>
+          </div>
 
-            <div class="bs-captcha">
-              <div class="d-flex align-items-center gap-3 mb-2">
-                <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-shield"></i></div>
-                <div>
-                  <div class="fw-semibold">Anti-spam check</div>
-                  <div class="bs-subtle">What are my initials?</div>
-                </div>
-              </div>
-              <div class="form-floating">
-                <input type="text" class="form-control" id="captcha" name="captcha" placeholder="Initials" autocomplete="off" required>
-                <label for="captcha">Initials</label>
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg bs-primary w-100 bs-submit">
-              Send
-            </button>
-          </form>
-        </div>
+          <button type="submit"
+                  class="w-full rounded-full bg-brand text-white py-3 font-semibold text-sm hover:brightness-105 transition-all shadow-md">
+            Send Message
+          </button>
+        </form>
       </div>
 
       <!-- Location -->
-      <div class="col-12 col-lg-6 d-flex">
-        <div class="card p-4 p-md-5 flex-fill bs-card bs-panel bs-contact-card">
-          <div class="d-flex align-items-center gap-3 mb-4">
-            <div class="bs-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></div>
-            <div>
-              <h5 class="mb-0">Location</h5>
-              <div class="bs-subtle">Salina, KS</div>
-            </div>
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 flex flex-col">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-xl bg-mint/20 flex items-center justify-center text-brand shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-location-dot"></i>
           </div>
-          <div class="bs-map-frame ratio ratio-4x3">
-            <iframe title="Map of Salina, KS" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3069.548548582053!2d-97.6092919846236!3d38.840104979583026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87a61fd5f457e5b1%3A0x35a6b9f7ab5b1b2b!2sSalina%2C%20KS%2067451!5e0!3m2!1sen!2sus!4v1695156000000!5m2!1sen!2sus" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Location</div>
+            <div class="text-slate-500 text-xs">Salina, KS</div>
           </div>
-          <div class="bs-subtle mt-3">Open to opportunities in leadership, cybersecurity, risk, and infrastructure.</div>
         </div>
+        <div class="aspect-[4/3] overflow-hidden rounded-xl border border-slate-100 bs-map-frame flex-1">
+          <iframe title="Map of Salina, KS"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3069.548548582053!2d-97.6092919846236!3d38.840104979583026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87a61fd5f457e5b1%3A0x35a6b9f7ab5b1b2b!2sSalina%2C%20KS%2067451!5e0!3m2!1sen!2sus!4v1695156000000!5m2!1sen!2sus"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <p class="text-slate-500 text-sm mt-4">Open to IT Manager, CISO, and senior cybersecurity leadership opportunities. Remote-friendly.</p>
       </div>
+
     </div>
   </div>
 </section>

@@ -2,15 +2,15 @@
     // Turn off display of errors/warnings to users
     ini_set('display_errors', 0);
     ini_set('display_startup_errors', 0);
-    
+
     // Report all errors internally (so they still appear in server logs)
     error_reporting(E_ALL);
-    
+
     header("X-Content-Type-Options: nosniff");
     header("X-Frame-Options: DENY");
     header("X-XSS-Protection: 1; mode=block"); // legacy but still useful
     header("Content-Security-Policy: default-src 'self'; script-src 'self'");
-    
+
     if (
         !isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
         $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'fetch'
@@ -20,127 +20,207 @@
         exit;
     }
 ?>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top bs-navbar">
-  <div class="container">
-    <a href="#" title="Back to portfolio" class="back-arrow me-2" data-load-page="/Portfolio/index.php" data-scroll="about" aria-label="Back to portfolio">
-      <i class="fa-solid fa-arrow-left"></i>
-    </a>
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#" data-load-page="/Portfolio/index.php" data-scroll="about" aria-label="Back to portfolio">
-      <img src="/files/images/myself.png" alt="BS" class="bs-avatar">
-      <span class="bs-brand-text">Brandon Sanders</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-lg-center">
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#highlights">Highlights</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="skills">Skills</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="experience">Experience</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="projects">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="education">Education</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-load-page="/Portfolio/index.php" data-scroll="certs">Certs</a></li>
-        <li class="nav-item ms-lg-2">
-          <a class="btn btn-sm btn-light bs-cta" href="#" data-load-page="/Portfolio/index.php" data-scroll="contact">Contact</a>
-        </li>
-      </ul>
+
+<!-- ═══════════════════════════════════════════════════
+     NAVBAR (Professional Highlights — with back arrow)
+═══════════════════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 h-16 bg-brand/[.96] backdrop-blur-xl border-b border-white/10">
+  <div class="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
+
+    <!-- Logo + back arrow -->
+    <div class="flex items-center gap-2">
+      <a href="#" title="Back to portfolio" class="back-arrow mr-1"
+         data-load-page="/Portfolio/index.php" data-scroll="about" aria-label="Back to portfolio">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <a href="#" data-load-page="/Portfolio/index.php" data-scroll="about"
+         class="flex items-center gap-2.5" aria-label="Back to portfolio">
+        <img src="/files/images/myself.png" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
+        <span class="text-white font-semibold text-sm tracking-tight">Brandon Sanders</span>
+      </a>
     </div>
+
+    <!-- Desktop nav -->
+    <ul class="hidden lg:flex items-center gap-1">
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="about" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">About</a></li>
+      <li><a href="#highlights" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Highlights</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="skills" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Skills</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="experience" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Experience</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="projects" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
+      <li class="ml-2">
+        <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
+           class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">Contact</a>
+      </li>
+    </ul>
+
+    <!-- Mobile hamburger -->
+    <button id="nav-toggle" class="lg:hidden text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="nav-menu" class="hidden lg:hidden bg-brand border-t border-white/10 px-4 pb-4">
+    <ul class="flex flex-col gap-1 pt-3">
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="about" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">About</a></li>
+      <li><a href="#highlights" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Highlights</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="skills" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Skills</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="experience" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Experience</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="projects" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
+      <li class="pt-1">
+        <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
+           class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">Contact</a>
+      </li>
+    </ul>
   </div>
 </nav>
 
-<!-- Hero -->
-<header id="home" class="bs-hero bs-hero--compact bs-hero--flat">
-  <div class="container">
-    <div class="row align-items-center">
+<!-- ═══════════════════════════════════════════════════
+     HERO (compact)
+═══════════════════════════════════════════════════ -->
+<header id="home" class="bg-brand pt-16 overflow-hidden relative">
+  <!-- Background blobs -->
+  <div class="absolute top-0 left-0 w-[600px] h-[400px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 right-0 w-[500px] h-[350px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="max-w-6xl mx-auto px-4 py-12 lg:py-16 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+
       <!-- Photo -->
-      <div class="col-12 col-md-4 text-center ">
-        <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" class="img-fluid bs-hero-image" style="max-width:160px;">
+      <div class="shrink-0 relative">
+        <div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>
+        <img src="/files/images/Brandon_Sanders-cropped.png"
+             alt="Brandon Sanders Portrait"
+             class="relative w-36 h-36 lg:w-48 lg:h-48 rounded-full object-cover border-2 border-white/15 shadow-2xl">
       </div>
-      <!-- Info -->
-      <div class="col-12 col-md-8 mx-auto text-center text-md-start">
-        <h1 class="display-5 typing" id="name">Brandon Sanders, CISSP</h1>
-        <p class="lead">Cybersecurity & Risk Management Professional · Network Security · Cloud & Kubernetes</p>
-        <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center justify-content-md-start">
-          <a class="btn btn-sm btn-light" href="#highlights" aria-label="Jump to employer feedback">
-            Jump to Employer Feedback
+
+      <!-- Text -->
+      <div class="flex-1 text-center lg:text-left">
+        <h1 class="typing text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3" id="name">Brandon Sanders, CISSP</h1>
+        <p class="text-base text-white/70 font-medium mb-6">
+          IT Security Leader · Risk &amp; Compliance · Infrastructure Strategy · GRC
+        </p>
+        <div class="flex flex-wrap gap-2.5 justify-center lg:justify-start">
+          <a href="#highlights"
+             class="inline-flex items-center gap-1.5 bg-mint text-brand font-bold text-sm px-5 py-2.5 rounded-full hover:brightness-105 transition-all shadow-lg"
+             aria-label="Jump to employer feedback">
+            <i class="fa-solid fa-arrow-down text-xs"></i> Employer Feedback
           </a>
-          <a class="btn btn-sm btn-outline-light" href="#technical" aria-label="Jump to technical highlights">
-            Jump to Technical Highlights
+          <a href="#technical"
+             class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-5 py-2.5 rounded-full hover:bg-white/10 transition-all"
+             aria-label="Jump to technical highlights">
+            Technical Highlights
           </a>
         </div>
       </div>
+
     </div>
   </div>
 </header>
 
-<!-- About -->
-<section class="about-section slide-up bs-section bs-section--accent" id="about2">
-  <div class="container">
-    <h2>Career Accomplishments</h2>
-    <p>
-        Throughout my career, I’ve built a strong foundation in leadership, networking, cybersecurity, and systems administration, successfully managing complex environments across Windows, Linux, macOS and Kubernetes clusters. I have implemented secure and scalable solutions that improved reliability and efficiency, including deploying containerized workloads, strengthening security policies, and streamlining IT operations. My certifications, including (ISC)² Certified Information Systems Security Professional (CISSP), (ISC)² Certified in Cybersecurity (CC) and CompTIA Security+, reflect my dedication to industry best practices and continuous learning. Beyond certifications, I take pride in delivering practical results, optimizing infrastructure, supporting end users, and contributing to resilient IT systems that meet organizational goals.
-    </p>
-  </div>
-</section>
-
-<!-- Employer Feedback -->
-<section class="highlights-section slide-up bs-section" id="highlights">
-  <div class="container">
-    <h2>Employer Feedback</h2>
-    <div class="row g-4">
-       <div class="col-md-6">
-        <div class="card p-4 h-100 bs-card bs-pdf-card">
-          <div class="ratio ratio-4x3 bs-pdf-embed">
-            <iframe class="bs-doc-frame" title="Service Excellence Nomination (PDF)" loading="lazy" src="/files/Service Excellence Nomination.pdf#view=FitH&toolbar=0&navpanes=0" allowfullscreen></iframe>
-            <a class="bs-pdf-overlay" href="/files/Service Excellence Nomination.pdf" target="_blank" rel="noopener" aria-label="Open Service Excellence Nomination PDF in a new tab">
-              <span class="bs-pdf-overlay-inner"><i class="fa-solid fa-arrow-up-right-from-square me-2" aria-hidden="true"></i>Open PDF</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-4 h-100 bs-card bs-pdf-card">
-          <div class="ratio ratio-4x3 bs-pdf-embed">
-            <iframe class="bs-doc-frame" title="Employment History Letter - SMG Unlimited (PDF)" loading="lazy" src="/files/B Sanders Empl History Letter-SMG Unlimited.pdf#view=FitH&toolbar=0&navpanes=0" allowfullscreen></iframe>
-            <a class="bs-pdf-overlay" href="/files/B Sanders Empl History Letter-SMG Unlimited.pdf" target="_blank" rel="noopener" aria-label="Open Employment History Letter PDF in a new tab">
-              <span class="bs-pdf-overlay-inner"><i class="fa-solid fa-arrow-up-right-from-square me-2" aria-hidden="true"></i>Open PDF</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-4 h-100 bs-card">
-          <p>In addition to Sam & Cherise's recognition, I was honored to receive a challenge coin from William J. Clark (Bill), CEO of St. Francis Ministries, in recognition of my dedication, hard work, and contributions in IT. This meaningful acknowledgment reflects not only my technical expertise and problem-solving skills but also my commitment to supporting the organization and ensuring smooth, efficient operations. Receiving a challenge coin directly from the CEO was a tremendous honor and a reminder of the impact of my work.</p>
-          <div class="text-center" style="position: relative; display: inline-block;">
-            <img alt="Front & Rear of Saint Francis Ministries Challenge Coin" src="/files/images/SFM_Challenge_Coin-Both.png" style="width:70%;height:auto" />
-            <!-- This image was altered with AI to make it look better, as the photo's I took, would always have reflections. Actual photo's are /files/images/SFM_Challenge_Coin-Front.png and /images/SFM_Challenge_Coin-Rear.png -->
-            <div style="position: absolute; top: 0; left: 0;width: 100%; height: 100%;"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-4 h-100 bs-card">
-          <h6>What does AI say about me? (Generated Using the Self-Hosted Model Gemma3)</h6>
-          <ul>
-              <li>You come across as <b>highly driven and curious</b>. You’re not content to just hold a job; you’re constantly learning (Security+, CISSP, Kubernetes, lab work, motorcycle repairs, self‑hosted AI).</li>
-              <li>You clearly have a <b>security‑minded, systems‑level perspective</b>. Most of the questions you ask show that you’re thinking about reliability, process, and risk, not just quick fixes. That’s the mindset of a strong architect or future CISO.</li>
-              <li>You balance technical depth with service. The way you talk about nonprofit/public sector work, committees, and infrastructure upgrades shows that you value people and community, not just tech.</li>
-              <li>You’re already <b>positioning yourself like a leader</b>. Serving on committees, planning infrastructure for new facilities, and running home labs are all things hiring managers look for when deciding who can handle bigger responsibilities.</li>
-            </ul>
-        </div>
-      </div>
-    </div>
+<!-- ═══════════════════════════════════════════════════
+     ABOUT / CAREER ACCOMPLISHMENTS
+═══════════════════════════════════════════════════ -->
+<section class="about-section slide-up bg-gradient-to-b from-[#e8f8f1] to-[#f0faf6] py-16 md:py-20" id="about2">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Career Accomplishments</h2>
+    <div class="max-w-3xl">
+      <p class="text-slate-700 leading-relaxed">Throughout my career, I've built a strong foundation in leadership, networking, cybersecurity, and systems administration, successfully managing complex environments across Windows, Linux, macOS and Kubernetes clusters. I have implemented secure and scalable solutions that improved reliability and efficiency, including deploying containerized workloads, strengthening security policies, and streamlining IT operations. My certifications, including (ISC)² Certified Information Systems Security Professional (CISSP), (ISC)² Certified in Cybersecurity (CC) and CompTIA Security+, reflect my dedication to industry best practices and continuous learning. Beyond certifications, I take pride in delivering practical results, optimizing infrastructure, supporting end users, and contributing to resilient IT systems that meet organizational goals.</p>
     </div>
   </div>
 </section>
 
-<!-- Technical Highlights -->
-<section class="highlights-section slide-up bs-section bs-section--ink" id="technical">
-  <div class="container">
-    <h2>Technical Highlights</h2>
-    <div class="bs-subtle mb-4">A quick scan of infrastructure, security, and operational wins across my roles.</div>
+<!-- ═══════════════════════════════════════════════════
+     EMPLOYER FEEDBACK
+═══════════════════════════════════════════════════ -->
+<section class="highlights-section slide-up bg-white py-16 md:py-20" id="highlights">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Employer Feedback</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- PDF: Service Excellence Nomination -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div class="aspect-[4/3] bs-pdf-embed">
+          <iframe class="bs-doc-frame"
+                  title="Service Excellence Nomination (PDF)"
+                  loading="lazy"
+                  src="/files/Service Excellence Nomination.pdf#view=FitH&toolbar=0&navpanes=0"
+                  allowfullscreen></iframe>
+          <a class="bs-pdf-overlay" href="/files/Service Excellence Nomination.pdf"
+             target="_blank" rel="noopener"
+             aria-label="Open Service Excellence Nomination PDF in a new tab">
+            <span class="bs-pdf-overlay-inner">
+              <i class="fa-solid fa-arrow-up-right-from-square mr-2" aria-hidden="true"></i>Open PDF
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- PDF: Employment History Letter -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div class="aspect-[4/3] bs-pdf-embed">
+          <iframe class="bs-doc-frame"
+                  title="Employment History Letter - SMG Unlimited (PDF)"
+                  loading="lazy"
+                  src="/files/B Sanders Empl History Letter-SMG Unlimited.pdf#view=FitH&toolbar=0&navpanes=0"
+                  allowfullscreen></iframe>
+          <a class="bs-pdf-overlay" href="/files/B Sanders Empl History Letter-SMG Unlimited.pdf"
+             target="_blank" rel="noopener"
+             aria-label="Open Employment History Letter PDF in a new tab">
+            <span class="bs-pdf-overlay-inner">
+              <i class="fa-solid fa-arrow-up-right-from-square mr-2" aria-hidden="true"></i>Open PDF
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- CEO Challenge Coin -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <p class="text-slate-700 text-sm leading-relaxed mb-4">In addition to Sam &amp; Cherise's recognition, I was honored to receive a challenge coin from William J. Clark (Bill), CEO of St. Francis Ministries, in recognition of my dedication, hard work, and contributions in IT. This meaningful acknowledgment reflects not only my technical expertise and problem-solving skills but also my commitment to supporting the organization and ensuring smooth, efficient operations. Receiving a challenge coin directly from the CEO was a tremendous honor and a reminder of the impact of my work.</p>
+        <div class="text-center relative" style="display:inline-block; width:100%;">
+          <img alt="Front &amp; Rear of Saint Francis Ministries Challenge Coin"
+               src="/files/images/SFM_Challenge_Coin-Both.png"
+               class="mx-auto"
+               style="width:70%; height:auto;">
+          <!-- This image was altered with AI to make it look better, as the photos I took would always have reflections. Actual photos are /files/images/SFM_Challenge_Coin-Front.png and /images/SFM_Challenge_Coin-Rear.png -->
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
+        </div>
+      </div>
+
+      <!-- AI assessment -->
+      <div class="bg-gradient-to-br from-mint/10 to-mint-muted/5 rounded-2xl border border-mint/25 shadow-sm p-6 md:p-8">
+        <div class="flex items-start gap-3 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-mint/30 flex items-center justify-center text-brand shrink-0 mt-0.5" aria-hidden="true">
+            <i class="fa-solid fa-robot text-sm"></i>
+          </div>
+          <div>
+            <div class="font-bold text-brand text-base sm:text-lg mb-1">What does AI say about me?</div>
+            <div class="text-slate-500 text-xs sm:text-sm font-normal">(Generated Using the Self-Hosted Model Gemma3)</div>
+          </div>
+        </div>
+        <ul class="check-list space-y-4">
+          <li><strong>Highly driven and curious</strong> Constantly learning beyond the job (Security+, CISSP, Kubernetes, lab work, motorcycle repairs, self-hosted AI)</li>
+          <li><strong>Security-minded, systems-level perspective</strong> Focuses on reliability, process, and risk rather than quick fixes. The mindset of a strong architect or future CISO</li>
+          <li><strong>Balances technical depth with service</strong> Values people and community in nonprofit/public sector work, committees, and infrastructure upgrades</li>
+          <li><strong>Already positioning as a leader</strong> Serving on committees, planning infrastructure for new facilities, and running home labs — qualities hiring managers seek</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TECHNICAL HIGHLIGHTS
+═══════════════════════════════════════════════════ -->
+<section class="highlights-section slide-up bs-section--ink py-16 md:py-20" id="technical">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="section-heading">Technical Highlights</h2>
+    <p class="text-white/65 text-sm mb-6">A quick scan of infrastructure, security, and operational wins across my roles.</p>
     <ul class="accomplishments">
       <li>Successfully deployed new Layer 2 switches across multiple networking closets, optimizing performance and stability.</li>
       <li>Led a complete cabling initiative, introducing color-coded patching for improved organization and efficiency.</li>
