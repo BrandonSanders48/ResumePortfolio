@@ -460,17 +460,17 @@ textarea.form-input { resize: vertical; min-height: 130px; }
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .bs-section--ink .section-heading {
-  color: #fff;
+  color: #fff !important;
   background-image: linear-gradient(90deg, rgba(191, 243, 230, 0.70), rgba(119, 196, 200, 0.40));
 }
 .bs-section--ink .accomplishments li {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 255, 255, 0.14);
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(255, 255, 255, 0.86) !important;
 }
 .bs-section--ink .accomplishments li::before {
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.92) !important;
   background: rgba(191, 243, 230, 0.14);
   border-color: rgba(191, 243, 230, 0.24);
 }
@@ -537,4 +537,13 @@ textarea.form-input { resize: vertical; min-height: 130px; }
   .form-input { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.18); color: #e8eefc; }
   .form-input::placeholder { color: rgba(232, 238, 252, 0.42); }
   .form-input:focus { border-color: rgba(191, 243, 230, 0.55); box-shadow: 0 0 0 4px rgba(191, 243, 230, 0.12); }
+
+  /* AI assessment box has a light mint background — keep text dark in dark mode too */
+  #about2 .check-list li,
+  #about2 .check-list li strong { color: #1f2a44 !important; }
+  #about2 .check-list li::before { color: rgba(31, 42, 68, 0.92) !important; background: rgba(191, 243, 230, 0.28) !important; }
+
+  /* Portfolio check-list checkmark icons on white-background cards */
+  #experience .check-list li::before,
+  #skills .check-list li::before { color: rgba(31, 42, 68, 0.92) !important; background: rgba(191, 243, 230, 0.28) !important; border-color: rgba(119, 196, 200, 0.40) !important; }
 }

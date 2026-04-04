@@ -35,7 +35,7 @@
       </a>
       <a href="#" data-load-page="/Portfolio/index.php" data-scroll="about"
          class="flex items-center gap-2.5" aria-label="Back to portfolio">
-        <img src="/files/images/myself.png" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
+        <img src="/files/images/bs-logo.svg" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
         <span class="text-white font-semibold text-sm tracking-tight">Brandon Sanders</span>
       </a>
     </div>
@@ -84,15 +84,16 @@
 ═══════════════════════════════════════════════════ -->
 <header id="home" class="bg-brand pt-16 overflow-hidden relative">
   <!-- Background blobs -->
-  <div class="absolute top-0 left-0 w-[600px] h-[400px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
-  <div class="absolute top-0 right-0 w-[500px] h-[350px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="hidden lg:block absolute top-0 left-0 w-[600px] h-[400px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="hidden lg:block absolute top-0 right-0 w-[500px] h-[350px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
 
   <div class="max-w-6xl mx-auto px-4 py-12 lg:py-16 relative z-10">
     <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
 
       <!-- Photo -->
       <div class="shrink-0 relative">
-        <div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>
+        <!-- Glow ring -->
+        <!--<div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>-->
         <img src="/files/images/Brandon_Sanders-cropped.png"
              alt="Brandon Sanders Portrait"
              class="relative w-36 h-36 lg:w-48 lg:h-48 rounded-full object-cover border-2 border-white/15 shadow-2xl">
@@ -192,7 +193,17 @@
       </div>
 
       <!-- AI assessment -->
-      <div class="bg-gradient-to-br from-mint/10 to-mint-muted/5 rounded-2xl border border-mint/25 shadow-sm p-6 md:p-8">
+      <style>
+        .ai-assessment-box .check-list li::before {
+          color: #1f2a44 !important;
+          background: rgba(191,243,230,0.45) !important;
+          border-color: rgba(119,196,200,0.55) !important;
+        }
+        .ai-assessment-box .check-list li {
+          border-bottom-color: rgba(119,196,200,0.25) !important;
+        }
+      </style>
+      <div class="ai-assessment-box bg-gradient-to-br from-mint/10 to-mint-muted/5 rounded-2xl border border-mint/25 shadow-sm p-6 md:p-8">
         <div class="flex items-start gap-3 mb-5">
           <div class="w-8 h-8 rounded-lg bg-mint/30 flex items-center justify-center text-brand shrink-0 mt-0.5" aria-hidden="true">
             <i class="fa-solid fa-robot text-sm"></i>
@@ -202,11 +213,11 @@
             <div class="text-slate-500 text-xs sm:text-sm font-normal">(Generated Using the Self-Hosted Model Gemma3)</div>
           </div>
         </div>
-        <ul class="check-list space-y-4">
-          <li><strong>Highly driven and curious</strong> Constantly learning beyond the job (Security+, CISSP, Kubernetes, lab work, motorcycle repairs, self-hosted AI)</li>
-          <li><strong>Security-minded, systems-level perspective</strong> Focuses on reliability, process, and risk rather than quick fixes. The mindset of a strong architect or future CISO</li>
-          <li><strong>Balances technical depth with service</strong> Values people and community in nonprofit/public sector work, committees, and infrastructure upgrades</li>
-          <li><strong>Already positioning as a leader</strong> Serving on committees, planning infrastructure for new facilities, and running home labs — qualities hiring managers seek</li>
+        <ul class="check-list space-y-4" style="--check-color: #1f2a44; --check-bg: rgba(191,243,230,0.35); --check-border: rgba(119,196,200,0.5);">
+          <li style="color:#1f2a44;"><strong style="color:#1f2a44;">Highly driven and curious</strong> Constantly learning beyond the job (Security+, CISSP, Kubernetes, lab work, motorcycle repairs, self-hosted AI)</li>
+          <li style="color:#1f2a44;"><strong style="color:#1f2a44;">Security-minded, systems-level perspective</strong> Focuses on reliability, process, and risk rather than quick fixes. The mindset of a strong architect or future CISO</li>
+          <li style="color:#1f2a44;"><strong style="color:#1f2a44;">Balances technical depth with service</strong> Values people and community in nonprofit/public sector work, committees, and infrastructure upgrades</li>
+          <li style="color:#1f2a44;"><strong style="color:#1f2a44;">Already positioning as a leader</strong> Serving on committees, planning infrastructure for new facilities, and running home labs — qualities hiring managers seek</li>
         </ul>
       </div>
 

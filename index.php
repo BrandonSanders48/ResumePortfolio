@@ -74,7 +74,7 @@
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="files/images/myself.png">
+    <link rel="icon" type="image/svg+xml" href="files/images/bs-logo.svg">
     <?php if (defined('CLARITY_TRACKING_CODE')) { echo CLARITY_TRACKING_CODE; } ?>
 </head>
 <body class="font-sans antialiased">
@@ -96,7 +96,7 @@
         <div class="max-w-6xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
             <!-- Logo + copyright -->
             <div class="flex items-center gap-3">
-                <img src="/files/images/myself.png" alt="Brandon Sanders initials" class="w-9 h-9 rounded-lg object-cover opacity-80">
+                <img src="/files/images/bs-logo.svg" alt="Brandon Sanders initials" class="w-9 h-9 rounded-lg object-cover opacity-80">
                 <p class="text-white/60 text-xs">&copy; <?php echo date("Y"); ?> Brandon Sanders, CISSP</p>
             </div>
             <!-- Disclaimer -->

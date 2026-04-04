@@ -619,6 +619,8 @@ if ($action === 'export') {
           }
         }
       </style>
+      <link rel="icon" type="image/svg+xml" href="../files/images/bs-logo.svg">
+      <?php if (defined('CLARITY_TRACKING_CODE')) { echo CLARITY_TRACKING_CODE; } ?>
     </head>
     <body>
       <div class="toolbar">

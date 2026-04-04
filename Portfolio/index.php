@@ -29,7 +29,7 @@
 
     <!-- Logo -->
     <a href="#home" class="flex items-center gap-2.5" aria-label="Home">
-      <img src="/files/images/myself.png" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
+      <img src="/files/images/bs-logo.svg" alt="BS" class="w-8 h-8 rounded-lg object-cover shadow-md">
       <span class="text-white font-semibold text-sm tracking-tight">Brandon Sanders</span>
     </a>
 
@@ -104,8 +104,12 @@
         <div class="flex flex-wrap gap-2 justify-center lg:justify-start mb-7">
           <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">Salina, KS</span>
           <span class="bg-mint/20 border border-mint/30 text-mint/90 text-xs font-semibold px-3 py-1.5 rounded-full">IT Manager / CISO Track</span>
-          <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">(ISC)² CISSP</span>
-          <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">CompTIA Security+</span>
+          <a href="https://www.credly.com/badges/3c84ffd0-0c4d-4551-bc52-2309e51f0597" target="_blank" rel="noopener noreferrer">
+            <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">(ISC)² CISSP</span>
+          </a>
+          <a href="https://www.credly.com/badges/0e6238f1-615e-4767-b19b-e00b3ee1e10a" target="_blank" rel="noopener noreferrer">
+            <span class="bg-white/10 border border-white/18 text-white/85 text-xs font-medium px-3 py-1.5 rounded-full">CompTIA Security+</span>
+          </a>
         </div>
 
         <!-- Action buttons -->
@@ -132,7 +136,7 @@
       <!-- Photo column -->
       <div class="order-1 lg:order-2 shrink-0 relative">
         <!-- Glow ring -->
-        <div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>
+        <!--<div class="absolute inset-0 rounded-full bg-mint/20 blur-2xl scale-110 pointer-events-none" aria-hidden="true"></div>-->
         <img src="/files/images/Brandon_Sanders-cropped.png"
              alt="Brandon Sanders Portrait"
              class="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-64 lg:h-64 rounded-full object-cover border-2 border-white/15 shadow-2xl">
@@ -631,43 +635,52 @@
     <h2 class="section-heading">Certifications</h2>
     <div class="grid md:grid-cols-3 gap-6 mb-6">
 
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col">
         <div class="flex items-center justify-between mb-2">
           <div class="font-bold text-brand text-lg">CISSP</div>
           <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">(ISC)²</span>
         </div>
         <div class="text-slate-500 text-sm mb-4">Certified Information Systems Security Professional</div>
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-wrap gap-1.5 mb-4">
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Risk</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Security Strategy</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Architecture</span>
         </div>
+        <a href="https://www.credly.com/badges/3c84ffd0-0c4d-4551-bc52-2309e51f0597" target="_blank" rel="noopener" class="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-mint transition-colors">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[0.65rem]"></i> Verify on Credly
+        </a>
       </div>
 
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col">
         <div class="flex items-center justify-between mb-2">
           <div class="font-bold text-brand text-lg">CC</div>
           <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">(ISC)²</span>
         </div>
         <div class="text-slate-500 text-sm mb-4">Certified in Cybersecurity</div>
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-wrap gap-1.5 mb-4">
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Foundations</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Security Controls</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Best Practices</span>
         </div>
+        <a href="https://www.credly.com/badges/90835a7f-8e3c-48c6-b082-fb36d9e0c533" target="_blank" rel="noopener" class="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-mint transition-colors">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[0.65rem]"></i> Verify on Credly
+        </a>
       </div>
 
-      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col">
         <div class="flex items-center justify-between mb-2">
           <div class="font-bold text-brand text-lg">Security+</div>
           <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">CompTIA</span>
         </div>
         <div class="text-slate-500 text-sm mb-4">Baseline cybersecurity knowledge and operations</div>
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-wrap gap-1.5 mb-4">
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Ops</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Defense</span>
           <span class="bg-mint/15 border border-mint/30 text-brand text-xs font-medium px-2.5 py-1 rounded-full">Incidents</span>
         </div>
+        <a href="https://www.credly.com/badges/0e6238f1-615e-4767-b19b-e00b3ee1e10a" target="_blank" rel="noopener" class="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-mint transition-colors">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[0.65rem]"></i> Verify on Credly
+        </a>
       </div>
 
     </div>
@@ -677,7 +690,7 @@
       <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener"
          class="inline-flex items-center gap-2 border border-slate-300 text-slate-700 text-sm font-semibold px-5 py-2 rounded-full hover:bg-slate-50 transition-all">
         <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-        View on Credly
+        View more on Credly
       </a>
     </div>
   </div>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Dark navy background -->
+  <rect width="200" height="200" fill="#1a2e44" rx="8"/>
+
+  <!-- B letter -->
+  <text x="12" y="138" font-family="Arial, Helvetica, sans-serif" font-size="110" font-weight="700" fill="#ffffff">B</text>
+
+  <!-- Teal/green diagonal slash -->
+  <line x1="96" y1="48" x2="108" y2="152" stroke="#4db89e" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- S letter -->
+  <text x="114" y="138" font-family="Arial, Helvetica, sans-serif" font-size="110" font-weight="700" fill="#ffffff">S</text>
+</svg>
