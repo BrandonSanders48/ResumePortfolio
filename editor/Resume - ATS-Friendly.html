@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brandon Sanders - Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@page { margin: 0; }
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #1f2a33;
+}
+
+.resume {
+  width: 8.5in;
+  height: 11in;
+  margin: 0 auto;
+  overflow: hidden;
+  background: linear-gradient(to right, #f2f3f1 0, #f2f3f1 2.6in, #ffffff 2.6in, #ffffff 100%);
+}
+
+.resume::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: #1f3553;
+  color: #ffffff;
+  padding: 22px 34px;
+  box-shadow: inset 0 -12px 0 #cfeedd;
+  height: 1.85in;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headshot {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.logo span {
+  color: #9fe0c3;
+}
+
+.name-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+.name-title h2 {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255,255,255,0.5);
+  padding-top: 8px;
+}
+
+/* ===== LEFT COLUMN ===== */
+.sidebar {
+  background: transparent;
+  padding: 22px 20px;
+  float: left;
+  width: 2.6in;
+  box-sizing: border-box;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+/* Reset heading defaults inside sidebar sections */
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3.2px;
+  color: #1f3553;
+  margin: 0 0 10px 0;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.skill-label {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.education p,
+.certifications p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.mini-list p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+/* ===== RIGHT COLUMN ===== */
+.content {
+  padding: 18px 30px;
+  margin-left: 2.7in;
+  box-sizing: border-box;
+}
+
+.summary {
+  font-size: 12px;
+  line-height: 1.42;
+  border-bottom: 2px solid #cfeedd;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.job {
+  margin-top: 14px;
+}
+
+.job h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.job h4 {
+  margin: 2px 0 6px;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+  color: #3a5070;
+}
+
+.job ul {
+  font-size: 12px;
+  line-height: 1.42;
+  margin: 0 0 0 14px;
+  padding: 0;
+}
+
+.job ul li {
+  margin-bottom: 3px;
+}
+</style>
+</head>
+
+<body>
+<div class="resume">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">B<span>/</span>S</div>
+      <div class="name-title">
+        <h1>Brandon Sanders, CISSP</h1>
+        <h2>IT Security Leader | Risk &amp; Compliance | Infrastructure Strategy</h2>
+      </div>
+    </div>
+
+    <div class="headshot" aria-label="Headshot">
+      <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" />
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>
+      <span>Salina, KS</span>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.56 3.58.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.3 21 3 13.7 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.19 2.46.56 3.58a1 1 0 0 1-.24 1.01l-2.2 2.2z"/></svg>
+      <a href="tel:{{CONTACT_PHONE_NUMBER_TEL}}">{{CONTACT_PHONE_NUMBER}}</a>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
+      <a href="mailto:{{CONTACT_EMAIL_MAILTO}}">{{CONTACT_EMAIL}}</a>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      <a href="https://linkedin.com/in/brandonsanders48">linkedin.com/in/brandonsanders48</a>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3.9 12a5 5 0 0 1 1.46-3.54l2.12-2.12a5 5 0 0 1 7.07 7.07l-1.06 1.06-1.41-1.41 1.06-1.06a3 3 0 1 0-4.24-4.24L6.78 9.88a3 3 0 1 0 4.24 4.24l.53-.53 1.41 1.41-.53.53A5 5 0 0 1 3.9 12zm16.2 0a5 5 0 0 1-1.46 3.54l-2.12 2.12a5 5 0 1 1-7.07-7.07l1.06-1.06 1.41 1.41-1.06 1.06a3 3 0 1 0 4.24 4.24l2.12-2.12a3 3 0 0 0-4.24-4.24l-.53.53-1.41-1.41.53-.53A5 5 0 0 1 20.1 12z"/></svg>
+      <a href="https://brandonsanders.org">BrandonSanders.org</a>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Skills</h2>
+      <div class="mini-list">
+        <p>Network Security &amp; Infrastructure</p>
+        <p>Security Operations &amp; Hardening</p>
+        <p>Vulnerability &amp; Risk Management</p>
+        <p>Identity &amp; Access Management (SSO / MFA)</p>
+        <p>GRC &amp; Compliance (HIPAA, SOC 2, NIST)</p>
+        <p>Cloud, Kubernetes &amp; Automation</p>
+        <p>IT Strategy &amp; Program Management</p>
+        <p>Disaster Recovery &amp; Business Continuity</p>
+        <p>Vendor Management &amp; Procurement</p>
+        <p>PowerShell &amp; Bash Scripting</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Core Platforms</h2>
+      <div class="mini-list">
+        <p>Azure / Microsoft 365 / Entra ID / Intune</p>
+        <p>Fortinet / Sophos / pfSense / Cisco</p>
+        <p>Proxmox / VMware / Veeam / TrueNAS</p>
+        <p>Kubernetes / Docker / Git / Ansible</p>
+        <p>Elastic SIEM / Graylog / Prometheus</p>
+      </div>
+    </div>
+
+    <div class="section education">
+      <h2 class="section-title">Education</h2>
+      <p><em>Salina Central High School</em></p>
+      <p>Diploma, Class of 2014</p>
+    </div>
+
+    <div class="section certifications">
+      <h2 class="section-title">Certifications</h2>
+      <p>(ISC)2 CISSP</p>
+      <p>CompTIA Security+</p>
+      <p>(ISC)2 CC - Certified in Cybersecurity</p>
+      <p>Pursuing: CISM</p>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="summary">
+      IT Security leader with 5+ years managing security programs, infrastructure, and compliance across healthcare and nonprofit organizations. Holds CISSP certification. Expertise in GRC, risk management, incident response, identity security, and IT program leadership. Elected to Safety, Security, and HIPAA committees across multiple organizations. Seeking IT Manager and CISO-track roles where technical depth meets strategic risk leadership.
+    </div>
+
+    <div class="job">
+      <h3>Salina Health Education Foundation</h3>
+      <h4>Network Administrator | Jan 2023 - Present</h4>
+      <ul>
+        <li>Own end-to-end IT operations and security program for a multi-site healthcare organization, ensuring HIPAA compliance, uptime, and risk alignment.</li>
+        <li>Elected to both the Safety Committee and Security Committee, contributing to governance, risk oversight, and policy decisions at the organizational level.</li>
+        <li>Led security modernization transitioning to Azure SSO with MFA enforcement and HTTPS-only policies, measurably reducing credential and access-related risk.</li>
+        <li>Designed and delivered complete IT infrastructure for a new healthcare facility, including network topology, server room design, endpoint provisioning, and disaster recovery.</li>
+        <li>Negotiated vendor contracts and managed technology procurement balancing cost, compliance requirements, and long-term operational needs.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>Saint Francis Ministries</h3>
+      <h4>Cybersecurity Analyst | May 2021 - Oct 2022</h4>
+      <ul>
+        <li>Elected to the HIPAA Committee, collaborating cross-functionally to align data handling and privacy practices with regulatory requirements.</li>
+        <li>Managed security across a multi-site environment, conducting risk assessments and remediating vulnerabilities to protect sensitive organizational data.</li>
+        <li>Developed and enforced data protection policies for data in transit and at rest, aligned with HIPAA, SOC 2, and industry best practices.</li>
+        <li>Recognized with the CEO Challenge Coin for outstanding contributions to organizational security and compliance.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>SMG Unlimited LLC</h3>
+      <h4>Network Administrator | Feb 2020 - May 2021</h4>
+      <ul>
+        <li>Administered network infrastructure and provided technical support across the organization, resolving issues and maintaining operational continuity.</li>
+        <li>Configured and maintained firewalls and network security appliances.</li>
+        <li>Managed work orders, support tickets, and network problem resolution.</li>
+        <li>Supported technology upgrade and network expansion projects.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>Blue Beacon International</h3>
+      <h4>Information Technology Intern | Oct 2013 - Dec 2016</h4>
+      <ul>
+        <li>Diagnosed problems and helped develop solutions.</li>
+        <li>Supported PC hardware components, desktop operating system software, and application software.</li>
+        <li>Handled equipment repairs and arranged servicing, alongside additional assigned duties and projects.</li>
+      </ul>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

@@ -414,7 +414,7 @@
         <div class="tl-card">
           <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — Salina Family Healthcare Center</h3>
+              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — Salina Health Education Foundation</h3>
               <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2023 – Present</span>
             </div>
             <ul class="check-list">
@@ -532,7 +532,7 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-hospital"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">IT &amp; Network Infrastructure Design — Salina Family Healthcare Center</div>
+          <div class="font-bold text-white text-sm leading-tight">IT &amp; Network Infrastructure Design — Salina Health Education Foundation</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
           Designed the complete IT and network infrastructure for a new healthcare facility, including network topology, segmentation strategy, server room layout, and security architecture, ensuring HIPAA compliance and operational resilience from day one.
@@ -573,7 +573,7 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-lock"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">Security Modernization — Salina Family Healthcare Center</div>
+          <div class="font-bold text-white text-sm leading-tight">Security Modernization — Salina Health Education Foundation</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
           Led a targeted security modernization initiative, transitioning the organization from legacy authentication to Azure SSO with MFA and enforcing HTTPS-only policies, measurably improving the security posture.

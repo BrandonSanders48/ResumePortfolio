@@ -322,6 +322,7 @@
       <li>Deployed read-only domain controllers at remote sites.</li>
       <li>Adopted modern conditional access policies to enforce location-based security.</li>
       <li>Implemented advanced vulnerability scanning and remediation for domain environments.</li>
+      <li>This list is not comprehensive but highlights some key achievements in IT infrastructure and security.</li>
     </ul>
   </div>
 </section>
