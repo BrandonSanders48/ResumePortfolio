@@ -524,7 +524,7 @@
 <section class="slide-up bg-white py-16 md:py-20" id="projects">
   <div class="max-w-6xl mx-auto px-4">
     <h2 class="section-heading">Featured Projects</h2>
-    <div class="grid md:grid-cols-3 gap-6">
+    <div class="grid md:grid-cols-2 gap-6">
 
       <!-- Project 1 -->
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
@@ -584,6 +584,34 @@
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Network segmentation</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Security baseline hardening</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Vulnerability remediation</span>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <div class="font-bold text-white text-sm leading-tight">Sophos NDR on Proxmox — Home Lab</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Deployed Sophos Network Detection &amp; Response (NDR) on Proxmox, overcoming undocumented compatibility and configuration challenges to run a commercial enterprise security appliance on an open-source hypervisor. Documented the full solution on GitHub to help others in the community do the same.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Sophos NDR</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Proxmox</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Network Detection &amp; Response</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Virtualization</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Home Lab</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Security Research</span>
+        </div>
+        <div class="px-4 pb-4 mt-auto">
+          <a href="https://github.com/BrandonSanders48/SophosNDR-Proxmox" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-mint transition-colors">
+            <i class="fa-brands fa-github text-sm"></i> View on GitHub
+          </a>
+
         </div>
       </div>
 
