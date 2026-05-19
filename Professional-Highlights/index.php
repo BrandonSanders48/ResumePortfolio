@@ -46,7 +46,8 @@
       <li><a href="#highlights" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Highlights</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="skills" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Skills</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="experience" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Experience</a></li>
-      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="projects" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Projects/index.php" data-scroll="" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Volunteer/index.php" data-scroll="" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Volunteer</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
       <li class="ml-2">
@@ -68,7 +69,8 @@
       <li><a href="#highlights" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Highlights</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="skills" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Skills</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="experience" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Experience</a></li>
-      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="projects" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Projects/index.php" data-scroll="" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Projects</a></li>
+      <li><a href="#" data-load-page="/Volunteer/index.php" data-scroll="" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Volunteer</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
       <li class="pt-1">
@@ -83,9 +85,8 @@
      HERO (compact)
 ═══════════════════════════════════════════════════ -->
 <header id="home" class="bg-brand pt-16 overflow-hidden relative">
-  <!-- Background blobs -->
-  <div class="hidden lg:block absolute top-0 left-0 w-[600px] h-[400px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
-  <div class="hidden lg:block absolute top-0 right-0 w-[500px] h-[350px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 left-0 w-[700px] h-[500px] rounded-full bg-mint opacity-[0.07] blur-3xl -translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[450px] rounded-full bg-mint-muted opacity-[0.08] blur-3xl translate-x-1/4 -translate-y-1/4 pointer-events-none" aria-hidden="true"></div>
 
   <div class="max-w-6xl mx-auto px-4 py-12 lg:py-16 relative z-10">
     <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
@@ -126,7 +127,7 @@
 <!-- ═══════════════════════════════════════════════════
      ABOUT / CAREER ACCOMPLISHMENTS
 ═══════════════════════════════════════════════════ -->
-<section class="about-section slide-up bg-gradient-to-b from-[#e8f8f1] to-[#f0faf6] py-16 md:py-20" id="about2">
+<section class="about-section slide-up bg-gradient-to-b from-blue-50 to-slate-50 py-16 md:py-20" id="about2">
   <div class="max-w-6xl mx-auto px-4">
     <h2 class="section-heading">Career Accomplishments</h2>
     <div class="max-w-3xl">
