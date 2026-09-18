@@ -1,0 +1,257 @@
+@import "tailwindcss";
+@import "@fortawesome/fontawesome-svg-core/styles.css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #14171f;
+
+  /* Ink = near-black text/section color. Brand kept as an alias for it
+     so existing bg-brand / text-brand utility classes stay in sync. */
+  --ink: #14171f;
+  --brand: #14171f;
+  --brand-dark: #0b0d13;
+  --brand-light: #2a2e3d;
+
+  /* Muted, editorial neutrals */
+  --paper: #eef1f6;
+  --line: #dfe3ea;
+
+  /* Single restrained accent, used sparingly (eyebrow labels, links, small marks) */
+  --accent: #3f6b66;
+  --mint: #3f6b66;
+  --mint-muted: #8a95a8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-paper: var(--paper);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-mint: var(--mint);
+  --color-mint-muted: var(--mint-muted);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id],
+header[id] {
+  scroll-margin-top: 84px;
+}
+
+/* Scroll-reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Checklist */
+.check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.check-list li {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(20, 23, 31, 0.08);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #3f4451;
+}
+.check-list li:last-child {
+  border-bottom: none;
+}
+.check-list li::before {
+  content: "";
+  flex: 0 0 auto;
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: rgba(63, 107, 102, 0.1);
+  border: 1.5px solid rgba(63, 107, 102, 0.35);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%233f6b66' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.5l3 3 7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 62%;
+}
+
+/* Numbered section eyebrow */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.eyebrow .eyebrow-rule {
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.eyebrow.eyebrow-light {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Moving grid background effect */
+.moving-grid {
+  position: absolute;
+  inset: -1px;
+  background-image: linear-gradient(rgba(20, 23, 31, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 31, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  animation: grid-pan 20s linear infinite;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 50%, transparent 100%);
+}
+.moving-grid-glow {
+  position: absolute;
+  width: 40rem;
+  height: 26rem;
+  top: -8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgba(63, 107, 102, 0.16), transparent 72%);
+  filter: blur(60px);
+  animation: grid-glow-drift 14s ease-in-out infinite;
+}
+@keyframes grid-pan {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 44px 44px, 44px 44px;
+  }
+}
+@keyframes grid-glow-drift {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-44%) translateY(2rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .moving-grid,
+  .moving-grid-glow {
+    animation: none;
+  }
+}
+
+/* Buttons & pills */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  transition: opacity 0.15s ease;
+}
+.btn-primary:hover {
+  opacity: 0.82;
+}
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: #fff;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.btn-outline:hover {
+  border-color: rgba(20, 23, 31, 0.4);
+  background: var(--paper);
+}
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: none;
+  color: rgba(20, 23, 31, 0.6);
+  background: rgba(20, 23, 31, 0.055);
+}
+.pill-accent {
+  color: var(--accent);
+  background: rgba(63, 107, 102, 0.1);
+  font-weight: 600;
+}
+
+/* Form input */
+.form-input {
+  width: 100%;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.form-input::placeholder {
+  color: rgba(20, 23, 31, 0.38);
+}
+.form-input:focus {
+  border-color: rgba(63, 107, 102, 0.6);
+  box-shadow: 0 0 0 3px rgba(63, 107, 102, 0.14);
+}
+textarea.form-input {
+  resize: vertical;
+  min-height: 130px;
+}
