@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brandon Sanders – Cover Letter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@page { margin: 0; }
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #14171f;
+}
+
+.page {
+  width: 8.5in;
+  height: 11in;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER (match resume) ===== */
+.header {
+  background: #eef1f6;
+  color: #14171f;
+  padding: 22px 34px;
+  border-bottom: 3px solid #3f6b66;
+  height: 1.85in;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint grid texture, echoes the site's hero background */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(20, 23, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 31, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  pointer-events: none;
+}
+
+.header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.headshot {
+  width: 92px;
+  height: 92px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 3px solid #ffffff;
+  background: #dfe3ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-shadow: 0 1px 3px rgba(20, 23, 31, 0.15);
+}
+
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.headshot .headshot-fallback {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #14171f;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: #14171f;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 27px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+.logo span {
+  position: absolute;
+  right: 9px;
+  bottom: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3f6b66;
+}
+
+.name-title h1 {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+.name-title h1 em {
+  font-style: italic;
+}
+
+.name-title h2 {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(20, 23, 31, 0.6);
+  border-top: 1px solid #dfe3ea;
+  padding-top: 8px;
+}
+
+/* CONTENT */
+.cover-content {
+  padding: 42px 64px;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.cover-content p {
+  margin-bottom: 28px;
+}
+
+.cover-content a {
+  color: #3f6b66;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">BS<span></span></div>
+      <div class="name-title">
+        <h1>Brandon Sanders, <em>CISSP</em></h1>
+        <h2>IT Security Leader | Risk & Compliance | Infrastructure Strategy</h2>
+      </div>
+    </div>
+
+    <div class="headshot" aria-label="Headshot">
+      <img src="/files/images/Brandon_Sanders-cropped.png" alt="Brandon Sanders Portrait" />
+    </div>
+  </header>
+
+  <main class="cover-content">
+    <p>
+      Dear Hiring Team{{TARGET_HIRING_TEAM_AT}},
+    </p>
+
+    <p>
+      Thank you for the opportunity to apply for this {{TARGET_JOB_TITLE}} position. After reviewing the role, I am confident that my experience and leadership approach align strongly with your organization’s needs.
+    </p>
+
+    <p>
+      I am a results-driven IT professional with experience across network administration, cybersecurity, systems architecture, and operational improvement. Beyond implementing technical solutions, I provide strategic direction by identifying infrastructure risks, eliminating inefficiencies, and leading initiatives that strengthen security posture while improving reliability and performance.
+    </p>
+
+    <p>
+      In my current role, I serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, approximately 200 users), owning infrastructure and security initiatives that support both daily operations and long-term organizational resilience. Recent initiatives include migrating our virtualization platform from VMware to Proxmox to eliminate rising licensing costs, and designing an active hot site disaster recovery solution for near-instant failover during an outage. I approach IT as a business enabler, balancing technical excellence with cost-effectiveness and risk management.
+    </p>
+
+    <p>
+      I am currently pursuing a B.S. in Information Technology Management at Western Governors University to complement my hands-on experience and CISSP certification with formal academic credentials. My portfolio and professional highlights at <strong><a href="https://brandonsanders.org">brandonsanders.org</a></strong> show additional technical wins across networking, segmentation, firewall/VPN work, vulnerability remediation, and deploying enterprise security tooling (including Sophos NDR and Kubernetes) in production.
+    </p>
+
+    <p>
+      I would welcome the opportunity to bring this same level of strategic and operational leadership to your organization. Thank you for your time and consideration.
+    </p> 
+
+    <p>
+      I can be reached at <strong><a href="tel:{{CONTACT_PHONE_NUMBER_TEL}}">{{CONTACT_PHONE_NUMBER}}</a></strong> or <strong><a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></strong>.
+    </p>
+
+    <p>
+      Sincerely,<br>
+      <strong>Brandon Sanders, CISSP</strong>
+    </p>
+  </main>
+
+</div>
+</body>
+</html>

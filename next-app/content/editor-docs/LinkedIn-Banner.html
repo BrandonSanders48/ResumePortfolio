@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brandon Sanders – LinkedIn Banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+  }
+
+  .banner {
+    width: 1584px;
+    height: 396px;
+    background: #eef1f6;
+    border-bottom: 10px solid #3f6b66;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Faint grid texture, echoes the site's hero background */
+  .banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(20, 23, 31, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20, 23, 31, 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 70% 90% at 100% 50%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 90% at 100% 50%, #000 40%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    z-index: 1;
+  }
+
+  .logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 32px;
+    background: #14171f;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 58px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  .logo span {
+    position: absolute;
+    right: 20px;
+    bottom: 22px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #3f6b66;
+  }
+
+  .divider-v {
+    width: 2px;
+    height: 120px;
+    background: #dfe3ea;
+    flex-shrink: 0;
+  }
+
+  .name-block {
+    color: #14171f;
+  }
+
+  .name-block h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: 0.5px;
+  }
+
+  .name-block h1 em {
+    font-style: italic;
+  }
+
+  .name-block h2 {
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    border-top: 1px solid #dfe3ea;
+    padding-top: 14px;
+    color: rgba(20, 23, 31, 0.6);
+  }
+
+  /* Export instructions overlay - hidden when printing */
+  .instructions {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  @media print {
+    body { background: none; margin: 0; min-height: unset; }
+    .instructions { display: none; }
+    .banner { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="brand">
+    <div class="logo">BS<span></span></div>
+    <div class="divider-v"></div>
+    <div class="name-block">
+      <h1>Brandon Sanders, <em>CISSP</em></h1>
+      <h2>IT Security Leader &nbsp;|&nbsp; Risk &amp; Compliance &nbsp;|&nbsp; Infrastructure Strategy</h2>
+    </div>
+  </div>
+
+</div>
+
+<div class="instructions">
+  To export: zoom browser to 100% &rarr; screenshot the banner &rarr; crop to 1584&times;396 px &nbsp;|&nbsp; LinkedIn banner size: 1584&times;396
+</div>
+
+</body>
+</html>

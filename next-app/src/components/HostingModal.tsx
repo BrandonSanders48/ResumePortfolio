@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faCubes, faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -10,9 +11,11 @@ const STORAGE_KEY = "modalLastShown";
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 export default function HostingModal() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (pathname?.startsWith("/editor")) return;
     try {
       const lastShown = localStorage.getItem(STORAGE_KEY);
       const now = Date.now();
@@ -22,7 +25,7 @@ export default function HostingModal() {
     } catch {
       // localStorage unavailable; skip the modal
     }
-  }, []);
+  }, [pathname]);
 
   function close() {
     setOpen(false);

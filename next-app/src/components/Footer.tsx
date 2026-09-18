@@ -18,12 +18,7 @@ export default function Footer() {
         <div className="text-white/60 text-xs text-right">
           Self-hosted website built by Brandon Sanders, CISSP
           <span className="mx-1.5 text-white/30">·</span>
-          <a
-            href="https://brandonsanders.org/editor/index.php"
-            target="_blank"
-            rel="noopener"
-            className="hover:text-white/85 transition-colors"
-          >
+          <a href="/editor" className="hover:text-white/85 transition-colors">
             Resume Editor
           </a>
         </div>
