@@ -538,7 +538,7 @@ textarea.form-input { resize: vertical; min-height: 130px; }
   .form-input::placeholder { color: rgba(232, 238, 252, 0.42); }
   .form-input:focus { border-color: rgba(191, 243, 230, 0.55); box-shadow: 0 0 0 4px rgba(191, 243, 230, 0.12); }
 
-  /* AI assessment box has a light mint background — keep text dark in dark mode too */
+  /* AI assessment box has a light mint background - keep text dark in dark mode too */
   #about2 .check-list li,
   #about2 .check-list li strong { color: #1f2a44 !important; }
   #about2 .check-list li::before { color: rgba(31, 42, 68, 0.92) !important; background: rgba(191, 243, 230, 0.28) !important; }

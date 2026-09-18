@@ -1,25 +1,25 @@
 <?php
-    ini_set('display_errors', 0);
-    ini_set('display_startup_errors', 0);
-    error_reporting(E_ALL);
+    $isFetch = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'fetch';
 
-    header("X-Content-Type-Options: nosniff");
-    header("X-Frame-Options: DENY");
-    header("X-XSS-Protection: 1; mode=block");
-    header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    if ($isFetch) {
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(E_ALL);
 
-    if (
-        !isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
-        $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'fetch'
-    ) {
-        http_response_code(405);
-        echo json_encode(["success" => false, "message" => "Method Not Allowed"]);
-        exit;
+        header("X-Content-Type-Options: nosniff");
+        header("X-Frame-Options: DENY");
+        header("X-XSS-Protection: 1; mode=block");
+        header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    } else {
+        $pageTitle = 'Volunteer Work | Brandon Sanders, CISSP';
+        $pageDescription = 'Volunteer and community involvement by Brandon Sanders, CISSP, including cybersecurity education and scholarship review work.';
+        $pageCanonical = 'https://brandonsanders.org/Volunteer/index.php';
+        require __DIR__ . '/../includes/full-page-wrapper-top.php';
     }
 ?>
 
 <!-- ═══════════════════════════════════════════════════
-     NAVBAR (Volunteer — with back arrow)
+     NAVBAR (Volunteer - with back arrow)
 ═══════════════════════════════════════════════════ -->
 <nav class="fixed top-0 left-0 right-0 z-50 h-16 bg-brand/[.96] backdrop-blur-xl border-b border-white/10">
   <div class="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
@@ -48,8 +48,13 @@
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
       <li class="ml-2">
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Resume
+        </a>
+      </li>
+      <li>
         <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
-           class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">Contact</a>
+           class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
 
@@ -71,8 +76,13 @@
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
       <li class="pt-1">
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Download Resume
+        </a>
+      </li>
+      <li>
         <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
-           class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">Contact</a>
+           class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
   </div>
@@ -170,3 +180,6 @@
     </div>
   </div>
 </section>
+<?php if (!$isFetch): ?>
+<?php require __DIR__ . '/../includes/full-page-wrapper-bottom.php'; ?>
+<?php endif; ?>

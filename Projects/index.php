@@ -1,25 +1,25 @@
 <?php
-    ini_set('display_errors', 0);
-    ini_set('display_startup_errors', 0);
-    error_reporting(E_ALL);
+    $isFetch = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'fetch';
 
-    header("X-Content-Type-Options: nosniff");
-    header("X-Frame-Options: DENY");
-    header("X-XSS-Protection: 1; mode=block");
-    header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    if ($isFetch) {
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(E_ALL);
 
-    if (
-        !isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
-        $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'fetch'
-    ) {
-        http_response_code(405);
-        echo json_encode(["success" => false, "message" => "Method Not Allowed"]);
-        exit;
+        header("X-Content-Type-Options: nosniff");
+        header("X-Frame-Options: DENY");
+        header("X-XSS-Protection: 1; mode=block");
+        header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    } else {
+        $pageTitle = 'Projects | Brandon Sanders, CISSP';
+        $pageDescription = 'Featured infrastructure, security, and engineering projects by Brandon Sanders, CISSP, including virtualization migrations, disaster recovery, and network security work.';
+        $pageCanonical = 'https://brandonsanders.org/Projects/index.php';
+        require __DIR__ . '/../includes/full-page-wrapper-top.php';
     }
 ?>
 
 <!-- ═══════════════════════════════════════════════════
-     NAVBAR (Projects — with back arrow)
+     NAVBAR (Projects - with back arrow)
 ═══════════════════════════════════════════════════ -->
 <nav class="fixed top-0 left-0 right-0 z-50 h-16 bg-brand/[.96] backdrop-blur-xl border-b border-white/10">
   <div class="max-w-6xl mx-auto px-4 h-full flex items-center justify-between">
@@ -48,8 +48,13 @@
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
       <li class="ml-2">
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Resume
+        </a>
+      </li>
+      <li>
         <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
-           class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">Contact</a>
+           class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
 
@@ -71,8 +76,13 @@
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
       <li class="pt-1">
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Download Resume
+        </a>
+      </li>
+      <li>
         <a href="#" data-load-page="/Portfolio/index.php" data-scroll="contact"
-           class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">Contact</a>
+           class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
   </div>
@@ -132,7 +142,7 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-hospital"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">IT &amp; Network Infrastructure Design — Salina Health Education Foundation</div>
+          <div class="font-bold text-white text-sm leading-tight">IT &amp; Network Infrastructure Design, Salina Health Education Foundation</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
           Designed the complete IT and network infrastructure for a new healthcare facility, including network topology, segmentation strategy, server room layout, and security architecture, ensuring HIPAA compliance and operational resilience from day one.
@@ -153,7 +163,7 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-scale-balanced"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">Risk &amp; Compliance Program — Saint Francis Ministries</div>
+          <div class="font-bold text-white text-sm leading-tight">Risk &amp; Compliance Program, Saint Francis Ministries</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
           Established and contributed to a risk and compliance program across a multi-database healthcare organization, achieving HIPAA alignment and SOC 2 audit readiness while serving as an elected HIPAA committee member.
@@ -173,7 +183,7 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-lock"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">Security Modernization — Salina Health Education Foundation</div>
+          <div class="font-bold text-white text-sm leading-tight">Security Modernization, Salina Health Education Foundation</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
           Led a targeted security modernization initiative, transitioning the organization from legacy authentication to Azure SSO with MFA and enforcing HTTPS-only policies, measurably improving the security posture.
@@ -193,17 +203,16 @@
           <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
             <i class="fa-solid fa-network-wired"></i>
           </div>
-          <div class="font-bold text-white text-sm leading-tight">Sophos NDR on Proxmox — Home Lab</div>
+          <div class="font-bold text-white text-sm leading-tight">Sophos NDR on Proxmox, Salina Health Education Foundation</div>
         </div>
         <p class="text-slate-600 text-sm leading-relaxed p-4">
-          Deployed Sophos Network Detection &amp; Response (NDR) on Proxmox, overcoming undocumented compatibility and configuration challenges to run a commercial enterprise security appliance on an open-source hypervisor. Documented the full solution on GitHub to help others in the community do the same.
+          Deployed Sophos Network Detection &amp; Response (NDR) on Proxmox for the organization, overcoming undocumented compatibility and configuration challenges to run a commercial enterprise security appliance on an open-source hypervisor. Documented the full solution on GitHub to help others in the community do the same.
         </p>
         <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Sophos NDR</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Proxmox</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Network Detection &amp; Response</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Virtualization</span>
-          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Home Lab</span>
           <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Security Research</span>
         </div>
         <div class="px-4 pb-4 mt-auto">
@@ -214,6 +223,49 @@
         </div>
       </div>
 
+      <!-- Project 5 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-server"></i>
+          </div>
+          <div class="font-bold text-white text-sm leading-tight">VMware to Proxmox Migration, Salina Health Education Foundation</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Led an enterprise virtualization migration off VMware to Proxmox across multiple hosts and 10+ production VMs, eliminating recurring licensing costs driven by post-Broadcom acquisition price increases while planning and executing the cutover with minimal disruption to clinical and administrative systems.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Proxmox</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">VMware migration</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Virtualization</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Cost optimization</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Cutover planning</span>
+        </div>
+      </div>
+
+      <!-- Project 6 -->
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
+        <div class="bg-gradient-to-br from-slate-800 to-brand p-4 flex items-center gap-3 rounded-t-2xl">
+          <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-mint text-lg shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-building-shield"></i>
+          </div>
+          <div class="font-bold text-white text-sm leading-tight">Disaster Recovery Hot Site, Salina Health Education Foundation</div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed p-4">
+          Designed and implemented an active hot site disaster recovery solution using Dell PowerStore Metro synchronous replication paired with a Layer 2 network bridge between sites, enabling near-instant failover with minimal data loss to protect critical healthcare systems during an outage.
+        </p>
+        <div class="flex flex-wrap gap-1.5 p-4 pt-0 mt-auto">
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Dell PowerStore Metro</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Disaster recovery</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Layer 2 bridging</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">Business continuity</span>
+          <span class="bg-teal-50 text-teal-800 border border-teal-200/70 text-xs font-medium px-2.5 py-1 rounded-full">High availability</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+<?php if (!$isFetch): ?>
+<?php require __DIR__ . '/../includes/full-page-wrapper-bottom.php'; ?>
+<?php endif; ?>
