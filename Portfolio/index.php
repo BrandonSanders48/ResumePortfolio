@@ -43,13 +43,8 @@
       <li><a href="#experience" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Experience</a></li>
       <li><a href="#" data-load-page="/Projects/index.php" data-scroll="" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Projects</a></li>
       <li><a href="#" data-load-page="/Volunteer/index.php" data-scroll="" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Volunteer</a></li>
-      <li><a href="#education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
-      <li><a href="#certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
-      <li class="ml-2">
-        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">
-          <i class="fa-solid fa-file-arrow-down text-xs"></i> Resume
-        </a>
-      </li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
       <li>
         <a href="#contact" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Contact</a>
       </li>
@@ -70,13 +65,8 @@
       <li><a href="#experience" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Experience</a></li>
       <li><a href="#" data-load-page="/Projects/index.php" data-scroll="" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Projects</a></li>
       <li><a href="#" data-load-page="/Volunteer/index.php" data-scroll="" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Volunteer</a></li>
-      <li><a href="#education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
-      <li><a href="#certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
-      <li class="pt-1">
-        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">
-          <i class="fa-solid fa-file-arrow-down text-xs"></i> Download Resume
-        </a>
-      </li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
+      <li><a href="#" data-load-page="/Portfolio/index.php" data-scroll="certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
       <li>
         <a href="#contact" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Contact</a>
       </li>
