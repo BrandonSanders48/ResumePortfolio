@@ -27,11 +27,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#1f2a44">
-    <meta name="description" content="Portfolio of Brandon Sanders, CISSP — IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.">
+    <meta name="description" content="Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.">
     <meta name="keywords" content="Brandon Sanders, CISSP, IT Manager, CISO, Cybersecurity Leader, Risk Management, GRC, Compliance, HIPAA, IT Security, Network Security, Cloud Security, Salina KS, Salina Kansas, Information Technology, Resume, LinkedIn">
     <meta name="author" content="Brandon Sanders">
     <meta name="robots" content="index, follow">
-    <title>Brandon Sanders, CISSP — IT Security Leader &amp; Manager</title>
+    <title>Brandon Sanders, CISSP, IT Security Leader &amp; Manager</title>
     <link rel="canonical" href="https://brandonsanders.org/">
 
     <!-- Open Graph -->
@@ -44,7 +44,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Brandon Sanders, CISSP | IT Security Leader &amp; Manager">
-    <meta name="twitter:description" content="IT and cybersecurity leader — risk management, GRC, compliance, and infrastructure strategy. CISSP certified. Targeting IT Manager and CISO roles.">
+    <meta name="twitter:description" content="IT and cybersecurity leader focused on risk management, GRC, compliance, and infrastructure strategy. CISSP certified. Targeting IT Manager and CISO roles.">
     <meta name="twitter:image" content="https://brandonsanders.org/files/images/Brandon_Sanders.png">
 
     <!-- Inter font -->
@@ -162,81 +162,7 @@
     </div>
 
     <!-- Core scripts -->
-    <script>
-        function runPageScripts(scrollToId = null) {
-            // Typing animation cursor removal
-            const nameEl = document.getElementById('name');
-            if (nameEl) {
-                const typingDuration = 3000;
-                setTimeout(() => {
-                    nameEl.style.borderRight = 'none';
-                }, typingDuration + 1000);
-            }
-
-            // Slide-up animations
-            const elements = document.querySelectorAll('.slide-up');
-            if (!scrollToId) {
-                elements.forEach((el, index) => {
-                    setTimeout(() => el.classList.add('show'), 500 + index * 300);
-                });
-            } else {
-                elements.forEach(el => el.classList.add('show'));
-            }
-
-            // data-load-page buttons
-            const buttons = document.querySelectorAll('[data-load-page]');
-            buttons.forEach(btn => {
-                const page     = btn.getAttribute('data-load-page');
-                const targetId = btn.getAttribute('data-scroll') || null;
-                btn.addEventListener('click', (e) => {
-                    if (e && typeof e.preventDefault === 'function') e.preventDefault();
-                    // Close mobile nav if open
-                    const navMenu = document.getElementById('nav-menu');
-                    if (navMenu) navMenu.classList.add('hidden');
-                    loadPage(page, targetId);
-                });
-            });
-
-            // Mobile nav toggle
-            const navToggle = document.getElementById('nav-toggle');
-            const navMenu   = document.getElementById('nav-menu');
-            if (navToggle && navMenu) {
-                // Remove old listener by cloning
-                const newToggle = navToggle.cloneNode(true);
-                navToggle.parentNode.replaceChild(newToggle, navToggle);
-                newToggle.addEventListener('click', () => {
-                    navMenu.classList.toggle('hidden');
-                });
-            }
-        }
-
-        function loadPage(url, scrollToId = null) {
-            const spinner = document.getElementById('spinner');
-            if (spinner) spinner.style.display = 'flex';
-            fetch(url + '?t=' + Date.now(), {
-                headers: { "X-Requested-With": "fetch" }
-            })
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('content').innerHTML = html;
-                runPageScripts(scrollToId);
-                window.scrollTo({ top: 0, behavior: 'auto' });
-                if (scrollToId) {
-                    const target = document.getElementById(scrollToId);
-                    if (target) target.scrollIntoView({ behavior: 'smooth' });
-                }
-            })
-            .finally(() => {
-                const spinnerAfter = document.getElementById('spinner');
-                if (spinnerAfter) spinnerAfter.style.display = 'none';
-            })
-            .catch(err => console.error('Error loading page:', err));
-        }
-
-        window.addEventListener('load', () => {
-            loadPage('/Portfolio/index.php');
-        });
-    </script>
+    <script src="/spa.js"></script>
     <script src="extra.js" defer></script>
 
     <!-- The Cloudflare script will likely inject itself in this section. -->

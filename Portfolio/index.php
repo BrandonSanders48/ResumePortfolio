@@ -1,23 +1,25 @@
 <?php
-    // Turn off display of errors/warnings to users
-    ini_set('display_errors', 0);
-    ini_set('display_startup_errors', 0);
+    $isFetch = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'fetch';
 
-    // Report all errors internally (so they still appear in server logs)
-    error_reporting(E_ALL);
+    if ($isFetch) {
+        // Turn off display of errors/warnings to users
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
 
-    header("X-Content-Type-Options: nosniff");
-    header("X-Frame-Options: DENY");
-    header("X-XSS-Protection: 1; mode=block"); // legacy but still useful
-    header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+        // Report all errors internally (so they still appear in server logs)
+        error_reporting(E_ALL);
 
-    if (
-        !isset($_SERVER['HTTP_X_REQUESTED_WITH']) ||
-        $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'fetch'
-    ) {
-        http_response_code(405);
-        echo json_encode(["success" => false, "message" => "Method Not Allowed"]);
-        exit;
+        header("X-Content-Type-Options: nosniff");
+        header("X-Frame-Options: DENY");
+        header("X-XSS-Protection: 1; mode=block"); // legacy but still useful
+        header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+    } else {
+        // Requested directly (bookmark, shared link, crawler) rather than via
+        // the SPA shell's fetch call: render as a complete standalone page.
+        $pageTitle = 'Brandon Sanders, CISSP, IT Security Leader & Manager';
+        $pageDescription = 'Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.';
+        $pageCanonical = 'https://brandonsanders.org/';
+        require __DIR__ . '/../includes/full-page-wrapper-top.php';
     }
 ?>
 
@@ -44,7 +46,12 @@
       <li><a href="#education" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#certs" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Certs</a></li>
       <li class="ml-2">
-        <a href="#contact" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">Contact</a>
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 hover:brightness-105 transition-all shadow-md">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Resume
+        </a>
+      </li>
+      <li>
+        <a href="#contact" class="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
 
@@ -66,7 +73,12 @@
       <li><a href="#education" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Education</a></li>
       <li><a href="#certs" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Certs</a></li>
       <li class="pt-1">
-        <a href="#contact" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">Contact</a>
+        <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" class="block rounded-full bg-mint text-brand font-bold text-sm px-4 py-2 text-center hover:brightness-105 transition-all">
+          <i class="fa-solid fa-file-arrow-down text-xs"></i> Download Resume
+        </a>
+      </li>
+      <li>
+        <a href="#contact" class="block text-white/80 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-all">Contact</a>
       </li>
     </ul>
   </div>
@@ -116,6 +128,10 @@
 
         <!-- Action buttons -->
         <div class="flex flex-wrap gap-2.5 justify-center lg:justify-start">
+          <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1.5 bg-mint text-brand font-bold text-sm px-5 py-2 rounded-full hover:brightness-105 transition-all shadow-lg">
+            <i class="fa-solid fa-file-arrow-down text-xs"></i> Download Resume
+          </a>
           <a href="https://www.linkedin.com/in/brandonsanders48" target="_blank" rel="noopener"
              class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
             <i class="fa-brands fa-linkedin-in text-xs"></i> LinkedIn
@@ -129,7 +145,7 @@
             <i class="fa-solid fa-award text-xs"></i> Credly
           </a>
           <a href="#contact"
-             class="inline-flex items-center gap-1.5 bg-mint text-brand font-bold text-sm px-5 py-2 rounded-full hover:brightness-105 transition-all shadow-lg">
+             class="inline-flex items-center gap-1.5 border border-white/30 text-white/90 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
             <i class="fa-solid fa-envelope text-xs"></i> Contact
           </a>
         </div>
@@ -190,8 +206,8 @@
     <h2 class="section-heading">About</h2>
     <div class="max-w-3xl">
       <p class="text-slate-700 leading-relaxed mb-4">I'm an IT and cybersecurity leader with a track record of building secure, compliant, and resilient technology environments across healthcare and nonprofit organizations. I bridge technical depth with strategic oversight, translating organizational risk into policy, leading cross-functional security committees, and driving initiatives that align IT operations with business goals and regulatory requirements.</p>
-      <p class="text-slate-700 leading-relaxed mb-4">In my current role, I serve as the IT lead for a multi-site healthcare organization, managing infrastructure strategy, security operations, and compliance programs while sitting on the Safety and Security Committees to contribute to governance at the organizational level. I have delivered full-scope IT programs from design through implementation, including new facility buildouts, security modernization initiatives, and disaster recovery planning.</p>
-      <p class="text-slate-700 leading-relaxed mb-6">I hold the CISSP designation and am actively pursuing CISM to deepen my security management expertise. I am seeking IT Manager and CISO-track opportunities where I can combine technical credibility with risk leadership to protect the organization and enable the business.</p>
+      <p class="text-slate-700 leading-relaxed mb-4">In my current role, I serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, approximately 200 users), managing infrastructure strategy, security operations, and compliance programs while sitting on the Safety and Security Committees to contribute to governance at the organizational level. I have delivered full-scope IT programs from design through implementation, including new facility buildouts, security modernization initiatives, and disaster recovery planning.</p>
+      <p class="text-slate-700 leading-relaxed mb-6">I hold the CISSP designation and am actively pursuing CISM to deepen my security management expertise, alongside a B.S. in Information Technology Management at Western Governors University. I am seeking IT Manager and CISO-track opportunities where I can combine technical credibility with risk leadership to protect the organization and enable the business.</p>
       <div class="text-center">
         <button data-load-page="/Professional-Highlights/index.php" data-scroll=""
                 class="rounded-full bg-brand text-white font-semibold text-sm px-6 py-3 hover:brightness-110 transition-all shadow-md">
@@ -416,16 +432,17 @@
         <div class="tl-card">
           <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — Salina Health Education Foundation</h3>
+              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator, Salina Health Education Foundation</h3>
               <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2023 – Present</span>
             </div>
             <ul class="check-list">
-              <li>Own end-to-end IT operations and security program for a multi-site healthcare organization, ensuring compliance, uptime, and alignment with organizational risk posture.</li>
+              <li>Serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, ~200 users), owning end-to-end infrastructure, operations, and the security program with full accountability for compliance, uptime, and organizational risk posture.</li>
               <li>Elected to both the Safety Committee and Security Committee, contributing to governance, risk oversight, and policy decisions at the organizational level.</li>
-              <li>Led a security modernization initiative, transitioning to Azure SSO with MFA enforcement and HTTPS-only policies, measurably reducing credential and access-related risk.</li>
+              <li>Led a security modernization initiative, transitioning all 4 locations to Azure SSO with MFA enforcement and HTTPS-only policies, reducing credential and access-related risk organization-wide.</li>
               <li>Designed and delivered the complete IT infrastructure for a new healthcare facility, from network topology and server room design through endpoint provisioning and disaster recovery.</li>
-              <li>Developed and implemented disaster recovery and business continuity plans, improving organizational resilience and reducing recovery time objectives.</li>
-              <li>Negotiated vendor contracts and managed technology procurement, balancing cost, compliance requirements, and long-term operational needs.</li>
+              <li>Designed and implemented an active hot site disaster recovery solution using Dell PowerStore Metro synchronous replication and a Layer 2 network bridge between sites, enabling near-instant failover with minimal data loss.</li>
+              <li>Led a virtualization migration from VMware to Proxmox across multiple hosts and 10+ production VMs, eliminating recurring licensing costs following Broadcom's VMware price increases.</li>
+              <li>Directed vendor selection and contract negotiation for network, phone, and security technology as the organization's sole decision-maker, balancing cost, compliance requirements, and long-term operational needs.</li>
               <li>Integrated and secured VoIP and telephony systems, maintaining regulatory compliance and operational continuity throughout the transition.</li>
               <li>Proactively identified and remediated vulnerabilities across the network and endpoint environment, maintaining a strong and measurable security baseline.</li>
             </ul>
@@ -441,26 +458,7 @@
         <div class="tl-card">
           <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">Systems Administrator — Salina Public Library</h3>
-              <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2022 – 2023</span>
-            </div>
-            <ul class="check-list">
-              <li>Managed IT systems, servers, storage, and client fleet for a public institution, ensuring reliable service delivery across all departments.</li>
-              <li>Upgraded and modernized infrastructure, improving coverage, performance, and enforcing updated security policies.</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-      <article class="experience-item">
-        <div class="timeline-col">
-          <div class="tl-dot"></div>
-          <div class="tl-line"></div>
-        </div>
-        <div class="tl-card">
-          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">Cybersecurity Analyst — Saint Francis Ministries</h3>
+              <h3 class="font-bold text-brand text-[0.95rem]">Cybersecurity Analyst, Saint Francis Ministries</h3>
               <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2021 – 2022</span>
             </div>
             <ul class="check-list">
@@ -482,7 +480,7 @@
         <div class="tl-card">
           <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator — SMG Unlimited</h3>
+              <h3 class="font-bold text-brand text-[0.95rem]">Network Administrator, SMG Unlimited</h3>
               <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2020 – 2021</span>
             </div>
             <ul class="check-list">
@@ -503,7 +501,7 @@
         <div class="tl-card">
           <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-all">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h3 class="font-bold text-brand text-[0.95rem]">IT Intern — Blue Beacon International</h3>
+              <h3 class="font-bold text-brand text-[0.95rem]">IT Intern, Blue Beacon International</h3>
               <span class="px-2.5 py-1 rounded-full bg-mint/15 border border-mint/30 text-brand text-xs font-semibold">2013 – 2016</span>
             </div>
             <ul class="check-list">
@@ -526,7 +524,20 @@
 <section class="slide-up bg-[#f0faf6] py-16 md:py-20" id="education">
   <div class="max-w-6xl mx-auto px-4">
     <h2 class="section-heading">Education</h2>
-    <div class="grid md:grid-cols-2 gap-6">
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-xl bg-mint/20 flex items-center justify-center text-brand shrink-0" aria-hidden="true">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <div class="font-bold text-brand text-[0.95rem]">Western Governors University</div>
+            <div class="text-slate-500 text-xs">B.S., Information Technology Management · In Progress</div>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">Currently pursuing a Bachelor's degree in Information Technology Management to complement hands-on IT leadership and cybersecurity experience with formal academic credentials.</p>
+      </div>
 
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
         <div class="flex items-center gap-3 mb-3">
@@ -538,7 +549,7 @@
             <div class="text-slate-500 text-xs">High School Diploma · 2014</div>
           </div>
         </div>
-        <p class="text-slate-600 text-sm leading-relaxed">My formal education is a high school diploma. My cybersecurity and IT expertise has been built through hands-on professional experience, certifications, continuous self-study, and lab work (including a high-availability Kubernetes environment).</p>
+        <p class="text-slate-600 text-sm leading-relaxed">My cybersecurity and IT expertise has been built through hands-on professional experience, certifications, continuous self-study, and lab work (including a high-availability Kubernetes environment).</p>
       </div>
 
       <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -634,7 +645,7 @@
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
       <div>
         <h2 class="section-heading">Contact</h2>
-        <p class="text-slate-600 text-sm">Send a message and I'll get back to you. I'm happy to provide my resume upon request.</p>
+        <p class="text-slate-600 text-sm">Send a message and I'll get back to you, or grab my resume directly using the button in the nav above.</p>
       </div>
       <div class="flex flex-wrap gap-2">
         <span class="bg-white border border-slate-200 text-slate-600 text-xs font-medium px-3 py-1.5 rounded-full">Leadership &amp; management inquiries welcome</span>
@@ -719,3 +730,6 @@
     </div>
   </div>
 </section>
+<?php if (!$isFetch): ?>
+<?php require __DIR__ . '/../includes/full-page-wrapper-bottom.php'; ?>
+<?php endif; ?>
