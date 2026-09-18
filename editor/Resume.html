@@ -4,21 +4,24 @@
 <meta charset="UTF-8">
 <title>Brandon Sanders – Resume</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 @page { margin: 0; }
 body {
   margin: 0;
   background: #dfe3e6;
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-  color: #1f2a33;
+  font-family: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #14171f;
 }
 
 .resume {
   width: 8.5in;
   min-height: 11in;
   margin: 0 auto 24px;
-  background: linear-gradient(to right, #f2f3f1 0, #f2f3f1 2.6in, #ffffff 2.6in, #ffffff 100%);
+  background: linear-gradient(to right, #f6f8fa 0, #f6f8fa 2.6in, #ffffff 2.6in, #ffffff 100%);
   page-break-after: always;
   break-after: page;
 }
@@ -42,15 +45,35 @@ body {
 
 /* ===== HEADER (match resume) ===== */
 .header {
-  background: #1f3553;
-  color: #ffffff;
+  background: #eef1f6;
+  color: #14171f;
   padding: 22px 34px;
-  box-shadow: inset 0 -12px 0 #cfeedd;
+  border-bottom: 3px solid #3f6b66;
   height: 1.85in;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint grid texture, echoes the site's hero background */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(20, 23, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 31, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  pointer-events: none;
+}
+
+.header > * {
+  position: relative;
+  z-index: 1;
 }
 
 .header.header-compact {
@@ -60,14 +83,15 @@ body {
 .headshot {
   width: 92px;
   height: 92px;
-  border-radius: 999px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.14);
+  border: 3px solid #ffffff;
+  background: #dfe3ea;
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  box-shadow: 0 1px 3px rgba(20, 23, 31, 0.15);
 }
 
 .headshot img {
@@ -81,29 +105,50 @@ body {
   font-size: 11px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  color: #14171f;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 22px;
 }
 
 .logo {
-  font-size: 42px;
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: #14171f;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 27px;
   font-weight: 700;
-  letter-spacing: 1px;
+  color: #ffffff;
+  line-height: 1;
 }
 .logo span {
-  color: #9fe0c3;
+  position: absolute;
+  right: 9px;
+  bottom: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3f6b66;
 }
 
 .name-title h1 {
   margin: 0;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 30px;
   font-weight: 600;
   line-height: 1.05;
+}
+.name-title h1 em {
+  font-style: italic;
 }
 .name-title h2 {
   margin: 8px 0 0;
@@ -111,7 +156,8 @@ body {
   font-weight: 400;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  border-top: 1px solid rgba(255,255,255,0.5);
+  color: rgba(20, 23, 31, 0.6);
+  border-top: 1px solid #dfe3ea;
   padding-top: 8px;
 }
 
@@ -124,13 +170,16 @@ body {
   padding-top: 5px;
 }
 .header-compact .logo {
-  font-size: 28px;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  font-size: 19px;
 }
 .header-compact .page-tag {
   font-size: 11px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: #9fe0c3;
+  color: #3f6b66;
 }
 
 /* ===== LEFT COLUMN ===== */
@@ -140,6 +189,8 @@ body {
   float: left;
   width: 2.6in;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .contact-item {
@@ -148,6 +199,12 @@ body {
   gap: 10px;
   margin-bottom: 10px;
   font-size: 12px;
+}
+
+.contact-item a,
+.certifications a {
+  color: #3f6b66;
+  text-decoration: none;
 }
 
 .contact-label {
@@ -168,44 +225,55 @@ body {
 }
 
 .section-title {
-  font-size: 11px;
-  letter-spacing: 3.2px;
-  color: #1f3553;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.6px;
+  color: #3f6b66;
+  margin-bottom: 12px;
+}
+
+.section-title::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #dfe3ea;
 }
 
 .skill {
-  margin-bottom: 10px;
+  margin-bottom: 11px;
+}
+
+.skill-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.skill-label .pct {
+  font-size: 10px;
+  font-weight: 700;
+  color: #3f6b66;
+  flex-shrink: 0;
 }
 
 .skill-bar {
   position: relative;
-  height: 18px;
-  border-radius: 4px;
+  height: 5px;
+  border-radius: 3px;
   overflow: hidden;
   /* Remaining portion */
-  background: #cfeedd;
-}
-
-.skill-fill {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.35);
-  pointer-events: none;
+  background: #e3e7ee;
 }
 
 .skill-bg {
   position: absolute;
   inset: 0;
-  z-index: 1;
 }
 
 .skill-bg::before {
@@ -213,13 +281,9 @@ body {
   position: absolute;
   inset: 0;
   width: var(--pct, 0%);
+  border-radius: 3px;
   /* Filled portion */
-  background: #1f3553;
-}
-
-.skill-label {
-  font-size: 12px;
-  margin-top: 4px;
+  background: #14171f;
 }
 
 .education p,
@@ -233,6 +297,36 @@ body {
   margin: 4px 0;
 }
 
+.platform-group {
+  margin-bottom: 10px;
+}
+
+.platform-group:last-child {
+  margin-bottom: 0;
+}
+
+.platform-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #14171f;
+  margin-bottom: 5px;
+}
+
+.platform-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.platform-tags span {
+  font-size: 10.5px;
+  color: #3f4451;
+  background: #eef1f6;
+  border-radius: 5px;
+  padding: 3px 7px;
+  line-height: 1.3;
+}
+
 /* ===== RIGHT COLUMN ===== */
 .content {
   padding: 22px 30px;
@@ -243,12 +337,20 @@ body {
 .summary {
   font-size: 13px;
   line-height: 1.42;
-  border-bottom: 2px solid #cfeedd;
+  border-bottom: 2px solid #dfe3ea;
   padding-bottom: 12px;
 }
 
 .job {
   margin-top: 18px;
+}
+
+.job-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .job h3 {
@@ -257,11 +359,24 @@ body {
   font-weight: 600;
 }
 
+.job-period {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #3f6b66;
+  background: #eef1f6;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
 .job h4 {
-  margin: 3px 0 8px;
+  margin: 6px 0 8px;
   font-size: 12px;
   font-style: italic;
   font-weight: 400;
+  color: #5a6b7a;
 }
 
 .job p,
@@ -280,10 +395,21 @@ body {
 }
 
 .content-title {
-  font-size: 11px;
-  letter-spacing: 3.2px;
-  color: #1f3553;
-  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.6px;
+  color: #3f6b66;
+  margin: 0 0 10px;
+}
+
+.content-title::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #dfe3ea;
 }
 
 .project {
@@ -313,9 +439,9 @@ body {
 
   <header class="header">
     <div class="brand">
-      <div class="logo">B<span>/</span>S</div>
+      <div class="logo">BS<span></span></div>
       <div class="name-title">
-        <h1>Brandon Sanders, CISSP</h1>
+        <h1>Brandon Sanders, <em>CISSP</em></h1>
         <h2>IT Security Leader | Risk & Compliance | Infrastructure Strategy</h2>
       </div>
     </div>
@@ -347,69 +473,16 @@ body {
       <span><span class="contact-label">Web:</span> <a href="https://brandonsanders.org">BrandonSanders.org</a></span>
     </div>
 
-    <div class="section">
-      <div class="section-title">SELF ASSESSMENT</div>
-
-      <div class="skill">
-        <div class="skill-bar" style="--pct: 95%;">
-          <div class="skill-fill">95%</div>
-          <div class="skill-bg"></div>
-        </div>
-        <div class="skill-label">Network Security & Infrastructure</div>
-      </div>
-
-      <div class="skill">
-        <div class="skill-bar" style="--pct: 90%;">
-          <div class="skill-fill">90%</div>
-          <div class="skill-bg"></div>
-        </div>
-        <div class="skill-label">Security Operations & Hardening</div>
-      </div>
-
-      <div class="skill">
-        <div class="skill-bar" style="--pct: 90%;">
-          <div class="skill-fill">90%</div>
-          <div class="skill-bg"></div>
-        </div>
-        <div class="skill-label">Vulnerability & Risk Management</div>
-      </div>
-
-      <div class="skill">
-        <div class="skill-bar" style="--pct: 90%;">
-          <div class="skill-fill">90%</div>
-          <div class="skill-bg"></div>
-        </div>
-        <div class="skill-label">Cloud, Kubernetes & Automation</div>
-      </div>
-
-      <div class="skill">
-        <div class="skill-bar" style="--pct: 85%;">
-          <div class="skill-fill">85%</div>
-          <div class="skill-bg"></div>
-        </div>
-        <div class="skill-label">GRC & Regulatory Compliance</div>
-      </div>
-    </div>
-
-    <div class="section education">
-      <div class="section-title">CORE PLATFORMS</div>
-      <div class="mini-list">
-        <p>Azure / Microsoft 365 / Entra ID / Intune</p>
-        <p>Active Directory / Group Policy / DNS / DHCP</p>
-        <p>Fortinet / Sophos / pfSense / Cisco</p>
-        <p>VMware / Proxmox / Veeam / TrueNAS</p>
-        <p>Kubernetes / Docker / Git / Ansible</p>
-        <p>Elastic SIEM / Graylog / Prometheus / EDR</p>
-        <p><em>Plus additional platforms and tools across networking, security, and cloud.</em></p>
-      </div>
-    </div>
-
     <div class="section education">
       <div class="section-title">EDUCATION</div>
-      <p><em>Western Governors University</em></p>
-      <p>B.S., IT Management (In Progress)</p>
-      <p><em>Salina Central High School</em></p>
-      <p>Class of 2014</p>
+      <div style="margin-bottom: 12px;">
+        <p><em>Western Governors University</em></p>
+        <p>B.S., IT Management (In Progress)</p>
+      </div>
+      <div>
+        <p><em>Salina Central High School</em></p>
+        <p>Class of 2014</p>
+      </div>
     </div>
 
     <div class="section certifications">
@@ -420,7 +493,79 @@ body {
       <p><em>Pursuing: (ISC)² CISM</em></p>
       <br>
       <p>View all my certifications on Credly</p>
-      <p><a href="https://credly.com/users/brandonsanders">https://credly.com/users/brandonsanders</a></p>
+      <p><a href="https://credly.com/users/brandonsanders">credly.com/users/brandonsanders</a></p>
+    </div>
+
+    <div class="section certifications">
+      <div class="section-title">VOLUNTEER</div>
+      <p>(ISC)² Code Taskforce Member</p>
+      <p>Center for Cyber Safety &amp; Education, Scholarship Review Committee</p>
+      <p><em>Mar 2026 – Present</em></p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">SELF ASSESSMENT</div>
+
+      <div class="skill">
+        <div class="skill-label"><span>Network Security & Infrastructure</span><span class="pct">95%</span></div>
+        <div class="skill-bar"><div class="skill-bg" style="--pct: 95%;"></div></div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-label"><span>Security Operations & Hardening</span><span class="pct">90%</span></div>
+        <div class="skill-bar"><div class="skill-bg" style="--pct: 90%;"></div></div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-label"><span>Vulnerability & Risk Management</span><span class="pct">90%</span></div>
+        <div class="skill-bar"><div class="skill-bg" style="--pct: 90%;"></div></div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-label"><span>Cloud, Kubernetes & Automation</span><span class="pct">90%</span></div>
+        <div class="skill-bar"><div class="skill-bg" style="--pct: 90%;"></div></div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-label"><span>GRC & Regulatory Compliance</span><span class="pct">85%</span></div>
+        <div class="skill-bar"><div class="skill-bg" style="--pct: 85%;"></div></div>
+      </div>
+    </div>
+
+    <div class="section education">
+      <div class="section-title">CORE PLATFORMS</div>
+
+      <div class="platform-group">
+        <div class="platform-label">Microsoft Ecosystem</div>
+        <div class="platform-tags"><span>Azure</span><span>Microsoft 365</span><span>Entra ID</span><span>Intune</span></div>
+      </div>
+
+      <div class="platform-group">
+        <div class="platform-label">Windows Infrastructure</div>
+        <div class="platform-tags"><span>Active Directory</span><span>Group Policy</span><span>DNS</span><span>DHCP</span></div>
+      </div>
+
+      <div class="platform-group">
+        <div class="platform-label">Network &amp; Security</div>
+        <div class="platform-tags"><span>Fortinet</span><span>Sophos</span><span>pfSense</span><span>Cisco</span></div>
+      </div>
+
+      <div class="platform-group">
+        <div class="platform-label">Virtualization &amp; Backup</div>
+        <div class="platform-tags"><span>VMware</span><span>Proxmox</span><span>Veeam</span><span>TrueNAS</span></div>
+      </div>
+
+      <div class="platform-group">
+        <div class="platform-label">Cloud &amp; Automation</div>
+        <div class="platform-tags"><span>Kubernetes</span><span>Docker</span><span>Git</span><span>Ansible</span></div>
+      </div>
+
+      <div class="platform-group">
+        <div class="platform-label">Monitoring &amp; SIEM</div>
+        <div class="platform-tags"><span>Elastic SIEM</span><span>Graylog</span><span>Prometheus</span><span>EDR</span></div>
+      </div>
+
+      <p style="font-size: 11px; font-style: italic; color: #5a6b7a; margin: 10px 0 0;">Plus additional platforms and tools across networking, security, and cloud.</p>
     </div>
   </aside>
 
@@ -430,8 +575,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Salina Health Education Foundation</h3>
-      <h4>Network Administrator / Jan 2023 – Present</h4>
+      <div class="job-header">
+        <h3>Salina Health Education Foundation</h3>
+        <span class="job-period">Jan 2023 – Present</span>
+      </div>
+      <h4>Network Administrator</h4>
       <ul>
         <li>Serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, ~200 users), owning end-to-end infrastructure, operations, and the security program with full accountability for HIPAA compliance, system uptime, and enterprise-wide risk alignment.</li>
         <li>Elected to both the Safety Committee and Security Committee, contributing to governance, risk oversight, and policy decisions at the organizational level.</li>
@@ -444,8 +592,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Saint Francis Ministries</h3>
-      <h4>Cybersecurity Analyst / May 2021 – Oct 2022</h4>
+      <div class="job-header">
+        <h3>Saint Francis Ministries</h3>
+        <span class="job-period">May 2021 – Oct 2022</span>
+      </div>
+      <h4>Cybersecurity Analyst</h4>
       <ul>
         <li>Ensured the integrity and security of data on host computers, multiple databases, and during data transfer, in accordance with business needs and industry best practices for privacy, security, and regulatory compliance.</li>
         <li>Elected to the HIPAA Committee, collaborating cross-functionally to align data handling and privacy practices with regulatory requirements.</li>
@@ -465,9 +616,9 @@ body {
 
   <header class="header header-compact">
     <div class="brand">
-      <div class="logo">B<span>/</span>S</div>
+      <div class="logo">BS<span></span></div>
       <div class="name-title">
-        <h1>Brandon Sanders, CISSP</h1>
+        <h1>Brandon Sanders, <em>CISSP</em></h1>
         <h2>IT Security Leader | Risk & Compliance | Infrastructure Strategy</h2>
       </div>
     </div>
@@ -475,13 +626,6 @@ body {
   </header>
 
   <aside class="sidebar">
-    <div class="section certifications">
-      <div class="section-title">VOLUNTEER</div>
-      <p>(ISC)² Code Taskforce Member</p>
-      <p>Center for Cyber Safety &amp; Education, Scholarship Review Committee</p>
-      <p><em>Mar 2026 – Present</em></p>
-    </div>
-
     <div class="section">
       <div class="section-title">CORE COMPETENCIES</div>
       <div class="mini-list">
@@ -501,14 +645,17 @@ body {
 
     <div class="section">
       <div class="section-title">REFERENCES</div>
-      <p>Available upon request.</p>
+      <p style="font-size: 11px; color: #5a6b7a;">Available upon request.</p>
     </div>
   </aside>
 
   <main class="content">
     <div class="job" style="margin-top: 0;">
-      <h3>SMG Unlimited LLC</h3>
-      <h4>Network Administrator / Feb 2020 – May 2021</h4>
+      <div class="job-header">
+        <h3>SMG Unlimited LLC</h3>
+        <span class="job-period">Feb 2020 – May 2021</span>
+      </div>
+      <h4>Network Administrator</h4>
       <ul>
         <li>Provided technical support, responded to work orders and tickets from end users, and analyzed and resolved reported network problems.</li>
         <li>Configured and maintained firewalls and network security appliances to protect organizational infrastructure.</li>
@@ -518,8 +665,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Blue Beacon International</h3>
-      <h4>Information Technology Intern / Oct 2013 – Dec 2016</h4>
+      <div class="job-header">
+        <h3>Blue Beacon International</h3>
+        <span class="job-period">Oct 2013 – Dec 2016</span>
+      </div>
+      <h4>Information Technology Intern</h4>
       <ul>
         <li>Diagnosed hardware and software problems and helped develop effective solutions across the organization.</li>
         <li>Supported PC hardware components, desktop operating systems, and application software for end users.</li>

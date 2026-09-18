@@ -4,21 +4,24 @@
 <meta charset="UTF-8">
 <title>Brandon Sanders - Resume</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 @page { margin: 0; }
 body {
   margin: 0;
   background: #dfe3e6;
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-  color: #1f2a33;
+  font-family: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+  color: #14171f;
 }
 
 .resume {
   width: 8.5in;
   min-height: 11in;
   margin: 0 auto 24px;
-  background: linear-gradient(to right, #f2f3f1 0, #f2f3f1 2.6in, #ffffff 2.6in, #ffffff 100%);
+  background: linear-gradient(to right, #f6f8fa 0, #f6f8fa 2.6in, #ffffff 2.6in, #ffffff 100%);
   page-break-after: always;
   break-after: page;
 }
@@ -42,15 +45,35 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-  background: #1f3553;
-  color: #ffffff;
+  background: #eef1f6;
+  color: #14171f;
   padding: 22px 34px;
-  box-shadow: inset 0 -12px 0 #cfeedd;
+  border-bottom: 3px solid #3f6b66;
   height: 1.85in;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint grid texture, echoes the site's hero background */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(20, 23, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 31, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+  pointer-events: none;
+}
+
+.header > * {
+  position: relative;
+  z-index: 1;
 }
 
 .header.header-compact {
@@ -60,14 +83,15 @@ body {
 .headshot {
   width: 92px;
   height: 92px;
-  border-radius: 999px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.14);
+  border: 3px solid #ffffff;
+  background: #dfe3ea;
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  box-shadow: 0 1px 3px rgba(20, 23, 31, 0.15);
 }
 
 .headshot img {
@@ -80,23 +104,44 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 22px;
 }
 
 .logo {
-  font-size: 42px;
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: #14171f;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 27px;
   font-weight: 700;
-  letter-spacing: 1px;
+  color: #ffffff;
+  line-height: 1;
 }
 .logo span {
-  color: #9fe0c3;
+  position: absolute;
+  right: 9px;
+  bottom: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3f6b66;
 }
 
 .name-title h1 {
   margin: 0;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 30px;
   font-weight: 600;
   line-height: 1.05;
+}
+.name-title h1 em {
+  font-style: italic;
 }
 .name-title h2 {
   margin: 8px 0 0;
@@ -104,7 +149,8 @@ body {
   font-weight: 400;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  border-top: 1px solid rgba(255,255,255,0.5);
+  color: rgba(20, 23, 31, 0.6);
+  border-top: 1px solid #dfe3ea;
   padding-top: 8px;
 }
 
@@ -117,13 +163,16 @@ body {
   padding-top: 5px;
 }
 .header-compact .logo {
-  font-size: 28px;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  font-size: 19px;
 }
 .header-compact .page-tag {
   font-size: 11px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: #9fe0c3;
+  color: #3f6b66;
 }
 
 /* ===== LEFT COLUMN ===== */
@@ -133,6 +182,8 @@ body {
   float: left;
   width: 2.6in;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .contact-item {
@@ -141,6 +192,11 @@ body {
   gap: 10px;
   margin-bottom: 10px;
   font-size: 12px;
+}
+
+.contact-item a {
+  color: #3f6b66;
+  text-decoration: none;
 }
 
 .contact-label {
@@ -162,13 +218,23 @@ body {
 
 /* Reset heading defaults inside sidebar sections */
 .section-title {
-  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 3.2px;
-  color: #1f3553;
-  margin: 0 0 10px 0;
+  letter-spacing: 2.6px;
+  color: #3f6b66;
+  margin: 0 0 12px 0;
   padding: 0;
   text-transform: uppercase;
+}
+
+.section-title::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #dfe3ea;
 }
 
 .skill-label {
@@ -197,7 +263,7 @@ body {
 .summary {
   font-size: 12px;
   line-height: 1.42;
-  border-bottom: 2px solid #cfeedd;
+  border-bottom: 2px solid #dfe3ea;
   padding-bottom: 10px;
   margin-bottom: 4px;
 }
@@ -206,18 +272,38 @@ body {
   margin-top: 14px;
 }
 
+.job-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .job h3 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
 }
 
+.job-period {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #3f6b66;
+  background: #eef1f6;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
 .job h4 {
-  margin: 2px 0 6px;
+  margin: 4px 0 6px;
   font-size: 11px;
   font-style: italic;
   font-weight: 400;
-  color: #3a5070;
+  color: #5a6b7a;
 }
 
 .job ul {
@@ -242,9 +328,9 @@ body {
 
   <header class="header">
     <div class="brand">
-      <div class="logo">B<span>/</span>S</div>
+      <div class="logo">BS<span></span></div>
       <div class="name-title">
-        <h1>Brandon Sanders, CISSP</h1>
+        <h1>Brandon Sanders, <em>CISSP</em></h1>
         <h2>IT Security Leader | Risk &amp; Compliance | Infrastructure Strategy</h2>
       </div>
     </div>
@@ -298,12 +384,12 @@ body {
     <div class="section">
       <h2 class="section-title">Core Platforms</h2>
       <div class="mini-list">
-        <p>Azure / Microsoft 365 / Entra ID / Intune</p>
-        <p>Active Directory / Group Policy / DNS / DHCP</p>
-        <p>Fortinet / Sophos / pfSense / Cisco</p>
-        <p>Proxmox / VMware / Veeam / TrueNAS</p>
-        <p>Kubernetes / Docker / Git / Ansible</p>
-        <p>Elastic SIEM / Graylog / Prometheus / EDR</p>
+        <p><strong>Microsoft Ecosystem:</strong> Azure, Microsoft 365, Entra ID, Intune</p>
+        <p><strong>Windows Infrastructure:</strong> Active Directory, Group Policy, DNS, DHCP</p>
+        <p><strong>Network &amp; Security:</strong> Fortinet, Sophos, pfSense, Cisco</p>
+        <p><strong>Virtualization &amp; Backup:</strong> Proxmox, VMware, Veeam, TrueNAS</p>
+        <p><strong>Cloud &amp; Automation:</strong> Kubernetes, Docker, Git, Ansible</p>
+        <p><strong>Monitoring &amp; SIEM:</strong> Elastic SIEM, Graylog, Prometheus, EDR</p>
       </div>
     </div>
   </aside>
@@ -314,8 +400,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Salina Health Education Foundation</h3>
-      <h4>Network Administrator | Jan 2023 - Present</h4>
+      <div class="job-header">
+        <h3>Salina Health Education Foundation</h3>
+        <span class="job-period">Jan 2023 - Present</span>
+      </div>
+      <h4>Network Administrator</h4>
       <ul>
         <li>Serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, ~200 users), owning end-to-end infrastructure, operations, and the security program with full accountability for HIPAA compliance, uptime, and risk alignment.</li>
         <li>Elected to both the Safety Committee and Security Committee, contributing to governance, risk oversight, and policy decisions at the organizational level.</li>
@@ -328,8 +417,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Saint Francis Ministries</h3>
-      <h4>Cybersecurity Analyst | May 2021 - Oct 2022</h4>
+      <div class="job-header">
+        <h3>Saint Francis Ministries</h3>
+        <span class="job-period">May 2021 - Oct 2022</span>
+      </div>
+      <h4>Cybersecurity Analyst</h4>
       <ul>
         <li>Elected to the HIPAA Committee, collaborating cross-functionally to align data handling and privacy practices with regulatory requirements.</li>
         <li>Managed security across a multi-site environment, conducting risk assessments and remediating vulnerabilities to protect sensitive organizational data.</li>
@@ -348,9 +440,9 @@ body {
 
   <header class="header header-compact">
     <div class="brand">
-      <div class="logo">B<span>/</span>S</div>
+      <div class="logo">BS<span></span></div>
       <div class="name-title">
-        <h1>Brandon Sanders, CISSP</h1>
+        <h1>Brandon Sanders, <em>CISSP</em></h1>
         <h2>IT Security Leader | Risk &amp; Compliance | Infrastructure Strategy</h2>
       </div>
     </div>
@@ -360,10 +452,14 @@ body {
   <aside class="sidebar">
     <div class="section education">
       <h2 class="section-title">Education</h2>
-      <p><em>Western Governors University</em></p>
-      <p>B.S., Information Technology Management (In Progress)</p>
-      <p><em>Salina Central High School</em></p>
-      <p>Diploma, Class of 2014</p>
+      <div style="margin-bottom: 12px;">
+        <p><em>Western Governors University</em></p>
+        <p>B.S., Information Technology Management (In Progress)</p>
+      </div>
+      <div>
+        <p><em>Salina Central High School</em></p>
+        <p>Diploma, Class of 2014</p>
+      </div>
     </div>
 
     <div class="section certifications">
@@ -376,14 +472,17 @@ body {
 
     <div class="section">
       <h2 class="section-title">References</h2>
-      <p>Available upon request.</p>
+      <p style="font-size: 11px; color: #5a6b7a;">Available upon request.</p>
     </div>
   </aside>
 
   <main class="content">
     <div class="job" style="margin-top: 0;">
-      <h3>SMG Unlimited LLC</h3>
-      <h4>Network Administrator | Feb 2020 - May 2021</h4>
+      <div class="job-header">
+        <h3>SMG Unlimited LLC</h3>
+        <span class="job-period">Feb 2020 - May 2021</span>
+      </div>
+      <h4>Network Administrator</h4>
       <ul>
         <li>Administered network infrastructure and provided technical support across the organization, resolving issues and maintaining operational continuity.</li>
         <li>Configured and maintained firewalls and network security appliances.</li>
@@ -393,8 +492,11 @@ body {
     </div>
 
     <div class="job">
-      <h3>Blue Beacon International</h3>
-      <h4>Information Technology Intern | Oct 2013 - Dec 2016</h4>
+      <div class="job-header">
+        <h3>Blue Beacon International</h3>
+        <span class="job-period">Oct 2013 - Dec 2016</span>
+      </div>
+      <h4>Information Technology Intern</h4>
       <ul>
         <li>Diagnosed problems and helped develop solutions.</li>
         <li>Supported PC hardware components, desktop operating system software, and application software.</li>
@@ -403,8 +505,11 @@ body {
     </div>
 
     <div class="job" style="margin-top:12px;">
-      <h3>Volunteer Work</h3>
-      <h4>(ISC)2 &amp; Center for Cyber Safety and Education | Mar 2026 - Present</h4>
+      <div class="job-header">
+        <h3>Volunteer Work</h3>
+        <span class="job-period">Mar 2026 - Present</span>
+      </div>
+      <h4>(ISC)2 &amp; Center for Cyber Safety and Education</h4>
       <ul>
         <li>(ISC)2 Code Taskforce Member, contributing to global cybersecurity education and workforce development initiatives.</li>
         <li>Center for Cyber Safety and Education, Scholarship Review Committee, evaluating candidates to support the next generation of security professionals.</li>
