@@ -53,6 +53,8 @@ export default function EditorApp({
   const [pdfAlert, setPdfAlert] = useState(true);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const previewRef = useRef<HTMLIFrameElement>(null);
+  const [previewHeight, setPreviewHeight] = useState(420);
 
   const previewSrcDoc = useMemo(
     () => applyTokensClient(content, { contactPhone, contactPhoneTel, contactEmail, jobName, companyName }),
@@ -196,8 +198,22 @@ export default function EditorApp({
           {/* Preview */}
           <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
             <h2 className="font-semibold text-ink text-sm mb-3">Preview</h2>
-            <div className="flex-1 min-h-[420px] rounded-xl border border-line overflow-hidden bg-slate-50">
-              <iframe title="Resume preview" srcDoc={previewSrcDoc} sandbox="allow-same-origin" className="w-full h-full" style={{ minHeight: 420 }} />
+            <div className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-y-auto bg-slate-50">
+              <iframe
+                ref={previewRef}
+                title="Resume preview"
+                srcDoc={previewSrcDoc}
+                sandbox="allow-same-origin"
+                scrolling="no"
+                className="w-full block border-0"
+                style={{ height: previewHeight }}
+                onLoad={() => {
+                  const doc = previewRef.current?.contentDocument;
+                  if (doc?.documentElement) {
+                    setPreviewHeight(doc.documentElement.scrollHeight);
+                  }
+                }}
+              />
             </div>
           </div>
         </div>
