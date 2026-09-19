@@ -5,6 +5,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HostingModal from "@/components/HostingModal";
+import ClarityAnalytics from "@/components/ClarityAnalytics";
 
 config.autoAddCss = false;
 
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <HostingModal />
+        <ClarityAnalytics />
       </body>
     </html>
   );
