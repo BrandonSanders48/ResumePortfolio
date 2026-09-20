@@ -3,8 +3,14 @@
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faFilePdf, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faFilePdf, faRightFromBracket, faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc } from "@/lib/editor-docs";
+
+// Docs whose PDF export corresponds to a file actually linked from the live
+// site, and the /files/ filename each one should publish as.
+const PUBLISH_TARGETS: Record<string, string> = {
+  "Resume.html": "Brandon-Sanders-Resume.pdf",
+};
 
 function applyTokensClient(
   html: string,
@@ -51,6 +57,7 @@ export default function EditorApp({
   const [exportMode, setExportMode] = useState<"current" | "both">("current");
   const [exportOther, setExportOther] = useState(() => docs.find((d) => d.filename !== initialDoc)?.filename ?? "");
   const [pdfAlert, setPdfAlert] = useState(true);
+  const [publish, setPublish] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLIFrameElement>(null);
@@ -99,6 +106,7 @@ export default function EditorApp({
   async function handleExport() {
     setExporting(true);
     setStatus(null);
+    const publishAs = publish ? PUBLISH_TARGETS[activeDoc] : undefined;
     try {
       const res = await fetch("/api/editor/export", {
         method: "POST",
@@ -111,6 +119,7 @@ export default function EditorApp({
           jobName,
           companyName,
           pdfAlert,
+          publishAs,
         }),
       });
 
@@ -131,7 +140,15 @@ export default function EditorApp({
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setStatus({ type: "success", message: "PDF exported." });
+
+      const publishStatus = res.headers.get("X-Publish-Status");
+      if (publishAs && publishStatus === "ok") {
+        setStatus({ type: "success", message: `PDF exported and published to /files/${publishAs}.` });
+      } else if (publishAs && publishStatus?.startsWith("error:")) {
+        setStatus({ type: "error", message: `PDF downloaded, but publishing failed: ${publishStatus.slice(6)}` });
+      } else {
+        setStatus({ type: "success", message: "PDF exported." });
+      }
     } catch {
       setStatus({ type: "error", message: "Unexpected error during export." });
     } finally {
@@ -257,7 +274,16 @@ export default function EditorApp({
               <label htmlFor="exportMode" className="block text-sm font-medium text-ink/70 mb-1.5">
                 Export
               </label>
-              <select id="exportMode" className="form-input w-auto" value={exportMode} onChange={(e) => setExportMode(e.target.value as "current" | "both")}>
+              <select
+                id="exportMode"
+                className="form-input w-auto"
+                value={exportMode}
+                onChange={(e) => {
+                  const mode = e.target.value as "current" | "both";
+                  setExportMode(mode);
+                  if (mode !== "current") setPublish(false);
+                }}
+              >
                 <option value="current">This document</option>
                 <option value="both">This + another</option>
               </select>
@@ -283,10 +309,18 @@ export default function EditorApp({
             </button>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-ink/70">
+          <label className="flex items-center gap-2 text-sm text-ink/70 mb-2">
             <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
             Enable PDF app alert (when configured)
           </label>
+
+          {exportMode === "current" && PUBLISH_TARGETS[activeDoc] && (
+            <label className="flex items-center gap-2 text-sm text-ink/70">
+              <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} />
+              <FontAwesomeIcon icon={faCloudArrowUp} className="text-xs text-accent" />
+              Also publish this export as the live <code className="text-xs bg-paper px-1 py-0.5 rounded">/files/{PUBLISH_TARGETS[activeDoc]}</code> download
+            </label>
+          )}
         </div>
       </div>
     </div>

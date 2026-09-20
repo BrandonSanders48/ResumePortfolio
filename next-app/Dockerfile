@@ -38,9 +38,11 @@ RUN mkdir -p /app/content /app-seed && chown -R node:node /app /app-seed
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
-# Read-only seed copy of the editable resume docs, used to populate a fresh
-# volume mounted at /app/content (see docker-entrypoint.sh).
+# Read-only seed copies used to populate fresh volumes on first run (see
+# docker-entrypoint.sh): the editable resume docs, and public/files (which
+# the /editor "publish" feature writes into at runtime).
 COPY --from=builder --chown=node:node /app/content /app-seed/content
+COPY --from=builder --chown=node:node /app/public/files /app-seed/files
 
 COPY --chown=node:node docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh

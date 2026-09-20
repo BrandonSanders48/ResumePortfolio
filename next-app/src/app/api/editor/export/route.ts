@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 import { PDFDocument } from "pdf-lib";
 import { isAuthorized } from "@/lib/editor-guard";
-import { listDocs, pickDefaultDoc, readDoc } from "@/lib/editor-docs";
+import { listDocs, pickDefaultDoc, readDoc, publishPdf } from "@/lib/editor-docs";
 import { applyTokens, filenamePart } from "@/lib/editor-tokens";
 import { combinePagesHtml, getPdfAlertMessage } from "@/lib/editor-export";
 
@@ -17,6 +17,8 @@ type ExportBody = {
   jobName?: string;
   companyName?: string;
   pdfAlert?: boolean;
+  /** If set, also writes the generated PDF to public/files/<publishAs> on the server. */
+  publishAs?: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -86,12 +88,24 @@ export async function POST(req: NextRequest) {
     }
 
     const filenameBase = companyName ? `BrandonSanders_Resume-${filenamePart(companyName)}` : "BrandonSanders_Resume";
+    const pdfBuffer = Buffer.from(pdfBytes);
 
-    return new NextResponse(Buffer.from(pdfBytes), {
+    let publishStatus = "";
+    if (body.publishAs) {
+      try {
+        await publishPdf(body.publishAs, pdfBuffer);
+        publishStatus = "ok";
+      } catch (err) {
+        publishStatus = `error:${err instanceof Error ? err.message : "unknown"}`;
+      }
+    }
+
+    return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filenameBase}.pdf"`,
+        ...(publishStatus ? { "X-Publish-Status": publishStatus } : {}),
       },
     });
   } catch (err) {

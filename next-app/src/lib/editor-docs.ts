@@ -2,7 +2,9 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const DOCS_DIR = path.join(process.cwd(), "content", "editor-docs");
+const PUBLIC_FILES_DIR = path.join(process.cwd(), "public", "files");
 const FILENAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._ -]*\.html?$/;
+const PDF_FILENAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pdf$/;
 
 export type EditorDoc = {
   filename: string;
@@ -61,4 +63,19 @@ export async function writeDoc(filename: string, content: string): Promise<void>
   }
   await fs.mkdir(DOCS_DIR, { recursive: true });
   await fs.writeFile(path.join(DOCS_DIR, filename), content, "utf-8");
+}
+
+/**
+ * Publishes an exported PDF to public/files/<filename>, overwriting whatever
+ * the site currently serves at /files/<filename>. Takes effect immediately
+ * (public/ is served straight from disk), but only persists across a
+ * redeploy if public/files is backed by the same kind of persistent volume
+ * as content/editor-docs.
+ */
+export async function publishPdf(filename: string, bytes: Buffer): Promise<void> {
+  if (!PDF_FILENAME_PATTERN.test(filename) || filename.includes("..")) {
+    throw new Error("Invalid filename");
+  }
+  await fs.mkdir(PUBLIC_FILES_DIR, { recursive: true });
+  await fs.writeFile(path.join(PUBLIC_FILES_DIR, filename), bytes);
 }
