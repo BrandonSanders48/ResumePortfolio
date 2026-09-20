@@ -220,7 +220,7 @@ export default function EditorApp({
                 ref={previewRef}
                 title="Resume preview"
                 srcDoc={previewSrcDoc}
-                sandbox="allow-same-origin"
+                sandbox="allow-same-origin allow-scripts"
                 scrolling="no"
                 className="w-full block border-0"
                 style={{ height: previewHeight }}
