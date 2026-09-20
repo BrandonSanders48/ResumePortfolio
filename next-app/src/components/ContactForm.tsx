@@ -1,17 +1,34 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faShield } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
 
 type Status = { type: "success" | "error"; message: string } | null;
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>(null);
   const [sending, setSending] = useState(false);
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const [token, setToken] = useState("");
+  const turnstileRef = useRef<TurnstileHandle>(null);
+
+  useEffect(() => {
+    fetch("/api/turnstile-config")
+      .then((res) => res.json())
+      .then((data) => setSiteKey(data.siteKey))
+      .catch(() => {});
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (siteKey && !token) {
+      setStatus({ type: "error", message: "Please complete the verification check before sending." });
+      return;
+    }
+
     setSending(true);
     setStatus(null);
 
@@ -22,7 +39,7 @@ export default function ContactForm() {
       email: data.get("bs_email"),
       company: data.get("bs_company"),
       message: data.get("bs_message"),
-      captcha: data.get("captcha"),
+      turnstileToken: token,
     };
 
     try {
@@ -38,6 +55,8 @@ export default function ContactForm() {
       setStatus({ type: "error", message: "Unexpected error. Please try again." });
     } finally {
       setSending(false);
+      setToken("");
+      turnstileRef.current?.reset();
     }
   }
 
@@ -93,18 +112,11 @@ export default function ContactForm() {
           <textarea id="bs_message" name="bs_message" maxLength={500} className="form-input" placeholder="Your message…" required />
         </div>
 
-        <div className="rounded-xl border border-dashed border-line bg-paper/60 p-3.5">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-white border border-line flex items-center justify-center text-accent shrink-0" aria-hidden="true">
-              <FontAwesomeIcon icon={faShield} className="text-sm" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-ink/80">Anti-spam check</div>
-              <div className="text-xs text-ink/45">What are my initials?</div>
-            </div>
+        {siteKey && (
+          <div className="flex justify-center">
+            <Turnstile ref={turnstileRef} siteKey={siteKey} onVerify={setToken} onExpire={() => setToken("")} />
           </div>
-          <input type="text" className="form-input" id="captcha" name="captcha" placeholder="Initials" autoComplete="off" required />
-        </div>
+        )}
 
         <button type="submit" disabled={sending} className="btn-primary justify-center w-full py-3 disabled:opacity-60">
           {sending ? "Sending…" : "Send Message"}

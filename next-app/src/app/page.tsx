@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFileArrowDown,
   faEnvelope,
   faAward,
   faUsersGear,
@@ -16,6 +15,7 @@ import { faLinkedinIn, faGithub } from "@fortawesome/free-brands-svg-icons";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import ContactForm from "@/components/ContactForm";
+import ResumeDownloadButton from "@/components/ResumeDownloadButton";
 import HeroBackground from "@/components/HeroBackground";
 import { experience } from "@/lib/content";
 
@@ -141,9 +141,7 @@ export default function Home() {
               </div>
 
               <div className="flex flex-wrap gap-2.5 justify-center lg:justify-start">
-                <a href="/files/Brandon-Sanders-Resume.pdf" target="_blank" rel="noopener" className="btn-primary">
-                  <FontAwesomeIcon icon={faFileArrowDown} className="text-xs" /> Download Resume
-                </a>
+                <ResumeDownloadButton />
                 <a href="https://www.linkedin.com/in/brandonsanders48" target="_blank" rel="noopener" className="btn-outline">
                   <FontAwesomeIcon icon={faLinkedinIn} className="text-xs" /> LinkedIn
                 </a>
