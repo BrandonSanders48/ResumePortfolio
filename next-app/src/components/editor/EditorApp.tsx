@@ -416,9 +416,9 @@ export default function EditorApp({
           </span>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 min-w-0">
           {/* Editor */}
-          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
+          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col min-w-0">
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-semibold text-ink text-sm">HTML</h2>
               <div className="flex items-center gap-3">
@@ -433,7 +433,7 @@ export default function EditorApp({
                 </button>
               </div>
             </div>
-            <div className="h-[75vh] min-h-[420px] rounded-xl border border-line overflow-hidden">
+            <div className="h-[50vh] lg:h-[75vh] min-h-[320px] rounded-xl border border-line overflow-hidden min-w-0">
               <CodeMirror
                 value={content}
                 onChange={(value) => setContent(value)}
@@ -456,12 +456,12 @@ export default function EditorApp({
               <button onClick={handleSave} disabled={saving} className="btn-primary justify-center disabled:opacity-60">
                 <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
               </button>
-              <span className="text-xs text-ink/40">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
+              <span className="hidden sm:inline text-xs text-ink/40">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
             </div>
           </div>
 
           {/* Preview */}
-          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
+          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col min-w-0">
             <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
               <h2 className="font-semibold text-ink text-sm">
                 Preview
@@ -522,7 +522,7 @@ export default function EditorApp({
             </div>
             <div
               ref={previewContainerRef}
-              className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-auto bg-slate-50 relative"
+              className="flex-1 min-h-[320px] max-h-[60vh] lg:max-h-[75vh] rounded-xl border border-line overflow-auto bg-slate-50 relative"
             >
               <div
                 className="relative origin-top-left"
