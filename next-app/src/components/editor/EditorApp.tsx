@@ -101,14 +101,65 @@ export default function EditorApp({
   const [wordWrap, setWordWrap] = useState(true);
   const [showPageGuides, setShowPageGuides] = useState(true);
   const [zoom, setZoom] = useState(1);
+  const [autoFit, setAutoFit] = useState(true);
 
   const previewRef = useRef<HTMLIFrameElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
   const [previewHeight, setPreviewHeight] = useState(420);
+  const [contentWidth, setContentWidth] = useState(816); // 8.5in at 96dpi, matches the resume/cover width
   const contentRef = useRef(content);
   contentRef.current = content;
 
   const isDirty = content !== savedContent;
   const activeDocMeta = docList.find((d) => d.filename === activeDoc);
+  // The LinkedIn banner is a fixed-size 1584x396 image design, not a paginated
+  // print document, so the 11in page-break model and its height-measuring
+  // logic (which fights with the banner's own min-height:100vh centering) don't apply.
+  const isBanner = /banner/i.test(activeDoc);
+  // The banner's actual design box, not the centering canvas around it (its
+  // body uses min-height:100vh + flex centering purely so it looks right
+  // when opened directly in a browser for a manual screenshot). Hardcoded
+  // rather than measured: measuring it live runs into two problems at once
+  // -- the flex layout shrinks .banner to fit whatever width the iframe
+  // happens to have on first paint (so a too-narrow initial guess "sticks"
+  // and never corrects itself), and scrollHeight is meaningless against a
+  // min-height:100vh element since that resolves against whatever height we
+  // hand the iframe in the first place.
+  const BANNER_WIDTH = 1584;
+  const BANNER_HEIGHT = 416;
+  const effectiveContentWidth = isBanner ? BANNER_WIDTH : contentWidth;
+
+  const recomputeFit = useCallback(() => {
+    const container = previewContainerRef.current;
+    if (!container || !effectiveContentWidth) return;
+    const available = container.clientWidth - 4; // small breathing room
+    const fit = Math.min(1.5, Math.max(0.15, available / effectiveContentWidth));
+    setZoom(+fit.toFixed(3));
+  }, [effectiveContentWidth]);
+
+  // Re-fit whenever the measured content width changes (new doc, or its
+  // natural width differs, e.g. the 1584px-wide banner vs. the 816px resume)
+  // while the user hasn't manually overridden the zoom.
+  useEffect(() => {
+    if (autoFit) recomputeFit();
+  }, [autoFit, effectiveContentWidth, recomputeFit]);
+
+  // Re-fit on container resize (e.g. window resize, or the split layout
+  // reflowing) so the preview never silently clips off the page edge.
+  useEffect(() => {
+    function onResize() {
+      if (autoFit) recomputeFit();
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [autoFit, recomputeFit]);
+
+  // Switching documents resets to fit-to-width, since a manually-picked zoom
+  // for one doc (e.g. a tall resume) rarely makes sense for another (e.g. the
+  // much wider banner).
+  useEffect(() => {
+    setAutoFit(true);
+  }, [activeDoc]);
 
   const pushToast = useCallback((type: Toast["type"], message: string) => {
     const id = ++toastId;
@@ -396,34 +447,48 @@ export default function EditorApp({
           {/* Preview */}
           <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
             <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h2 className="font-semibold text-ink text-sm">Preview</h2>
+              <h2 className="font-semibold text-ink text-sm">
+                Preview
+                {isBanner && <span className="ml-2 text-xs font-normal text-ink/40">1584 &times; 396px design, not paginated</span>}
+              </h2>
               <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() => setShowPageGuides((v) => !v)}
-                  className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
-                    showPageGuides ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
-                  }`}
-                  title="Toggle page-break guides (each line marks where an 11in PDF page ends)"
-                >
-                  <FontAwesomeIcon icon={faRulerHorizontal} className="text-[11px]" /> Page guides
-                </button>
+                {!isBanner && (
+                  <button
+                    onClick={() => setShowPageGuides((v) => !v)}
+                    className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
+                      showPageGuides ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
+                    }`}
+                    title="Toggle page-break guides (each line marks where an 11in PDF page ends)"
+                  >
+                    <FontAwesomeIcon icon={faRulerHorizontal} className="text-[11px]" /> Page guides
+                  </button>
+                )}
                 <div className="flex items-center gap-0.5 border border-line rounded-md">
                   <button
-                    onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.1).toFixed(2)))}
+                    onClick={() => {
+                      setAutoFit(false);
+                      setZoom((z) => Math.max(0.15, +(z - 0.1).toFixed(2)));
+                    }}
                     className="px-2 py-1 text-ink/60 hover:text-ink"
                     title="Zoom out"
                   >
                     <FontAwesomeIcon icon={faMagnifyingGlassMinus} className="text-[11px]" />
                   </button>
                   <button
-                    onClick={() => setZoom(1)}
-                    className="px-1.5 py-1 text-xs text-ink/60 hover:text-ink w-12 text-center"
-                    title="Reset zoom"
+                    onClick={() => {
+                      setAutoFit(true);
+                      recomputeFit();
+                    }}
+                    className={`px-1.5 py-1 text-xs w-14 text-center ${autoFit ? "text-accent font-medium" : "text-ink/60 hover:text-ink"}`}
+                    title="Fit to width"
                   >
-                    {Math.round(zoom * 100)}%
+                    {autoFit ? "Fit" : `${Math.round(zoom * 100)}%`}
                   </button>
                   <button
-                    onClick={() => setZoom((z) => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                    onClick={() => {
+                      setAutoFit(false);
+                      setZoom((z) => Math.min(1.5, +(z + 0.1).toFixed(2)));
+                    }}
                     className="px-2 py-1 text-ink/60 hover:text-ink"
                     title="Zoom in"
                   >
@@ -433,41 +498,56 @@ export default function EditorApp({
                 <button
                   onClick={openPreviewInNewTab}
                   className="px-2 py-1 text-ink/60 hover:text-ink border border-line rounded-md"
-                  title="Open preview in a new tab"
+                  title="Open preview in a new tab, at full size"
                 >
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[11px]" />
                 </button>
               </div>
             </div>
-            <div className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-auto bg-slate-50 relative">
+            <div
+              ref={previewContainerRef}
+              className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-auto bg-slate-50 relative"
+            >
               <div
                 className="relative origin-top-left"
-                style={{ width: zoom !== 1 ? `${100 / zoom}%` : "100%", transform: `scale(${zoom})` }}
+                style={{
+                  width: effectiveContentWidth * zoom,
+                  height: (isBanner ? BANNER_HEIGHT : previewHeight) * zoom,
+                }}
               >
-                <iframe
-                  ref={previewRef}
-                  title="Resume preview"
-                  srcDoc={previewSrcDoc}
-                  sandbox="allow-same-origin allow-scripts"
-                  scrolling="no"
-                  className="w-full block border-0"
-                  style={{ height: previewHeight }}
-                  onLoad={() => {
-                    const doc = previewRef.current?.contentDocument;
-                    if (doc?.documentElement) {
+                <div
+                  className="relative"
+                  style={{ width: effectiveContentWidth, transform: `scale(${zoom})`, transformOrigin: "top left" }}
+                >
+                  <iframe
+                    ref={previewRef}
+                    title="Resume preview"
+                    srcDoc={previewSrcDoc}
+                    sandbox="allow-same-origin allow-scripts"
+                    scrolling="no"
+                    className="block border-0"
+                    style={{ width: isBanner ? BANNER_WIDTH : contentWidth, height: isBanner ? BANNER_HEIGHT : previewHeight }}
+                    onLoad={() => {
+                      if (isBanner) return; // fixed dimensions above; see BANNER_WIDTH/BANNER_HEIGHT comment
+                      const doc = previewRef.current?.contentDocument;
+                      if (!doc?.documentElement) return;
+                      const firstEl = doc.body?.firstElementChild as HTMLElement | null;
+                      const measuredWidth = firstEl?.getBoundingClientRect().width || doc.documentElement.scrollWidth;
+                      if (measuredWidth) setContentWidth(Math.ceil(measuredWidth));
                       setPreviewHeight(doc.documentElement.scrollHeight);
-                    }
-                  }}
-                />
-                {showPageGuides &&
-                  pageMarkers.map((top, i) => (
-                    <div key={top} className="absolute left-0 right-0 pointer-events-none" style={{ top }}>
-                      <div className="border-t-2 border-dashed border-red-400/70" />
-                      <span className="absolute right-1 -top-4 text-[10px] font-medium text-red-500 bg-white/90 px-1 rounded">
-                        page {i + 1} ends
-                      </span>
-                    </div>
-                  ))}
+                    }}
+                  />
+                  {!isBanner &&
+                    showPageGuides &&
+                    pageMarkers.map((top, i) => (
+                      <div key={top} className="absolute left-0 right-0 pointer-events-none" style={{ top, width: effectiveContentWidth }}>
+                        <div className="border-t-2 border-dashed border-red-400/70" />
+                        <span className="absolute right-1 -top-4 text-[10px] font-medium text-red-500 bg-white/90 px-1 rounded">
+                          page {i + 1} ends
+                        </span>
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

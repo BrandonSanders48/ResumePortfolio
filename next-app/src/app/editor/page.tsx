@@ -4,7 +4,7 @@ import { SESSION_COOKIE, verifySessionToken, isLoginConfigured } from "@/lib/edi
 import { listDocs, pickDefaultDoc, readDoc } from "@/lib/editor-docs";
 import { getContactEmail, getContactPhone, getContactPhoneTel } from "@/lib/editor-tokens";
 import LoginForm from "@/components/editor/LoginForm";
-import EditorApp from "@/components/editor/EditorApp";
+import EditorAppLoader from "@/components/editor/EditorAppLoader";
 
 export const metadata: Metadata = {
   title: "Resume Editor",
@@ -24,7 +24,7 @@ export default async function EditorPage() {
   const content = await readDoc(activeDoc);
 
   return (
-    <EditorApp
+    <EditorAppLoader
       docs={docs}
       initialDoc={activeDoc}
       initialContent={content}
