@@ -19,6 +19,9 @@ type ExportBody = {
   pdfAlert?: boolean;
   /** If set, also writes the generated PDF to public/files/<publishAs> on the server. */
   publishAs?: string;
+  /** "pdf" (default) or "image" -- a flat PNG screenshot of the doc's design, for
+   *  docs like the LinkedIn banner that are graphics rather than paginated documents. */
+  format?: "pdf" | "image";
 };
 
 export async function POST(req: NextRequest) {
@@ -38,6 +41,10 @@ export async function POST(req: NextRequest) {
   const content = body.content ?? "";
   const jobName = (body.jobName ?? "").trim();
   const companyName = (body.companyName ?? "").trim();
+
+  if (body.format === "image") {
+    return exportImage(doc, content, jobName, companyName);
+  }
 
   const pages: { doc: string; html: string }[] = [];
 
@@ -110,6 +117,55 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "PDF export failed.";
+    return NextResponse.json({ success: false, message }, { status: 500 });
+  } finally {
+    await browser?.close();
+  }
+}
+
+/**
+ * Screenshots a doc's top-level design element (e.g. .banner, .resume) as a
+ * flat PNG at its true pixel size, rather than printing it to a PDF page.
+ * PNG over JPEG: this kind of content is flat colors, sharp text, and a thin
+ * grid line pattern -- exactly what JPEG's lossy compression smears into
+ * visible artifacts around edges, while PNG stays pixel-perfect and is still
+ * a small file for graphics like this (unlike a photo, where JPEG would win).
+ */
+async function exportImage(doc: string, content: string, jobName: string, companyName: string) {
+  const html = applyTokens(content, jobName, companyName);
+
+  let browser;
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    // Generously wide/tall so a flex-centered design (e.g. the banner) never
+    // gets shrunk to fit a too-small viewport before we measure/capture it.
+    await page.setViewport({ width: 1800, height: 900 });
+    await page.setContent(html, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 }).catch(() => {});
+
+    const elementHandle = await page.evaluateHandle(() => document.body.firstElementChild);
+    const element = elementHandle.asElement();
+    if (!element) {
+      return NextResponse.json({ success: false, message: "Could not find the design to capture." }, { status: 500 });
+    }
+
+    const pngBytes = await element.screenshot({ type: "png" });
+    const filenameBase = doc.replace(/\.html?$/i, "").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "export";
+
+    return new NextResponse(new Uint8Array(pngBytes), {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "Content-Disposition": `attachment; filename="${filenameBase}.png"`,
+      },
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Image export failed.";
     return NextResponse.json({ success: false, message }, { status: 500 });
   } finally {
     await browser?.close();

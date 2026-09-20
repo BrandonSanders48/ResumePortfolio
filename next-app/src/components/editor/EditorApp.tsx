@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFloppyDisk,
   faFilePdf,
+  faFileImage,
   faRightFromBracket,
   faCloudArrowUp,
   faMagnifyingGlassPlus,
@@ -97,6 +98,7 @@ export default function EditorApp({
   const [exportOther, setExportOther] = useState(() => docs.find((d) => d.filename !== initialDoc)?.filename ?? "");
   const [pdfAlert, setPdfAlert] = useState(true);
   const [publish, setPublish] = useState(false);
+  const [exportFormat, setExportFormat] = useState<"pdf" | "image">("pdf");
 
   const [wordWrap, setWordWrap] = useState(true);
   const [showPageGuides, setShowPageGuides] = useState(true);
@@ -160,6 +162,12 @@ export default function EditorApp({
   useEffect(() => {
     setAutoFit(true);
   }, [activeDoc]);
+
+  // The banner is a graphic, not a print document -- default it to PNG.
+  // Other docs only ever support PDF.
+  useEffect(() => {
+    setExportFormat(isBanner ? "image" : "pdf");
+  }, [isBanner]);
 
   const pushToast = useCallback((type: Toast["type"], message: string) => {
     const id = ++toastId;
@@ -257,7 +265,8 @@ export default function EditorApp({
   }
 
   async function handleExport() {
-    const publishAs = publish ? PUBLISH_TARGETS[activeDoc] : undefined;
+    const isImage = isBanner && exportFormat === "image";
+    const publishAs = !isImage && publish ? PUBLISH_TARGETS[activeDoc] : undefined;
     if (publishAs) {
       const ok = window.confirm(`This will overwrite the live download at /files/${publishAs} with this export. Continue?`);
       if (!ok) return;
@@ -267,21 +276,25 @@ export default function EditorApp({
       const res = await fetch("/api/editor/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          doc: activeDoc,
-          content,
-          mode: exportMode,
-          otherDoc: exportOther,
-          jobName,
-          companyName,
-          pdfAlert,
-          publishAs,
-        }),
+        body: JSON.stringify(
+          isImage
+            ? { doc: activeDoc, content, format: "image" }
+            : {
+                doc: activeDoc,
+                content,
+                mode: exportMode,
+                otherDoc: exportOther,
+                jobName,
+                companyName,
+                pdfAlert,
+                publishAs,
+              }
+        ),
       });
 
       if (!res.ok) {
         const json = await res.json().catch(() => null);
-        pushToast("error", json?.message || "PDF export failed.");
+        pushToast("error", json?.message || `${isImage ? "Image" : "PDF"} export failed.`);
         return;
       }
 
@@ -291,7 +304,7 @@ export default function EditorApp({
       const disposition = res.headers.get("Content-Disposition") || "";
       const match = disposition.match(/filename="([^"]+)"/);
       a.href = url;
-      a.download = match?.[1] || "resume.pdf";
+      a.download = match?.[1] || (isImage ? "export.png" : "resume.pdf");
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -303,7 +316,7 @@ export default function EditorApp({
       } else if (publishAs && publishStatus?.startsWith("error:")) {
         pushToast("error", `PDF downloaded, but publishing failed: ${publishStatus.slice(6)}`);
       } else {
-        pushToast("success", "PDF exported.");
+        pushToast("success", isImage ? "PNG exported." : "PDF exported.");
       }
     } catch {
       pushToast("error", "Unexpected error during export.");
@@ -554,97 +567,153 @@ export default function EditorApp({
         </div>
 
         {/* Export */}
-        <div className="bg-white rounded-2xl border border-line p-5 mt-6">
-          <h2 className="font-semibold text-ink text-sm mb-4">Export</h2>
-          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+        <div className="bg-white rounded-2xl border border-line overflow-hidden mt-6">
+          <div className="px-5 py-4 border-b border-line flex flex-wrap items-center justify-between gap-3">
             <div>
-              <label htmlFor="jobName" className="block text-sm font-medium text-ink/70 mb-1.5">
-                Job title
-              </label>
-              <input
-                id="jobName"
-                type="text"
-                className="form-input"
-                placeholder="e.g., Senior Cybersecurity Analyst"
-                value={jobName}
-                onChange={(e) => setJobName(e.target.value)}
-                maxLength={120}
-              />
+              <h2 className="font-semibold text-ink text-sm">Export</h2>
+              <p className="text-xs text-ink/45 mt-0.5">
+                {isBanner ? "Download the banner as an image, ready to upload to LinkedIn." : "Tailor it to a role, then export a PDF."}
+              </p>
             </div>
-            <div>
-              <label htmlFor="companyName" className="block text-sm font-medium text-ink/70 mb-1.5">
-                Company name
-              </label>
-              <input
-                id="companyName"
-                type="text"
-                className="form-input"
-                placeholder="e.g., Example Health"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                maxLength={120}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-end gap-3 mb-3">
-            <div>
-              <label htmlFor="exportMode" className="block text-sm font-medium text-ink/70 mb-1.5">
-                Export
-              </label>
-              <select
-                id="exportMode"
-                className="form-input w-auto"
-                value={exportMode}
-                onChange={(e) => {
-                  const mode = e.target.value as "current" | "both";
-                  setExportMode(mode);
-                  if (mode !== "current") setPublish(false);
-                }}
-              >
-                <option value="current">This document</option>
-                <option value="both">This + another</option>
-              </select>
-            </div>
-            {exportMode === "both" && (
-              <div>
-                <label htmlFor="exportOther" className="block text-sm font-medium text-ink/70 mb-1.5">
-                  Combine with
-                </label>
-                <select id="exportOther" className="form-input w-auto" value={exportOther} onChange={(e) => setExportOther(e.target.value)}>
-                  {docList
-                    .filter((d) => d.filename !== activeDoc)
-                    .map((d) => (
-                      <option key={d.filename} value={d.filename}>
-                        {d.label}
-                      </option>
-                    ))}
-                </select>
+            {isBanner && (
+              <div className="flex items-center gap-0.5 border border-line rounded-lg p-0.5 bg-paper" role="group" aria-label="Export format">
+                <button
+                  onClick={() => setExportFormat("image")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                    exportFormat === "image" ? "bg-ink text-white" : "text-ink/60 hover:text-ink"
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faFileImage} className="text-[11px]" /> PNG
+                </button>
+                <button
+                  onClick={() => setExportFormat("pdf")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                    exportFormat === "pdf" ? "bg-ink text-white" : "text-ink/60 hover:text-ink"
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faFilePdf} className="text-[11px]" /> PDF
+                </button>
               </div>
             )}
-            <button onClick={handleExport} disabled={exporting} className="btn-outline disabled:opacity-60">
-              <FontAwesomeIcon icon={faFilePdf} className="text-xs" /> {exporting ? "Exporting…" : "Export PDF"}
-            </button>
-            {isDirty && (
-              <span className="text-xs text-amber-600 flex items-center gap-1">
-                <FontAwesomeIcon icon={faCircleExclamation} className="text-[11px]" />
-                Unsaved edits export too, but won&apos;t be on disk until you Save.
-              </span>
-            )}
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-ink/70 mb-2">
-            <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
-            Enable PDF app alert (when configured)
-          </label>
+          <div className="p-5">
+            {!isBanner && (
+              <>
+                <div className="grid sm:grid-cols-2 gap-4 mb-5">
+                  <div>
+                    <label htmlFor="jobName" className="block text-sm font-medium text-ink/70 mb-1.5">
+                      Job title
+                    </label>
+                    <input
+                      id="jobName"
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g., Senior Cybersecurity Analyst"
+                      value={jobName}
+                      onChange={(e) => setJobName(e.target.value)}
+                      maxLength={120}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="companyName" className="block text-sm font-medium text-ink/70 mb-1.5">
+                      Company name
+                    </label>
+                    <input
+                      id="companyName"
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g., Example Health"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      maxLength={120}
+                    />
+                  </div>
+                </div>
+                <div className="h-px bg-line mb-5" />
+              </>
+            )}
 
-          {exportMode === "current" && PUBLISH_TARGETS[activeDoc] && (
-            <label className="flex items-center gap-2 text-sm text-ink/70">
-              <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} />
-              <FontAwesomeIcon icon={faCloudArrowUp} className="text-xs text-accent" />
-              Also publish this export as the live <code className="text-xs bg-paper px-1 py-0.5 rounded">/files/{PUBLISH_TARGETS[activeDoc]}</code> download
-            </label>
-          )}
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div className="flex flex-wrap items-end gap-3">
+                {!isBanner && (
+                  <>
+                    <div>
+                      <label htmlFor="exportMode" className="block text-sm font-medium text-ink/70 mb-1.5">
+                        Scope
+                      </label>
+                      <select
+                        id="exportMode"
+                        className="form-input w-auto"
+                        value={exportMode}
+                        onChange={(e) => {
+                          const mode = e.target.value as "current" | "both";
+                          setExportMode(mode);
+                          if (mode !== "current") setPublish(false);
+                        }}
+                      >
+                        <option value="current">This document</option>
+                        <option value="both">This + another</option>
+                      </select>
+                    </div>
+                    {exportMode === "both" && (
+                      <div>
+                        <label htmlFor="exportOther" className="block text-sm font-medium text-ink/70 mb-1.5">
+                          Combine with
+                        </label>
+                        <select id="exportOther" className="form-input w-auto" value={exportOther} onChange={(e) => setExportOther(e.target.value)}>
+                          {docList
+                            .filter((d) => d.filename !== activeDoc)
+                            .map((d) => (
+                              <option key={d.filename} value={d.filename}>
+                                {d.label}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <button onClick={handleExport} disabled={exporting} className="btn-primary disabled:opacity-60">
+                <FontAwesomeIcon icon={isBanner && exportFormat === "image" ? faFileImage : faFilePdf} className="text-xs" />
+                {exporting ? "Exporting…" : isBanner ? (exportFormat === "image" ? "Export PNG" : "Export PDF") : "Export PDF"}
+              </button>
+            </div>
+
+            {!isBanner && (
+              <div className="flex flex-col gap-2.5 mt-5 pt-4 border-t border-line">
+                <label className="flex items-center gap-2 text-sm text-ink/70">
+                  <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
+                  Enable PDF app alert (when configured)
+                </label>
+
+                {exportMode === "current" && PUBLISH_TARGETS[activeDoc] && (
+                  <label className="flex items-center gap-2 text-sm text-ink/70">
+                    <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} />
+                    <FontAwesomeIcon icon={faCloudArrowUp} className="text-xs text-accent" />
+                    Also publish this export as the live{" "}
+                    <code className="text-xs bg-paper px-1 py-0.5 rounded">/files/{PUBLISH_TARGETS[activeDoc]}</code> download
+                  </label>
+                )}
+              </div>
+            )}
+
+            {isBanner && exportFormat === "image" && (
+              <p className="text-xs text-ink/45 mt-4">
+                PNG is recommended here &mdash; the banner is flat colors and sharp text/logo edges, exactly what JPEG&apos;s lossy compression
+                smudges. PNG stays pixel-perfect at a full 1584&times;396.
+              </p>
+            )}
+
+            {isDirty && (
+              <p className="text-xs text-amber-600 flex items-center gap-1 mt-3">
+                <FontAwesomeIcon icon={faCircleExclamation} className="text-[11px]" />
+                Unsaved edits export too, but won&apos;t be on disk until you Save.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
