@@ -9,6 +9,20 @@ import { combinePagesHtml, getPdfAlertMessage } from "@/lib/editor-export";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
+/**
+ * req.nextUrl.origin reflects the server's own bind address (0.0.0.0 in a
+ * container) rather than the public hostname. That's harmless for plain
+ * <img> loads, but Chromium enforces stricter rules for CORS-mode fetches
+ * (like @font-face) against 0.0.0.0/private addresses, which silently
+ * failed self-hosted font loading during PDF export until this was derived
+ * from the Host header instead (same fix as the /files/*.pdf referer guard).
+ */
+function getRequestOrigin(req: NextRequest): string {
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || req.nextUrl.host;
+  const proto = req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "");
+  return `${proto}://${host}`;
+}
+
 type ExportBody = {
   doc?: string;
   content?: string;
@@ -43,7 +57,7 @@ export async function POST(req: NextRequest) {
   const companyName = (body.companyName ?? "").trim();
 
   if (body.format === "image") {
-    return exportImage(doc, content, jobName, companyName);
+    return exportImage(doc, content, jobName, companyName, getRequestOrigin(req));
   }
 
   const pages: { doc: string; html: string }[] = [];
@@ -71,7 +85,7 @@ export async function POST(req: NextRequest) {
     pages.push({ doc, html: applyTokens(content, jobName, companyName) });
   }
 
-  const combinedHtml = combinePagesHtml(pages, req.nextUrl.origin);
+  const combinedHtml = combinePagesHtml(pages, getRequestOrigin(req));
 
   let browser;
   try {
@@ -83,6 +97,12 @@ export async function POST(req: NextRequest) {
     const page = await browser.newPage();
     await page.setContent(combinedHtml, { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 }).catch(() => {});
+    // Network going idle means the font files finished downloading, not that
+    // the browser has finished swapping them in (font-display: swap can
+    // still be showing the fallback font at that point) -- wait for the
+    // actual font-loading promise too so the PDF never captures a
+    // fallback-font frame that would look heavier/different from the preview.
+    await page.evaluate(() => document.fonts.ready).catch(() => {});
     let pdfBytes: Uint8Array = await page.pdf({ format: "letter", printBackground: true });
 
     if (body.pdfAlert) {
@@ -131,8 +151,14 @@ export async function POST(req: NextRequest) {
  * visible artifacts around edges, while PNG stays pixel-perfect and is still
  * a small file for graphics like this (unlike a photo, where JPEG would win).
  */
-async function exportImage(doc: string, content: string, jobName: string, companyName: string) {
-  const html = applyTokens(content, jobName, companyName);
+async function exportImage(doc: string, content: string, jobName: string, companyName: string, origin: string) {
+  // Absolute-path assets (self-hosted fonts, /files/images/...) need a <base
+  // href> to resolve against, since page.setContent() gives the page an
+  // opaque origin with nothing to resolve a leading "/" against otherwise.
+  const html = applyTokens(content, jobName, companyName).replace(
+    /<head[^>]*>/i,
+    (match) => `${match}<base href="${origin}/">`
+  );
 
   let browser;
   try {
