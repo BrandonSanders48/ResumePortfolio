@@ -9,6 +9,7 @@ const PDF_FILENAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pdf$/;
 export type EditorDoc = {
   filename: string;
   label: string;
+  updatedAt: string | null;
 };
 
 export function isValidFilename(filename: string): boolean {
@@ -23,13 +24,22 @@ export async function listDocs(): Promise<EditorDoc[]> {
     return [];
   }
 
-  const docs = entries
-    .filter((f) => isValidFilename(f))
-    .map((filename) => {
-      const base = filename.replace(/\.html?$/i, "");
-      const label = base.replace(/[_-]/g, " ").trim() || filename;
-      return { filename, label };
-    });
+  const docs = await Promise.all(
+    entries
+      .filter((f) => isValidFilename(f))
+      .map(async (filename) => {
+        const base = filename.replace(/\.html?$/i, "");
+        const label = base.replace(/[_-]/g, " ").trim() || filename;
+        let updatedAt: string | null = null;
+        try {
+          const stat = await fs.stat(path.join(DOCS_DIR, filename));
+          updatedAt = stat.mtime.toISOString();
+        } catch {
+          updatedAt = null;
+        }
+        return { filename, label, updatedAt };
+      })
+  );
 
   docs.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true, sensitivity: "base" }));
   return docs;

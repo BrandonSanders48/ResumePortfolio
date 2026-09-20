@@ -1,9 +1,25 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import CodeMirror, { EditorView, keymap } from "@uiw/react-codemirror";
+import { html as htmlLang } from "@codemirror/lang-html";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faFilePdf, faRightFromBracket, faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFloppyDisk,
+  faFilePdf,
+  faRightFromBracket,
+  faCloudArrowUp,
+  faMagnifyingGlassPlus,
+  faMagnifyingGlassMinus,
+  faArrowUpRightFromSquare,
+  faXmark,
+  faCircleExclamation,
+  faCircleCheck,
+  faClock,
+  faTextWidth,
+  faRulerHorizontal,
+} from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc } from "@/lib/editor-docs";
 
 // Docs whose PDF export corresponds to a file actually linked from the live
@@ -11,6 +27,11 @@ import type { EditorDoc } from "@/lib/editor-docs";
 const PUBLISH_TARGETS: Record<string, string> = {
   "Resume.html": "Brandon-Sanders-Resume.pdf",
 };
+
+const PAGE_HEIGHT_PX = 1056; // 11in at 96dpi, matches the export's letter-size PDF pages
+
+let toastId = 0;
+type Toast = { id: number; type: "success" | "error" | "info"; message: string };
 
 function applyTokensClient(
   html: string,
@@ -29,6 +50,22 @@ function applyTokensClient(
     .split("{{TARGET_HIRING_TEAM_AT}}").join(companyAt);
 }
 
+function formatRelativeTime(iso: string | null): string {
+  if (!iso) return "never saved";
+  const date = new Date(iso);
+  const diffMs = Date.now() - date.getTime();
+  const diffSec = Math.round(diffMs / 1000);
+  if (diffSec < 10) return "just now";
+  if (diffSec < 60) return `${diffSec}s ago`;
+  const diffMin = Math.round(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.round(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.round(diffHr / 24);
+  if (diffDay < 7) return `${diffDay}d ago`;
+  return date.toLocaleDateString();
+}
+
 export default function EditorApp({
   docs,
   initialDoc,
@@ -45,9 +82,11 @@ export default function EditorApp({
   contactEmail?: string;
 }) {
   const router = useRouter();
+  const [docList, setDocList] = useState(docs);
   const [activeDoc, setActiveDoc] = useState(initialDoc);
   const [content, setContent] = useState(initialContent);
-  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [savedContent, setSavedContent] = useState(initialContent);
+  const [toasts, setToasts] = useState<Toast[]>([]);
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [switching, setSwitching] = useState(false);
@@ -59,54 +98,120 @@ export default function EditorApp({
   const [pdfAlert, setPdfAlert] = useState(true);
   const [publish, setPublish] = useState(false);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [wordWrap, setWordWrap] = useState(true);
+  const [showPageGuides, setShowPageGuides] = useState(true);
+  const [zoom, setZoom] = useState(1);
+
   const previewRef = useRef<HTMLIFrameElement>(null);
   const [previewHeight, setPreviewHeight] = useState(420);
+  const contentRef = useRef(content);
+  contentRef.current = content;
+
+  const isDirty = content !== savedContent;
+  const activeDocMeta = docList.find((d) => d.filename === activeDoc);
+
+  const pushToast = useCallback((type: Toast["type"], message: string) => {
+    const id = ++toastId;
+    setToasts((t) => [...t, { id, type, message }]);
+    window.setTimeout(() => {
+      setToasts((t) => t.filter((toast) => toast.id !== id));
+    }, 4000);
+  }, []);
 
   const previewSrcDoc = useMemo(
     () => applyTokensClient(content, { contactPhone, contactPhoneTel, contactEmail, jobName, companyName }),
     [content, contactPhone, contactPhoneTel, contactEmail, jobName, companyName]
   );
 
+  // Warn on tab close / navigation with unsaved changes.
+  useEffect(() => {
+    function onBeforeUnload(e: BeforeUnloadEvent) {
+      if (contentRef.current !== savedContent) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [savedContent]);
+
+  const handleSave = useCallback(async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/editor/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ doc: activeDoc, content: contentRef.current }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setSavedContent(contentRef.current);
+        setDocList((list) =>
+          list.map((d) => (d.filename === activeDoc ? { ...d, updatedAt: json.updatedAt ?? new Date().toISOString() } : d))
+        );
+        pushToast("success", `${activeDoc} saved.`);
+      } else {
+        pushToast("error", json.message || "Save failed.");
+      }
+    } catch {
+      pushToast("error", "Unexpected error while saving.");
+    } finally {
+      setSaving(false);
+    }
+  }, [activeDoc, pushToast]);
+
+  const handleExportRef = useRef<() => void>(() => {});
+
+  // Global keyboard shortcuts: Ctrl/Cmd+S to save, Ctrl/Cmd+Enter to export.
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      const mod = e.ctrlKey || e.metaKey;
+      if (mod && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        handleSave();
+      } else if (mod && e.key === "Enter") {
+        e.preventDefault();
+        handleExportRef.current();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleSave]);
+
   async function switchDoc(filename: string) {
+    if (filename === activeDoc) return;
+    if (isDirty) {
+      const ok = window.confirm(`You have unsaved changes to ${activeDoc}. Switch documents anyway and lose them?`);
+      if (!ok) return;
+    }
     setSwitching(true);
-    setStatus(null);
     try {
       const res = await fetch(`/api/editor/docs?doc=${encodeURIComponent(filename)}`);
       const json = await res.json();
       if (json.success) {
         setActiveDoc(json.activeDoc);
         setContent(json.content);
-        const other = docs.find((d) => d.filename !== json.activeDoc)?.filename;
+        setSavedContent(json.content);
+        setDocList(json.docs ?? docList);
+        const other = (json.docs ?? docList).find((d: EditorDoc) => d.filename !== json.activeDoc)?.filename;
         if (other) setExportOther(other);
+      } else {
+        pushToast("error", json.message || "Could not switch documents.");
       }
+    } catch {
+      pushToast("error", "Unexpected error switching documents.");
     } finally {
       setSwitching(false);
     }
   }
 
-  async function handleSave() {
-    setSaving(true);
-    setStatus(null);
-    try {
-      const res = await fetch("/api/editor/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ doc: activeDoc, content }),
-      });
-      const json = await res.json();
-      setStatus({ type: json.success ? "success" : "error", message: json.message });
-    } catch {
-      setStatus({ type: "error", message: "Unexpected error while saving." });
-    } finally {
-      setSaving(false);
-    }
-  }
-
   async function handleExport() {
-    setExporting(true);
-    setStatus(null);
     const publishAs = publish ? PUBLISH_TARGETS[activeDoc] : undefined;
+    if (publishAs) {
+      const ok = window.confirm(`This will overwrite the live download at /files/${publishAs} with this export. Continue?`);
+      if (!ok) return;
+    }
+    setExporting(true);
     try {
       const res = await fetch("/api/editor/export", {
         method: "POST",
@@ -125,7 +230,7 @@ export default function EditorApp({
 
       if (!res.ok) {
         const json = await res.json().catch(() => null);
-        setStatus({ type: "error", message: json?.message || "PDF export failed." });
+        pushToast("error", json?.message || "PDF export failed.");
         return;
       }
 
@@ -143,27 +248,71 @@ export default function EditorApp({
 
       const publishStatus = res.headers.get("X-Publish-Status");
       if (publishAs && publishStatus === "ok") {
-        setStatus({ type: "success", message: `PDF exported and published to /files/${publishAs}.` });
+        pushToast("success", `PDF exported and published to /files/${publishAs}.`);
       } else if (publishAs && publishStatus?.startsWith("error:")) {
-        setStatus({ type: "error", message: `PDF downloaded, but publishing failed: ${publishStatus.slice(6)}` });
+        pushToast("error", `PDF downloaded, but publishing failed: ${publishStatus.slice(6)}`);
       } else {
-        setStatus({ type: "success", message: "PDF exported." });
+        pushToast("success", "PDF exported.");
       }
     } catch {
-      setStatus({ type: "error", message: "Unexpected error during export." });
+      pushToast("error", "Unexpected error during export.");
     } finally {
       setExporting(false);
     }
   }
+  handleExportRef.current = handleExport;
 
   async function handleLogout() {
+    if (isDirty) {
+      const ok = window.confirm("You have unsaved changes that will be lost. Log out anyway?");
+      if (!ok) return;
+    }
     await fetch("/api/editor/logout", { method: "POST" });
     router.refresh();
   }
 
+  function openPreviewInNewTab() {
+    const blob = new Blob([previewSrcDoc], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
+  const pageMarkers = useMemo(() => {
+    const count = Math.floor(previewHeight / PAGE_HEIGHT_PX);
+    return Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT_PX);
+  }, [previewHeight]);
+
+  const editorExtensions = useMemo(() => {
+    const ext = [htmlLang(), keymap.of([{ key: "Mod-s", run: () => true }])];
+    if (wordWrap) ext.push(EditorView.lineWrapping);
+    return ext;
+  }, [wordWrap]);
+
   return (
     <div className="bg-paper min-h-[80vh] py-8">
-      <div className="max-w-[1400px] mx-auto px-4">
+      {/* Toasts */}
+      <div className="fixed top-20 right-4 z-[60] flex flex-col gap-2 w-[calc(100%-2rem)] max-w-sm">
+        {toasts.map((t) => (
+          <div
+            key={t.id}
+            className={`flex items-start gap-2 rounded-xl border px-3.5 py-2.5 text-sm shadow-lg bg-white ${
+              t.type === "success" ? "border-accent/30 text-ink" : t.type === "error" ? "border-red-300 text-red-800" : "border-line text-ink"
+            }`}
+          >
+            <FontAwesomeIcon
+              icon={t.type === "error" ? faCircleExclamation : faCircleCheck}
+              className={`mt-0.5 text-xs ${t.type === "error" ? "text-red-600" : "text-accent"}`}
+            />
+            <span className="flex-1">{t.message}</span>
+            <button onClick={() => setToasts((ts) => ts.filter((x) => x.id !== t.id))} className="text-ink/40 hover:text-ink">
+              <FontAwesomeIcon icon={faXmark} className="text-xs" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="max-w-[1600px] mx-auto px-4">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <div>
             <h1 className="font-serif text-2xl text-ink">Resume Editor</h1>
@@ -174,63 +323,152 @@ export default function EditorApp({
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <label htmlFor="docSelect" className="text-sm text-ink/60">
-            Document
-          </label>
-          <select
-            id="docSelect"
-            className="form-input w-auto"
-            value={activeDoc}
-            disabled={switching}
-            onChange={(e) => switchDoc(e.target.value)}
-          >
-            {docs.map((d) => (
-              <option key={d.filename} value={d.filename}>
+        {/* Doc tabs */}
+        <div className="flex flex-wrap items-center gap-1.5 mb-4 border-b border-line pb-3">
+          {docList.map((d) => {
+            const isActive = d.filename === activeDoc;
+            return (
+              <button
+                key={d.filename}
+                onClick={() => switchDoc(d.filename)}
+                disabled={switching}
+                className={`relative px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors disabled:opacity-60 ${
+                  isActive ? "bg-ink text-white" : "bg-white text-ink/60 hover:text-ink border border-line"
+                }`}
+              >
                 {d.label}
-              </option>
-            ))}
-          </select>
-          {status && (
-            <span className={`text-sm ${status.type === "success" ? "text-accent" : "text-red-700"}`}>{status.message}</span>
-          )}
+                {isActive && isDirty && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 border border-white" title="Unsaved changes" />
+                )}
+              </button>
+            );
+          })}
+          <span className="ml-auto flex items-center gap-1.5 text-xs text-ink/40">
+            <FontAwesomeIcon icon={faClock} className="text-[10px]" />
+            {isDirty ? "Unsaved changes" : `Saved ${formatRelativeTime(activeDocMeta?.updatedAt ?? null)}`}
+          </span>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Editor */}
           <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
-            <h2 className="font-semibold text-ink text-sm mb-3">HTML</h2>
-            <textarea
-              ref={textareaRef}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              spellCheck={false}
-              className="form-input flex-1 min-h-[420px] font-mono text-xs leading-relaxed resize-y"
-            />
-            <button onClick={handleSave} disabled={saving} className="btn-primary justify-center mt-4 disabled:opacity-60">
-              <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
-            </button>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold text-ink text-sm">HTML</h2>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setWordWrap((w) => !w)}
+                  className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
+                    wordWrap ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
+                  }`}
+                  title="Toggle word wrap"
+                >
+                  <FontAwesomeIcon icon={faTextWidth} className="text-[11px]" /> Wrap
+                </button>
+              </div>
+            </div>
+            <div className="h-[75vh] min-h-[420px] rounded-xl border border-line overflow-hidden">
+              <CodeMirror
+                value={content}
+                onChange={(value) => setContent(value)}
+                height="100%"
+                style={{ height: "100%", fontSize: "12.5px" }}
+                extensions={editorExtensions}
+                basicSetup={{
+                  lineNumbers: true,
+                  foldGutter: true,
+                  highlightActiveLine: true,
+                  bracketMatching: true,
+                  closeBrackets: true,
+                  autocompletion: true,
+                  searchKeymap: true,
+                  history: true,
+                }}
+              />
+            </div>
+            <div className="flex items-center gap-3 mt-4">
+              <button onClick={handleSave} disabled={saving} className="btn-primary justify-center disabled:opacity-60">
+                <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
+              </button>
+              <span className="text-xs text-ink/40">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
+            </div>
           </div>
 
           {/* Preview */}
           <div className="bg-white rounded-2xl border border-line p-5 flex flex-col">
-            <h2 className="font-semibold text-ink text-sm mb-3">Preview</h2>
-            <div className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-y-auto bg-slate-50">
-              <iframe
-                ref={previewRef}
-                title="Resume preview"
-                srcDoc={previewSrcDoc}
-                sandbox="allow-same-origin allow-scripts"
-                scrolling="no"
-                className="w-full block border-0"
-                style={{ height: previewHeight }}
-                onLoad={() => {
-                  const doc = previewRef.current?.contentDocument;
-                  if (doc?.documentElement) {
-                    setPreviewHeight(doc.documentElement.scrollHeight);
-                  }
-                }}
-              />
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <h2 className="font-semibold text-ink text-sm">Preview</h2>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setShowPageGuides((v) => !v)}
+                  className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
+                    showPageGuides ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
+                  }`}
+                  title="Toggle page-break guides (each line marks where an 11in PDF page ends)"
+                >
+                  <FontAwesomeIcon icon={faRulerHorizontal} className="text-[11px]" /> Page guides
+                </button>
+                <div className="flex items-center gap-0.5 border border-line rounded-md">
+                  <button
+                    onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.1).toFixed(2)))}
+                    className="px-2 py-1 text-ink/60 hover:text-ink"
+                    title="Zoom out"
+                  >
+                    <FontAwesomeIcon icon={faMagnifyingGlassMinus} className="text-[11px]" />
+                  </button>
+                  <button
+                    onClick={() => setZoom(1)}
+                    className="px-1.5 py-1 text-xs text-ink/60 hover:text-ink w-12 text-center"
+                    title="Reset zoom"
+                  >
+                    {Math.round(zoom * 100)}%
+                  </button>
+                  <button
+                    onClick={() => setZoom((z) => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                    className="px-2 py-1 text-ink/60 hover:text-ink"
+                    title="Zoom in"
+                  >
+                    <FontAwesomeIcon icon={faMagnifyingGlassPlus} className="text-[11px]" />
+                  </button>
+                </div>
+                <button
+                  onClick={openPreviewInNewTab}
+                  className="px-2 py-1 text-ink/60 hover:text-ink border border-line rounded-md"
+                  title="Open preview in a new tab"
+                >
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[11px]" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 min-h-[420px] max-h-[75vh] rounded-xl border border-line overflow-auto bg-slate-50 relative">
+              <div
+                className="relative origin-top-left"
+                style={{ width: zoom !== 1 ? `${100 / zoom}%` : "100%", transform: `scale(${zoom})` }}
+              >
+                <iframe
+                  ref={previewRef}
+                  title="Resume preview"
+                  srcDoc={previewSrcDoc}
+                  sandbox="allow-same-origin allow-scripts"
+                  scrolling="no"
+                  className="w-full block border-0"
+                  style={{ height: previewHeight }}
+                  onLoad={() => {
+                    const doc = previewRef.current?.contentDocument;
+                    if (doc?.documentElement) {
+                      setPreviewHeight(doc.documentElement.scrollHeight);
+                    }
+                  }}
+                />
+                {showPageGuides &&
+                  pageMarkers.map((top, i) => (
+                    <div key={top} className="absolute left-0 right-0 pointer-events-none" style={{ top }}>
+                      <div className="border-t-2 border-dashed border-red-400/70" />
+                      <span className="absolute right-1 -top-4 text-[10px] font-medium text-red-500 bg-white/90 px-1 rounded">
+                        page {i + 1} ends
+                      </span>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
@@ -294,7 +532,7 @@ export default function EditorApp({
                   Combine with
                 </label>
                 <select id="exportOther" className="form-input w-auto" value={exportOther} onChange={(e) => setExportOther(e.target.value)}>
-                  {docs
+                  {docList
                     .filter((d) => d.filename !== activeDoc)
                     .map((d) => (
                       <option key={d.filename} value={d.filename}>
@@ -307,6 +545,12 @@ export default function EditorApp({
             <button onClick={handleExport} disabled={exporting} className="btn-outline disabled:opacity-60">
               <FontAwesomeIcon icon={faFilePdf} className="text-xs" /> {exporting ? "Exporting…" : "Export PDF"}
             </button>
+            {isDirty && (
+              <span className="text-xs text-amber-600 flex items-center gap-1">
+                <FontAwesomeIcon icon={faCircleExclamation} className="text-[11px]" />
+                Unsaved edits export too, but won&apos;t be on disk until you Save.
+              </span>
+            )}
           </div>
 
           <label className="flex items-center gap-2 text-sm text-ink/70 mb-2">

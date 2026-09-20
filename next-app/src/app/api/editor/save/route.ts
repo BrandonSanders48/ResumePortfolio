@@ -25,5 +25,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message }, { status: 400 });
   }
 
-  return NextResponse.json({ success: true, message: "Saved." });
+  return NextResponse.json({ success: true, message: "Saved.", updatedAt: new Date().toISOString() });
 }
