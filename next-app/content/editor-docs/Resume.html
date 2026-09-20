@@ -58,17 +58,33 @@ body {
   overflow: hidden;
 }
 
-/* Faint grid texture, echoes the site's hero background */
+/* Grid texture, matches the site's homepage hero background */
 .header::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(20, 23, 31, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 23, 31, 0.05) 1px, transparent 1px);
-  background-size: 28px 28px;
+  inset: -1px;
+  background-image: linear-gradient(rgba(20, 23, 31, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 31, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  animation: header-grid-pan 20s linear infinite;
   mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
   pointer-events: none;
+}
+
+@keyframes header-grid-pan {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 44px 44px, 44px 44px;
+  }
+}
+
+@media print {
+  .header::before {
+    animation: none;
+  }
 }
 
 .header > * {
