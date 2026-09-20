@@ -60,7 +60,11 @@ body {
 
 /* Grid texture, matches the site's homepage hero background. Opacity is
    higher than the site's 0.08 because flattening to a static PDF loses
-   the subpixel anti-aliasing a browser gives it on screen. */
+   the subpixel anti-aliasing a browser gives it on screen. The fade
+   toward the headshot is a plain gradient layer rather than CSS
+   mask-image: headless Chromium's PDF/print pipeline can silently drop
+   masked layers depending on the host's compositor, while a normal
+   alpha-blended background gradient always rasterizes. */
 .header::before {
   content: "";
   position: absolute;
@@ -69,8 +73,6 @@ body {
     linear-gradient(90deg, rgba(20, 23, 31, 0.16) 1px, transparent 1px);
   background-size: 44px 44px;
   animation: header-grid-pan 20s linear infinite;
-  mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
   pointer-events: none;
 }
 
@@ -99,8 +101,14 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 100% at 0% 50%, #000 40%, transparent 100%);
+}
+
+.header > .header-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent 0%, transparent 45%, #eef1f6 92%);
 }
 
 .header.header-compact {
@@ -466,6 +474,7 @@ body {
 
   <header class="header">
     <canvas class="header-particles" aria-hidden="true"></canvas>
+    <div class="header-fade" aria-hidden="true"></div>
     <div class="brand">
       <div class="logo">BS<span></span></div>
       <div class="name-title">
@@ -594,6 +603,7 @@ body {
 
   <header class="header header-compact">
     <canvas class="header-particles" aria-hidden="true"></canvas>
+    <div class="header-fade" aria-hidden="true"></div>
     <div class="brand">
       <div class="logo">BS<span></span></div>
       <div class="name-title">
