@@ -5,6 +5,7 @@ import { isAuthorized } from "@/lib/editor-guard";
 import { listDocs, pickDefaultDoc, readDoc, publishPdf } from "@/lib/editor-docs";
 import { applyTokens, filenamePart } from "@/lib/editor-tokens";
 import { combinePagesHtml, getPdfAlertMessage } from "@/lib/editor-export";
+import { compressEmbeddedImages } from "@/lib/editor-image-compress";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -36,6 +37,9 @@ type ExportBody = {
   /** "pdf" (default) or "image" -- a flat PNG screenshot of the doc's design, for
    *  docs like the LinkedIn banner that are graphics rather than paginated documents. */
   format?: "pdf" | "image";
+  /** Downscale/recompress embedded photos (the headshot, etc.) before rendering,
+   *  for a meaningfully smaller PDF at the cost of some image quality. */
+  compress?: boolean;
 };
 
 export async function POST(req: NextRequest) {
@@ -83,6 +87,14 @@ export async function POST(req: NextRequest) {
     }
   } else {
     pages.push({ doc, html: applyTokens(content, jobName, companyName) });
+  }
+
+  if (body.compress) {
+    await Promise.all(
+      pages.map(async (p) => {
+        p.html = await compressEmbeddedImages(p.html);
+      })
+    );
   }
 
   const combinedHtml = combinePagesHtml(pages, getRequestOrigin(req));

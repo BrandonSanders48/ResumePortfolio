@@ -20,6 +20,7 @@ import {
   faClock,
   faTextWidth,
   faRulerHorizontal,
+  faFileZipper,
 } from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc } from "@/lib/editor-docs";
 
@@ -99,6 +100,7 @@ export default function EditorApp({
   const [pdfAlert, setPdfAlert] = useState(true);
   const [publish, setPublish] = useState(false);
   const [exportFormat, setExportFormat] = useState<"pdf" | "image">("pdf");
+  const [compress, setCompress] = useState(false);
 
   const [wordWrap, setWordWrap] = useState(true);
   const [showPageGuides, setShowPageGuides] = useState(true);
@@ -288,6 +290,7 @@ export default function EditorApp({
                 companyName,
                 pdfAlert,
                 publishAs,
+                compress,
               }
         ),
       });
@@ -687,6 +690,12 @@ export default function EditorApp({
                 <label className="flex items-center gap-2 text-sm text-ink/70">
                   <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
                   Enable PDF app alert (when configured)
+                </label>
+
+                <label className="flex items-center gap-2 text-sm text-ink/70">
+                  <input type="checkbox" checked={compress} onChange={(e) => setCompress(e.target.checked)} />
+                  <FontAwesomeIcon icon={faFileZipper} className="text-xs text-accent" />
+                  Compress images (much smaller file, slightly softer photo)
                 </label>
 
                 {exportMode === "current" && PUBLISH_TARGETS[activeDoc] && (
