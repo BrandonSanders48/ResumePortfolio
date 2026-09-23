@@ -1,4 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isSiteGateEnabled, verifyGateToken, SITE_GATE_COOKIE } from "@/lib/site-gate";
+
+const GATE_EXEMPT_PREFIXES = ["/gate", "/api/", "/editor", "/_next/", "/files/"];
+const GATE_EXEMPT_EXACT = ["/favicon.ico", "/robots.txt", "/sitemap.xml"];
+
+export async function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+
+  if (pathname.toLowerCase().endsWith(".pdf")) {
+    return pdfReferGuard(req);
+  }
+
+  if (isSiteGateEnabled() && !isGateExempt(pathname)) {
+    const ok = await verifyGateToken(req.cookies.get(SITE_GATE_COOKIE)?.value);
+    if (!ok) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/gate";
+      url.search = `?next=${encodeURIComponent(pathname + req.nextUrl.search)}`;
+      return NextResponse.redirect(url);
+    }
+  }
+
+  return NextResponse.next();
+}
+
+function isGateExempt(pathname: string): boolean {
+  if (GATE_EXEMPT_EXACT.includes(pathname)) return true;
+  return GATE_EXEMPT_PREFIXES.some((p) => pathname.startsWith(p));
+}
 
 /**
  * Blocks direct/off-site access to PDFs served from /files/*.pdf: only
@@ -9,11 +38,7 @@ import { NextRequest, NextResponse } from "next/server";
  * never hits this at all -- it reads the file server-side in
  * /api/resume-download instead of requesting the static path.
  */
-export function middleware(req: NextRequest) {
-  if (!req.nextUrl.pathname.toLowerCase().endsWith(".pdf")) {
-    return NextResponse.next();
-  }
-
+function pdfReferGuard(req: NextRequest): NextResponse {
   const referer = req.headers.get("referer");
   let refererHost: string | null = null;
   if (referer) {
@@ -38,5 +63,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/files/:path*"],
+  matcher: ["/((?!_next/static|_next/image).*)"],
 };

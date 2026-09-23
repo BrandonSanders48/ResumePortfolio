@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import HostingModal from "@/components/HostingModal";
-import ClarityAnalytics from "@/components/ClarityAnalytics";
+import SiteChrome from "@/components/SiteChrome";
 
 config.autoAddCss = false;
 
@@ -56,13 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Navbar />
-        <main id="content" className="flex-1 pt-16">
-          {children}
-        </main>
-        <Footer />
-        <HostingModal />
-        <ClarityAnalytics />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
