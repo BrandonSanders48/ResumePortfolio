@@ -5,6 +5,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
+import HeroBackground from "@/components/HeroBackground";
 
 export default function GateForm({ next }: { next: string }) {
   const [siteKey, setSiteKey] = useState<string | null>(null);
@@ -44,8 +45,9 @@ export default function GateForm({ next }: { next: string }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-paper px-4">
-      <div className="w-full max-w-sm text-center">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center bg-paper px-4">
+      <HeroBackground />
+      <div className="w-full max-w-sm text-center relative">
         <Image
           src="/files/images/Brandon_Sanders-cropped.png"
           alt="Brandon Sanders"
@@ -55,7 +57,8 @@ export default function GateForm({ next }: { next: string }) {
           className="w-28 h-28 rounded-2xl object-cover border border-line shadow-sm mx-auto mb-5"
         />
         <h1 className="font-serif text-2xl text-ink mb-1.5">Brandon Sanders, CISSP</h1>
-        <p className="text-ink/50 text-sm mb-8">One quick check before you continue.</p>
+        <p className="text-ink/60 text-sm mb-1">IT Security Leader &amp; Manager &mdash; Portfolio &amp; Resume</p>
+        <p className="text-ink/40 text-xs mb-8">One quick check before you continue.</p>
 
         <div className="bg-white rounded-2xl border border-line p-6 flex flex-col items-center">
           <Turnstile ref={turnstileRef} siteKey={siteKey} onVerify={handleVerify} />
