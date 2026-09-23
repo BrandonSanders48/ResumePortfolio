@@ -66,7 +66,7 @@ flowchart LR
 
 - `.github/workflows/docker.yml` builds the image from `next-app/` on every push to `main` and pushes it to Docker Hub as `brandonsanders/resumeportfolio:latest` (and `:<sha>`).
 - Kubernetes runs that image; deploying a new build there (image pull + rollout) is a separate step from the GitHub Actions build/push.
-- `docker-entrypoint.sh` seeds `/app/content` (the editable Resume/Cover/etc. HTML) and `/app/public/files` (published PDFs) from read-only copies baked into the image, but only when the mounted volume is fresh/empty — so edits made through `/editor` and PDFs published from it survive a redeploy instead of being overwritten by the new image's defaults.
+- `docker-entrypoint.sh` seeds `/app/content` (the editable Resume/Cover/etc. HTML) and `/app/public/files` (published PDFs) from read-only copies baked into the image, but only when the mounted volume is fresh/empty. This means edits made through `/editor` and PDFs published from it survive a redeploy instead of being overwritten by the new image's defaults.
 
 ### Secrets and Environment Variables
 
@@ -101,7 +101,7 @@ Tokens, secrets, and private configuration are controlled through Kubernetes env
 ### How Export Is Accomplished
 
 - For PDF export, the export route combines the selected page(s) into one document (optionally with embedded photos downscaled/recompressed first) and renders it with Puppeteer + system Chromium.
-- The LinkedIn banner exports as a PNG instead — a direct element screenshot at its true 1584×396 size, since it's a graphic, not a paginated document.
+- The LinkedIn banner exports as a PNG instead: a direct element screenshot at its true 1584×396 size, since it's a graphic, not a paginated document.
 - Fonts are self-hosted rather than pulled from Google Fonts at render time, which avoids a Chromium bug where a self-hosted `@font-face` gets embedded as a low-quality bitmap font when the same document also loads a font from an external stylesheet.
 - An optional JavaScript alert (`PDF_OPEN_ALERT_MESSAGE`) can be embedded in the exported PDF via `pdf-lib`.
 - The Resume PDF can optionally be "published" straight to `/files/Brandon-Sanders-Resume.pdf` on the live site from within the editor.

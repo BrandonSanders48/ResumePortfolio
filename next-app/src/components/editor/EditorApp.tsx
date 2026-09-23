@@ -711,7 +711,7 @@ export default function EditorApp({
 
             {isBanner && exportFormat === "image" && (
               <p className="text-xs text-ink/45 mt-4">
-                PNG is recommended here &mdash; the banner is flat colors and sharp text/logo edges, exactly what JPEG&apos;s lossy compression
+                PNG is recommended here: the banner is flat colors and sharp text/logo edges, exactly what JPEG&apos;s lossy compression
                 smudges. PNG stays pixel-perfect at a full 1584&times;396.
               </p>
             )}
