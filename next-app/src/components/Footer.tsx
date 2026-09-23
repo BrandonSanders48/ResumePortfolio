@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ResetAccessButton from "@/components/ResetAccessButton";
 
 export default function Footer() {
   return (
@@ -21,6 +22,7 @@ export default function Footer() {
           <a href="/editor" className="hover:text-white/85 transition-colors">
             Resume Editor
           </a>
+          <ResetAccessButton />
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSessionToken, verifyCredentials, SESSION_COOKIE, SESSION_MAX_AGE, isLoginConfigured } from "@/lib/editor-auth";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(req: NextRequest) {
   if (!isLoginConfigured()) {
@@ -9,11 +10,17 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { username?: string; password?: string };
+  let body: { username?: string; password?: string; turnstileToken?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ success: false, message: "Invalid request." }, { status: 400 });
+  }
+
+  const remoteIp = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
+  const verified = await verifyTurnstileToken((body.turnstileToken ?? "").trim(), remoteIp);
+  if (!verified) {
+    return NextResponse.json({ success: false, message: "Verification check failed. Please try again." }, { status: 400 });
   }
 
   const username = (body.username ?? "").trim();

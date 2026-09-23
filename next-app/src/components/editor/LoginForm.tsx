@@ -1,17 +1,34 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
 
 export default function LoginForm({ configured }: { configured: boolean }) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+  const [token, setToken] = useState("");
+  const turnstileRef = useRef<TurnstileHandle>(null);
+
+  useEffect(() => {
+    fetch("/api/turnstile-config")
+      .then((res) => res.json())
+      .then((data) => setSiteKey(data.siteKey))
+      .catch(() => {});
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (siteKey && !token) {
+      setError("Please complete the verification check before signing in.");
+      return;
+    }
+
     setSending(true);
     setError("");
 
@@ -20,7 +37,7 @@ export default function LoginForm({ configured }: { configured: boolean }) {
       const res = await fetch("/api/editor/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: data.get("username"), password: data.get("password") }),
+        body: JSON.stringify({ username: data.get("username"), password: data.get("password"), turnstileToken: token }),
       });
       const json = await res.json();
       if (json.success) {
@@ -32,6 +49,8 @@ export default function LoginForm({ configured }: { configured: boolean }) {
       setError("Unexpected error. Please try again.");
     } finally {
       setSending(false);
+      setToken("");
+      turnstileRef.current?.reset();
     }
   }
 
@@ -70,6 +89,11 @@ export default function LoginForm({ configured }: { configured: boolean }) {
             </label>
             <input type="password" id="password" name="password" className="form-input" autoComplete="current-password" required />
           </div>
+          {siteKey && (
+            <div className="flex justify-center">
+              <Turnstile ref={turnstileRef} siteKey={siteKey} onVerify={setToken} onExpire={() => setToken("")} />
+            </div>
+          )}
           <button type="submit" disabled={sending} className="btn-primary justify-center w-full py-3 disabled:opacity-60">
             {sending ? "Signing in…" : "Sign in"}
           </button>

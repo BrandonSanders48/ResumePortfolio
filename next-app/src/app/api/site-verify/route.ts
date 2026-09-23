@@ -27,3 +27,10 @@ export async function POST(req: NextRequest) {
   });
   return res;
 }
+
+/** Clears the gate cookie so the next request goes back through /gate. */
+export async function DELETE() {
+  const res = NextResponse.json({ success: true });
+  res.cookies.set(SITE_GATE_COOKIE, "", { path: "/", maxAge: 0 });
+  return res;
+}
