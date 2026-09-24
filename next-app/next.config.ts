@@ -9,7 +9,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://www.clarity.ms",
   "font-src 'self' data:",
-  "frame-src https://challenges.cloudflare.com",
+  "frame-src 'self' https://challenges.cloudflare.com https://www.google.com",
   "connect-src 'self' https://challenges.cloudflare.com https://www.clarity.ms https://*.clarity.ms",
   "object-src 'none'",
   "base-uri 'self'",
