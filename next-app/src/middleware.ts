@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSiteGateEnabled, verifyGateToken, SITE_GATE_COOKIE } from "@/lib/site-gate";
+import { isKnownSearchEngineCrawler } from "@/lib/crawler-detect";
 
 const GATE_EXEMPT_PREFIXES = [
   "/gate",
@@ -33,7 +34,7 @@ export async function middleware(req: NextRequest) {
     return pdfReferGuard(req);
   }
 
-  if (isSiteGateEnabled() && !isGateExempt(pathname)) {
+  if (isSiteGateEnabled() && !isGateExempt(pathname) && !isKnownSearchEngineCrawler(req.headers.get("user-agent"))) {
     const ok = await verifyGateToken(req.cookies.get(SITE_GATE_COOKIE)?.value);
     if (!ok) {
       const url = req.nextUrl.clone();
