@@ -42,7 +42,7 @@ export default function VolunteerPage() {
             <SectionHeading number="01" eyebrow="Giving back">
               Volunteer Work
             </SectionHeading>
-            <p className="text-ink/50 text-sm mb-8 -mt-2">
+            <p className="text-ink/65 text-sm mb-8 -mt-2">
               Contributing to the cybersecurity community through education, scholarships, and workforce development.
             </p>
             <div className="grid md:grid-cols-2 gap-6">

@@ -68,7 +68,7 @@ export default function ContactForm() {
         </div>
         <div>
           <div className="font-semibold text-ink text-[0.95rem]">Send a message</div>
-          <div className="text-ink/45 text-xs">Short and simple is perfect.</div>
+          <div className="text-ink/65 text-xs">Short and simple is perfect.</div>
         </div>
       </div>
 

@@ -67,7 +67,7 @@ export default function GateForm({ next }: { next: string }) {
         />
         <h1 className="font-serif text-2xl text-ink mb-1.5">Brandon Sanders, CISSP</h1>
         <p className="text-ink/60 text-sm mb-1">IT Security Leader &amp; Manager &middot; Portfolio &amp; Resume</p>
-        <p className="text-ink/40 text-xs mb-6">One quick check before you continue.</p>
+        <p className="text-ink/65 text-xs mb-6">One quick check before you continue.</p>
 
         <div className="flex flex-col items-center pt-6 border-t border-line">
           {status === "success" ? (
@@ -78,8 +78,8 @@ export default function GateForm({ next }: { next: string }) {
           ) : (
             <>
               <Turnstile ref={turnstileRef} siteKey={siteKey} onVerify={handleVerify} />
-              {!siteKey && <p className="text-xs text-ink/40 mt-1">Loading verification…</p>}
-              {status === "verifying" && <p className="text-xs text-ink/40 mt-3">Verifying…</p>}
+              {!siteKey && <p className="text-xs text-ink/65 mt-1">Loading verification…</p>}
+              {status === "verifying" && <p className="text-xs text-ink/65 mt-3">Verifying…</p>}
               {status === "error" && (
                 <p className="text-xs text-red-600 mt-3 flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faCircleExclamation} /> {errorMsg}

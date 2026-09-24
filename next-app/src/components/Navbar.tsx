@@ -22,12 +22,12 @@ export default function Navbar() {
               href="/"
               title="Back to portfolio"
               aria-label="Back to portfolio"
-              className="mr-1 text-ink/50 hover:text-ink transition-colors"
+              className="mr-1 text-ink/65 hover:text-ink transition-colors"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
             </Link>
           )}
-          <Link href="/" className="flex items-center gap-2.5" aria-label="Home">
+          <Link href="/" className="flex items-center gap-2.5">
             <Image
               src="/files/images/bs-logo.svg"
               alt="BS"

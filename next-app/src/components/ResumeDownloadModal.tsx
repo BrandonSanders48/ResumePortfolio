@@ -63,7 +63,7 @@ export default function ResumeDownloadModal({ open, onClose }: { open: boolean; 
           <h5 className="font-serif text-ink text-base" id="resumeDownloadLabel">
             Quick verification
           </h5>
-          <button onClick={onClose} className="text-ink/50 hover:text-ink transition-colors" aria-label="Close">
+          <button onClick={onClose} className="text-ink/65 hover:text-ink transition-colors" aria-label="Close">
             <FontAwesomeIcon icon={faXmark} className="text-lg" />
           </button>
         </div>
@@ -79,7 +79,7 @@ export default function ResumeDownloadModal({ open, onClose }: { open: boolean; 
               <div className="flex justify-center">
                 <Turnstile ref={turnstileRef} siteKey={siteKey} onVerify={handleVerify} />
               </div>
-              {status === "downloading" && <p className="text-xs text-ink/40 mt-3">Preparing your download…</p>}
+              {status === "downloading" && <p className="text-xs text-ink/65 mt-3">Preparing your download…</p>}
               {status === "error" && (
                 <p className="text-xs text-red-600 mt-3 flex items-center justify-center gap-1.5">
                   <FontAwesomeIcon icon={faCircleExclamation} /> {errorMsg}

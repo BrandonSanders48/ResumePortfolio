@@ -149,7 +149,7 @@ export default function HighlightsPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-ink text-base sm:text-lg mb-1">What does AI say about me?</div>
-                    <div className="text-ink/45 text-xs sm:text-sm font-normal">(Generated Using the Self-Hosted Model Gemma3)</div>
+                    <div className="text-ink/65 text-xs sm:text-sm font-normal">(Generated Using the Self-Hosted Model Gemma3)</div>
                   </div>
                 </div>
                 <ul className="flex flex-col gap-4">

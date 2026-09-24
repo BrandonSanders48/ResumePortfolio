@@ -48,10 +48,13 @@ export default function HostingModal() {
       <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={close} />
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-line">
         <div className="bg-paper border-b border-line px-6 py-4 flex items-center justify-between">
-          <h5 className="font-serif text-ink text-base" id="hostingModalLabel">
+          {/* Not a real heading: it's a dialog title referenced via aria-labelledby,
+              not part of the page's heading outline, so a <div> avoids implying a
+              heading-level jump wherever this modal happens to open. */}
+          <div className="font-serif text-ink text-base" id="hostingModalLabel">
             Powered by Modern Infrastructure
-          </h5>
-          <button onClick={close} className="text-ink/50 hover:text-ink transition-colors" aria-label="Close">
+          </div>
+          <button onClick={close} className="text-ink/65 hover:text-ink transition-colors" aria-label="Close">
             <FontAwesomeIcon icon={faXmark} className="text-lg" />
           </button>
         </div>

@@ -63,7 +63,7 @@ export default function LoginForm({ configured }: { configured: boolean }) {
           </div>
           <div>
             <h1 className="font-serif text-xl text-ink">Resume Editor</h1>
-            <div className="text-ink/45 text-xs">Login required</div>
+            <div className="text-ink/65 text-xs">Login required</div>
           </div>
         </div>
 

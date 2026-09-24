@@ -180,7 +180,7 @@ export default function Home() {
                 <div key={m.label} className="flex items-center shrink-0">
                   <div className="flex flex-col items-center text-center px-4 sm:px-6 py-2">
                     <span className="font-serif text-xl sm:text-2xl md:text-3xl text-ink leading-tight whitespace-nowrap">{m.value}</span>
-                    <span className="text-[0.62rem] sm:text-xs text-ink/50 font-semibold mt-1 uppercase tracking-wide whitespace-nowrap">
+                    <span className="text-[0.62rem] sm:text-xs text-ink/65 font-semibold mt-1 uppercase tracking-wide whitespace-nowrap">
                       {m.label}
                     </span>
                   </div>
@@ -286,7 +286,7 @@ export default function Home() {
                     </div>
                     <div>
                       <div className="font-semibold text-ink text-[0.95rem]">{group.title}</div>
-                      <div className="text-ink/50 text-xs">{group.subtitle}</div>
+                      <div className="text-ink/65 text-xs">{group.subtitle}</div>
                     </div>
                   </div>
                   <div className="p-5 flex-1">
@@ -352,7 +352,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Western Governors University</div>
-                    <div className="text-ink/45 text-xs">B.S., Information Technology Management · In Progress</div>
+                    <div className="text-ink/65 text-xs">B.S., Information Technology Management · In Progress</div>
                   </div>
                 </div>
                 <p className="text-ink/60 text-sm leading-relaxed">
@@ -368,7 +368,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Salina Central High School</div>
-                    <div className="text-ink/45 text-xs">High School Diploma · 2014</div>
+                    <div className="text-ink/65 text-xs">High School Diploma · 2014</div>
                   </div>
                 </div>
                 <p className="text-ink/60 text-sm leading-relaxed">
@@ -406,7 +406,7 @@ export default function Home() {
                     <div className="font-serif text-xl text-ink">{cert.name}</div>
                     <span className="pill">{cert.issuer}</span>
                   </div>
-                  <div className="text-ink/50 text-sm mb-4">{cert.description}</div>
+                  <div className="text-ink/65 text-sm mb-4">{cert.description}</div>
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {cert.tags.map((tag) => (
                       <span key={tag} className="pill">
@@ -422,7 +422,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-ink/50 text-sm">More certifications and verifications on Credly.</p>
+              <p className="text-ink/65 text-sm">More certifications and verifications on Credly.</p>
               <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener" className="btn-outline">
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
                 View more on Credly
@@ -461,7 +461,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Location</div>
-                    <div className="text-ink/45 text-xs">Salina, KS</div>
+                    <div className="text-ink/65 text-xs">Salina, KS</div>
                   </div>
                 </div>
                 <div className="aspect-[4/3] overflow-hidden rounded-xl border border-line flex-1">
@@ -474,7 +474,7 @@ export default function Home() {
                     className="w-full h-full border-0"
                   />
                 </div>
-                <p className="text-ink/50 text-sm mt-4">
+                <p className="text-ink/65 text-sm mt-4">
                   Open to IT Manager, CISO, and senior cybersecurity leadership opportunities. Remote-friendly.
                 </p>
               </div>

@@ -351,7 +351,14 @@ export default function EditorApp({
   }, [previewHeight]);
 
   const editorExtensions = useMemo(() => {
-    const ext = [htmlLang(), keymap.of([{ key: "Mod-s", run: () => true }])];
+    // CodeMirror's contentDOM (the role="textbox" element) doesn't pick up an
+    // aria-label passed as a React prop on <CodeMirror> -- it only accepts
+    // one through this contentAttributes facet.
+    const ext = [
+      htmlLang(),
+      keymap.of([{ key: "Mod-s", run: () => true }]),
+      EditorView.contentAttributes.of({ "aria-label": "HTML source editor" }),
+    ];
     if (wordWrap) ext.push(EditorView.lineWrapping);
     return ext;
   }, [wordWrap]);
@@ -372,7 +379,7 @@ export default function EditorApp({
               className={`mt-0.5 text-xs ${t.type === "error" ? "text-red-600" : "text-accent"}`}
             />
             <span className="flex-1">{t.message}</span>
-            <button onClick={() => setToasts((ts) => ts.filter((x) => x.id !== t.id))} className="text-ink/40 hover:text-ink">
+            <button onClick={() => setToasts((ts) => ts.filter((x) => x.id !== t.id))} className="text-ink/65 hover:text-ink">
               <FontAwesomeIcon icon={faXmark} className="text-xs" />
             </button>
           </div>
@@ -383,7 +390,7 @@ export default function EditorApp({
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <div>
             <h1 className="font-serif text-2xl text-ink">Resume Editor</h1>
-            <p className="text-ink/50 text-sm">Edit the raw HTML, preview it live, then save or export a PDF.</p>
+            <p className="text-ink/65 text-sm">Edit the raw HTML, preview it live, then save or export a PDF.</p>
           </div>
           <button onClick={handleLogout} className="btn-outline">
             <FontAwesomeIcon icon={faRightFromBracket} className="text-xs" /> Logout
@@ -410,7 +417,7 @@ export default function EditorApp({
               </button>
             );
           })}
-          <span className="ml-auto flex items-center gap-1.5 text-xs text-ink/40">
+          <span className="ml-auto flex items-center gap-1.5 text-xs text-ink/65">
             <FontAwesomeIcon icon={faClock} className="text-[10px]" />
             {isDirty ? "Unsaved changes" : `Saved ${formatRelativeTime(activeDocMeta?.updatedAt ?? null)}`}
           </span>
@@ -425,7 +432,7 @@ export default function EditorApp({
                 <button
                   onClick={() => setWordWrap((w) => !w)}
                   className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
-                    wordWrap ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
+                    wordWrap ? "bg-paper text-ink" : "text-ink/65 hover:text-ink"
                   }`}
                   title="Toggle word wrap"
                 >
@@ -456,7 +463,7 @@ export default function EditorApp({
               <button onClick={handleSave} disabled={saving} className="btn-primary justify-center disabled:opacity-60">
                 <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
               </button>
-              <span className="hidden sm:inline text-xs text-ink/40">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
+              <span className="hidden sm:inline text-xs text-ink/65">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
             </div>
           </div>
 
@@ -465,14 +472,14 @@ export default function EditorApp({
             <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
               <h2 className="font-semibold text-ink text-sm">
                 Preview
-                {isBanner && <span className="ml-2 text-xs font-normal text-ink/40">1584 &times; 396px design, not paginated</span>}
+                {isBanner && <span className="ml-2 text-xs font-normal text-ink/65">1584 &times; 396px design, not paginated</span>}
               </h2>
               <div className="flex items-center gap-1.5">
                 {!isBanner && (
                   <button
                     onClick={() => setShowPageGuides((v) => !v)}
                     className={`text-xs flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
-                      showPageGuides ? "bg-paper text-ink" : "text-ink/40 hover:text-ink"
+                      showPageGuides ? "bg-paper text-ink" : "text-ink/65 hover:text-ink"
                     }`}
                     title="Toggle page-break guides (each line marks where an 11in PDF page ends)"
                   >
@@ -574,7 +581,7 @@ export default function EditorApp({
           <div className="px-5 py-4 border-b border-line flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="font-semibold text-ink text-sm">Export</h2>
-              <p className="text-xs text-ink/45 mt-0.5">
+              <p className="text-xs text-ink/65 mt-0.5">
                 {isBanner ? "Download the banner as an image, ready to upload to LinkedIn." : "Tailor it to a role, then export a PDF."}
               </p>
             </div>
@@ -710,7 +717,7 @@ export default function EditorApp({
             )}
 
             {isBanner && exportFormat === "image" && (
-              <p className="text-xs text-ink/45 mt-4">
+              <p className="text-xs text-ink/65 mt-4">
                 PNG is recommended here: the banner is flat colors and sharp text/logo edges, exactly what JPEG&apos;s lossy compression
                 smudges. PNG stays pixel-perfect at a full 1584&times;396.
               </p>
