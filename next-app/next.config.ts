@@ -1,5 +1,22 @@
 import type { NextConfig } from "next";
 
+// Third-party origins the site actually loads: Cloudflare Turnstile (site
+// gate, contact form, resume download, editor login) and Microsoft Clarity
+// (analytics, disabled on /editor). Everything else stays same-origin.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.clarity.ms",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: https://www.clarity.ms",
+  "font-src 'self' data:",
+  "frame-src https://challenges.cloudflare.com",
+  "connect-src 'self' https://challenges.cloudflare.com https://www.clarity.ms https://*.clarity.ms",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join("; ");
+
 const nextConfig: NextConfig = {
   output: "standalone",
   async headers() {
@@ -13,6 +30,21 @@ const nextConfig: NextConfig = {
         // public/ static file serving didn't, by default).
         source: "/files/fonts/:path*",
         headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+      },
+      {
+        // Applies everywhere. script-src/style-src still need 'unsafe-inline'
+        // since Next's own hydration data and next/script inline blocks
+        // (Clarity's snippet) aren't nonce-based here -- this CSP is about
+        // constraining which origins can load/connect/frame, not blocking
+        // inline execution outright.
+        source: "/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: CSP },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "geolocation=(), microphone=(), camera=()" },
+        ],
       },
     ];
   },
