@@ -14,7 +14,17 @@ const GATE_EXEMPT_PREFIXES = [
   "/opengraph-image",
   "/twitter-image",
 ];
-const GATE_EXEMPT_EXACT = ["/favicon.ico", "/robots.txt", "/sitemap.xml"];
+const GATE_EXEMPT_EXACT = [
+  "/favicon.ico",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/manifest.webmanifest",
+  "/apple-touch-icon.png",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/favicon-32.png",
+  "/favicon-16.png",
+];
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
