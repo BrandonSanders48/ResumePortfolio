@@ -1,8 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getMailTransport } from "@/lib/mailer";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+// Sends a real email per successful submission -- caps how often one IP can
+// trigger that, independent of Turnstile (which only proves "not a bot",
+// not "not spamming").
+const CONTACT_LIMIT = 5;
+const CONTACT_WINDOW_MS = 15 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
+  const remoteIp = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for") || "unknown";
+  const rateCheck = checkRateLimit(`contact:${remoteIp}`, CONTACT_LIMIT, CONTACT_WINDOW_MS);
+  if (!rateCheck.allowed) {
+    return NextResponse.json(
+      { success: false, message: "Too many messages sent. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(rateCheck.retryAfterSeconds) } }
+    );
+  }
+
   let body: {
     name?: string;
     email?: string;
@@ -31,7 +47,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: "Please enter a valid email address." }, { status: 400 });
   }
 
-  const remoteIp = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for");
   const verified = await verifyTurnstileToken(turnstileToken, remoteIp);
   if (!verified) {
     return NextResponse.json(
