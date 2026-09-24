@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSiteGateEnabled, verifyGateToken, SITE_GATE_COOKIE } from "@/lib/site-gate";
 
-const GATE_EXEMPT_PREFIXES = ["/gate", "/api/", "/editor", "/_next/", "/files/"];
+const GATE_EXEMPT_PREFIXES = [
+  "/gate",
+  "/api/",
+  "/editor",
+  "/_next/",
+  "/files/",
+  "/.well-known/",
+  // Social-preview crawlers (LinkedIn, Slack, Twitter/X) fetch these
+  // unauthenticated when unfurling a shared link -- they need to resolve
+  // even when the rest of the site is gated.
+  "/opengraph-image",
+  "/twitter-image",
+];
 const GATE_EXEMPT_EXACT = ["/favicon.ico", "/robots.txt", "/sitemap.xml"];
 
 export async function middleware(req: NextRequest) {

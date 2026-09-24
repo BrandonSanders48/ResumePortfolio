@@ -44,6 +44,9 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "geolocation=(), microphone=(), camera=()" },
+          // No "preload" -- that requires submitting the domain to the
+          // browser-shipped HSTS preload list, which is a one-way door.
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
         ],
       },
     ];

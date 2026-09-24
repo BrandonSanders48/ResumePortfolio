@@ -41,6 +41,20 @@ export const metadata: Metadata = {
     "Salina KS",
   ],
   icons: { icon: "/files/images/bs-logo.svg" },
+  openGraph: {
+    type: "website",
+    url: "https://brandonsanders.org",
+    siteName: "Brandon Sanders, CISSP",
+    title: "Brandon Sanders, CISSP | IT Security Leader & Manager",
+    description:
+      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brandon Sanders, CISSP | IT Security Leader & Manager",
+    description:
+      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
