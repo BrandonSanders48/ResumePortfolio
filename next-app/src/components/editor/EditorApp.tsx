@@ -18,11 +18,12 @@ import {
   faCircleExclamation,
   faCircleCheck,
   faClock,
+  faClockRotateLeft,
   faTextWidth,
   faRulerHorizontal,
   faFileZipper,
 } from "@fortawesome/free-solid-svg-icons";
-import type { EditorDoc } from "@/lib/editor-docs";
+import type { EditorDoc, HistoryEntry } from "@/lib/editor-docs";
 
 // Docs whose PDF export corresponds to a file actually linked from the live
 // site, and the /files/ filename each one should publish as.
@@ -101,6 +102,11 @@ export default function EditorApp({
   const [publish, setPublish] = useState(false);
   const [exportFormat, setExportFormat] = useState<"pdf" | "image">("pdf");
   const [compress, setCompress] = useState(false);
+
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [restoringId, setRestoringId] = useState<string | null>(null);
 
   const [wordWrap, setWordWrap] = useState(true);
   const [showPageGuides, setShowPageGuides] = useState(true);
@@ -220,6 +226,49 @@ export default function EditorApp({
       setSaving(false);
     }
   }, [activeDoc, pushToast]);
+
+  async function openHistory() {
+    setHistoryOpen(true);
+    setHistoryLoading(true);
+    try {
+      const res = await fetch(`/api/editor/history?doc=${encodeURIComponent(activeDoc)}`);
+      const json = await res.json();
+      setHistoryEntries(json.success ? json.entries : []);
+    } catch {
+      setHistoryEntries([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }
+
+  async function handleRestore(id: string) {
+    if (isDirty) {
+      const ok = window.confirm("You have unsaved changes that will be discarded by restoring. Continue?");
+      if (!ok) return;
+    }
+    setRestoringId(id);
+    try {
+      const res = await fetch("/api/editor/history/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ doc: activeDoc, id }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setContent(json.content);
+        setSavedContent(json.content);
+        setDocList((list) => list.map((d) => (d.filename === activeDoc ? { ...d, updatedAt: json.updatedAt } : d)));
+        setHistoryOpen(false);
+        pushToast("success", "Version restored.");
+      } else {
+        pushToast("error", json.message || "Restore failed.");
+      }
+    } catch {
+      pushToast("error", "Unexpected error while restoring.");
+    } finally {
+      setRestoringId(null);
+    }
+  }
 
   const handleExportRef = useRef<() => void>(() => {});
 
@@ -462,6 +511,9 @@ export default function EditorApp({
             <div className="flex items-center gap-3 mt-4">
               <button onClick={handleSave} disabled={saving} className="btn-primary justify-center disabled:opacity-60">
                 <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
+              </button>
+              <button onClick={openHistory} className="btn-outline justify-center" title="View and restore earlier saved versions">
+                <FontAwesomeIcon icon={faClockRotateLeft} className="text-xs" /> History
               </button>
               <span className="hidden sm:inline text-xs text-ink/65">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
             </div>
@@ -732,6 +784,47 @@ export default function EditorApp({
           </div>
         </div>
       </div>
+
+      {historyOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center px-4" role="dialog" aria-modal="true" aria-labelledby="historyModalLabel">
+          <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={() => setHistoryOpen(false)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-hidden border border-line flex flex-col">
+            <div className="bg-paper border-b border-line px-5 py-3.5 flex items-center justify-between shrink-0">
+              <div id="historyModalLabel" className="font-serif text-ink text-base">
+                Version history &middot; {activeDocMeta?.label ?? activeDoc}
+              </div>
+              <button onClick={() => setHistoryOpen(false)} className="text-ink/65 hover:text-ink transition-colors" aria-label="Close">
+                <FontAwesomeIcon icon={faXmark} className="text-lg" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 flex flex-col gap-2">
+              {historyLoading && <p className="text-sm text-ink/65 text-center py-6">Loading…</p>}
+              {!historyLoading && historyEntries.length === 0 && (
+                <p className="text-sm text-ink/65 text-center py-6">
+                  No earlier versions yet. Every Save (after the first) keeps a snapshot of what it replaced.
+                </p>
+              )}
+              {historyEntries.map((entry) => (
+                <div key={entry.id} className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border border-line">
+                  <div>
+                    <div className="text-sm text-ink font-medium">{formatRelativeTime(entry.updatedAt)}</div>
+                    <div className="text-xs text-ink/65">
+                      {new Date(entry.updatedAt).toLocaleString()} &middot; {(entry.size / 1024).toFixed(1)} KB
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleRestore(entry.id)}
+                    disabled={restoringId === entry.id}
+                    className="px-3 py-1.5 rounded-full border border-line text-xs font-medium text-ink hover:border-ink/40 transition-colors disabled:opacity-60 shrink-0"
+                  >
+                    {restoringId === entry.id ? "Restoring…" : "Restore"}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
