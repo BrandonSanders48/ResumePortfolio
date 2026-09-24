@@ -137,6 +137,7 @@ export default function HighlightsPage() {
                     src="/files/images/SFM_Challenge_Coin-Both.png"
                     width={500}
                     height={300}
+                    sizes="350px"
                     className="mx-auto w-[70%] h-auto"
                   />
                 </div>
