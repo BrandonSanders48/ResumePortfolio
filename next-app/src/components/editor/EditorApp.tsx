@@ -413,7 +413,7 @@ export default function EditorApp({
   }, [wordWrap]);
 
   return (
-    <div className="bg-paper min-h-[80vh] py-8">
+    <div className="bg-paper min-h-[80vh] py-8 overflow-x-hidden">
       {/* Toasts */}
       <div className="fixed top-20 right-4 z-[60] flex flex-col gap-2 w-[calc(100%-2rem)] max-w-sm">
         {toasts.map((t) => (
@@ -606,10 +606,20 @@ export default function EditorApp({
                       if (isBanner) return; // fixed dimensions above; see BANNER_WIDTH/BANNER_HEIGHT comment
                       const doc = previewRef.current?.contentDocument;
                       if (!doc?.documentElement) return;
-                      const firstEl = doc.body?.firstElementChild as HTMLElement | null;
-                      const measuredWidth = firstEl?.getBoundingClientRect().width || doc.documentElement.scrollWidth;
-                      if (measuredWidth) setContentWidth(Math.ceil(measuredWidth));
-                      setPreviewHeight(doc.documentElement.scrollHeight);
+
+                      const measure = () => {
+                        const firstEl = doc.body?.firstElementChild as HTMLElement | null;
+                        const measuredWidth = firstEl?.getBoundingClientRect().width || doc.documentElement.scrollWidth;
+                        if (measuredWidth) setContentWidth(Math.ceil(measuredWidth));
+                        setPreviewHeight(doc.documentElement.scrollHeight);
+                      };
+                      measure();
+
+                      // Self-hosted @font-face swaps in after this fires (the whole point of
+                      // font-display: swap), which reflows text height -- most noticeable on a
+                      // slow connection or cold cache. Re-measure once the real fonts land so
+                      // the page-end guides don't drift out of sync with a taller/shorter page.
+                      doc.fonts?.ready.then(measure).catch(() => {});
                     }}
                   />
                   {!isBanner &&
@@ -696,17 +706,17 @@ export default function EditorApp({
               </>
             )}
 
-            <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div className="flex flex-wrap items-end gap-3">
                 {!isBanner && (
                   <>
-                    <div>
+                    <div className="w-full sm:w-auto">
                       <label htmlFor="exportMode" className="block text-sm font-medium text-ink/70 mb-1.5">
                         Scope
                       </label>
                       <select
                         id="exportMode"
-                        className="form-input w-auto"
+                        className="form-input w-full sm:w-auto"
                         value={exportMode}
                         onChange={(e) => {
                           const mode = e.target.value as "current" | "both";
@@ -719,11 +729,16 @@ export default function EditorApp({
                       </select>
                     </div>
                     {exportMode === "both" && (
-                      <div>
+                      <div className="w-full sm:w-auto">
                         <label htmlFor="exportOther" className="block text-sm font-medium text-ink/70 mb-1.5">
                           Combine with
                         </label>
-                        <select id="exportOther" className="form-input w-auto" value={exportOther} onChange={(e) => setExportOther(e.target.value)}>
+                        <select
+                          id="exportOther"
+                          className="form-input w-full sm:w-auto"
+                          value={exportOther}
+                          onChange={(e) => setExportOther(e.target.value)}
+                        >
                           {docList
                             .filter((d) => d.filename !== activeDoc)
                             .map((d) => (
@@ -738,14 +753,14 @@ export default function EditorApp({
                 )}
               </div>
 
-              <button onClick={handleExport} disabled={exporting} className="btn-primary disabled:opacity-60">
+              <button onClick={handleExport} disabled={exporting} className="btn-primary justify-center w-full sm:w-auto disabled:opacity-60">
                 <FontAwesomeIcon icon={isBanner && exportFormat === "image" ? faFileImage : faFilePdf} className="text-xs" />
                 {exporting ? "Exporting…" : isBanner ? (exportFormat === "image" ? "Export PNG" : "Export PDF") : "Export PDF"}
               </button>
             </div>
 
             {!isBanner && (
-              <div className="flex flex-col gap-2.5 mt-5 pt-4 border-t border-line">
+              <div className="flex flex-col gap-3 mt-5 pt-4 border-t border-line">
                 <label className="flex items-center gap-2 text-sm text-ink/70">
                   <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
                   Enable PDF app alert (when configured)
