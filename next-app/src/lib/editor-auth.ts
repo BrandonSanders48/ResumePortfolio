@@ -58,12 +58,22 @@ export function isLoginConfigured(): boolean {
   return Boolean(process.env.RESUME_EDITOR_USERNAME && process.env.RESUME_EDITOR_PASSWORD_HASH);
 }
 
+// A precomputed bcrypt hash with no matching plaintext, used so a wrong
+// username still costs one bcrypt.compare call -- otherwise response time
+// would leak whether the username was right before the password was ever checked.
+const DUMMY_HASH = "$2b$10$CwTycUXWue0Thq9StjUM0uJ8Q9m/1tHhZgRuLZ/kZVjXpqhP0/BJC";
+
 export async function verifyCredentials(username: string, password: string): Promise<boolean> {
   const expectedUsername = process.env.RESUME_EDITOR_USERNAME;
   const passwordHash = process.env.RESUME_EDITOR_PASSWORD_HASH;
-  if (!expectedUsername || !passwordHash) return false;
-  if (username !== expectedUsername) return false;
-  return bcrypt.compare(password, passwordHash);
+  if (!expectedUsername || !passwordHash) {
+    await bcrypt.compare(password, DUMMY_HASH);
+    return false;
+  }
+
+  const usernameMatches = username === expectedUsername;
+  const passwordMatches = await bcrypt.compare(password, usernameMatches ? passwordHash : DUMMY_HASH);
+  return usernameMatches && passwordMatches;
 }
 
 export const SESSION_MAX_AGE = SESSION_MAX_AGE_SECONDS;
