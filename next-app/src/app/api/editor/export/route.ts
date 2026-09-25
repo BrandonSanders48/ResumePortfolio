@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
 
 /**
  * Screenshots a doc's top-level design element (e.g. .banner, .resume) as a
- * flat PNG at its true pixel size, rather than printing it to a PDF page.
+ * flat PNG at 2x its CSS pixel size, rather than printing it to a PDF page.
  * PNG over JPEG: this kind of content is flat colors, sharp text, and a thin
  * grid line pattern -- exactly what JPEG's lossy compression smears into
  * visible artifacts around edges, while PNG stays pixel-perfect and is still
@@ -182,9 +182,14 @@ async function exportImage(doc: string, content: string, jobName: string, compan
     const page = await browser.newPage();
     // Generously wide/tall so a flex-centered design (e.g. the banner) never
     // gets shrunk to fit a too-small viewport before we measure/capture it.
-    await page.setViewport({ width: 1800, height: 900 });
+    // deviceScaleFactor 2 renders at retina density (e.g. 3168x792 for the
+    // banner) so text stays crisp on HiDPI screens and after LinkedIn's own
+    // downscale/recompress, instead of a 1x image being upscaled into blur.
+    await page.setViewport({ width: 1800, height: 900, deviceScaleFactor: 2 });
     await page.setContent(html, { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForNetworkIdle({ idleTime: 500, timeout: 60000 }).catch(() => {});
+    // Same font-swap guard as the PDF path above.
+    await page.evaluate(() => document.fonts.ready).catch(() => {});
 
     const elementHandle = await page.evaluateHandle(() => document.body.firstElementChild);
     const element = elementHandle.asElement();
