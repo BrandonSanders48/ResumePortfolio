@@ -2,14 +2,17 @@ import type { NextConfig } from "next";
 
 // Third-party origins the site actually loads: Cloudflare Turnstile (site
 // gate, contact form, resume download, editor login) and Microsoft Clarity
-// (analytics, disabled on /editor). Everything else stays same-origin.
+// (analytics, disabled on /editor), plus the Credly badge iframe on
+// /volunteer. Everything else stays same-origin.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.clarity.ms",
+  // React's dev build needs eval() for debugging features (callstack
+  // reconstruction); production never uses it, so only relax this in dev.
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://challenges.cloudflare.com https://www.clarity.ms`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://www.clarity.ms",
   "font-src 'self' data:",
-  "frame-src 'self' https://challenges.cloudflare.com https://www.google.com",
+  "frame-src 'self' https://challenges.cloudflare.com https://www.google.com https://www.credly.com",
   "connect-src 'self' https://challenges.cloudflare.com https://www.clarity.ms https://*.clarity.ms",
   "object-src 'none'",
   "base-uri 'self'",

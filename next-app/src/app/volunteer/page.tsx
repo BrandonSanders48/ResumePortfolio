@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowLeft, faEarthAmericas, faGraduationCap, type IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowLeft, faArrowUpRightFromSquare, faEarthAmericas, faGraduationCap, type IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import CompactHero from "@/components/CompactHero";
@@ -66,6 +66,35 @@ export default function VolunteerPage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Credly's embed snippet (div + embed.js) just swaps the div for this
+                iframe, so render it directly and skip loading their script. */}
+            <div className="mt-6 bg-white rounded-2xl border border-line p-6 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+              <iframe
+                src="https://www.credly.com/embedded_badge/06ce5dec-40f7-42b6-8839-5ae0be584ed0"
+                title="ISC2 Volunteer badge, verified on Credly"
+                width={150}
+                height={270}
+                loading="lazy"
+                scrolling="no"
+                className="border-0 shrink-0"
+              />
+              <div>
+                <div className="font-serif text-xl text-ink mb-2">ISC2 Volunteer</div>
+                <p className="text-ink/65 text-sm leading-relaxed mb-4">
+                  Recognizes active contributions to ISC2 initiatives: advancing cybersecurity knowledge, fostering
+                  collaboration, and promoting ethical digital practices.
+                </p>
+                <a
+                  href="https://www.credly.com/badges/06ce5dec-40f7-42b6-8839-5ae0be584ed0"
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:opacity-75 transition-opacity"
+                >
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[0.65rem]" /> Verify on Credly
+                </a>
+              </div>
             </div>
           </div>
         </section>
