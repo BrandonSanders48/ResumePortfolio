@@ -120,7 +120,7 @@ export default function HeroSearch() {
           }}
           onKeyDown={onKey}
           placeholder={askEnabled ? "Search or ask a question…" : "Search skills, vendors, companies…"}
-          className="flex-1 min-w-0 py-3.5 text-[0.95rem] text-ink placeholder:text-ink/40 bg-transparent outline-none [&::-webkit-search-cancel-button]:hidden"
+          className="flex-1 min-w-0 py-3.5 text-base sm:text-[0.95rem] text-ink placeholder:text-ink/40 bg-transparent outline-none [&::-webkit-search-cancel-button]:hidden"
           aria-label="Search this site"
           aria-expanded={showDropdown}
           aria-controls="hero-search-results"
@@ -143,7 +143,7 @@ export default function HeroSearch() {
           </button>
         )}
         {askEnabled && (
-          <button type="button" onClick={askNow} className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 rounded-full px-2.5 py-1 transition-colors" title="Ask the AI a question about my experience">
+          <button type="button" onClick={askNow} className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 rounded-full px-3 py-2 sm:px-2.5 sm:py-1 transition-colors" title="Ask the AI a question about my experience">
             <FontAwesomeIcon icon={faWandMagicSparkles} className="text-[0.65rem]" />
             Ask AI
           </button>
@@ -246,7 +246,7 @@ export default function HeroSearch() {
               ensureIndex();
               inputRef.current?.focus();
             }}
-            className="text-xs font-medium text-ink/65 hover:text-ink border border-line bg-white/80 hover:border-accent/40 rounded-full px-3 py-1 transition-colors"
+            className="text-xs font-medium text-ink/65 hover:text-ink border border-line bg-white/80 hover:border-accent/40 rounded-full px-3 py-1.5 sm:py-1 transition-colors"
           >
             {s}
           </button>

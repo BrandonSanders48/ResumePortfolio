@@ -22,7 +22,10 @@ export type CorpusLine = {
   text: string;
 };
 
-export type Source = Pick<CorpusLine, "path" | "pageLabel" | "sectionId" | "sectionTitle">;
+export type Source = Pick<CorpusLine, "path" | "pageLabel" | "sectionId" | "sectionTitle"> & {
+  /** Set for off-site sources (GitHub, Credly, LinkedIn): rendered as an external link. */
+  url?: string;
+};
 
 const PAGES: { path: string; label: string }[] = [
   { path: "/", label: "Home" },
@@ -134,7 +137,7 @@ const STOPWORDS = new Set(
   )
 );
 
-function terms(q: string): string[] {
+export function terms(q: string): string[] {
   return [
     ...new Set(
       q

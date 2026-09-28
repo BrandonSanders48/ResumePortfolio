@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark, faWandMagicSparkles, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -332,9 +333,12 @@ export default function SiteSearch() {
         <kbd className="hidden xl:inline font-sans text-[0.65rem] text-ink/45 border border-line bg-white rounded px-1.5 py-0.5">Ctrl K</kbd>
       </button>
 
-      {open && (
+      {/* Portaled to <body>: the navbar's backdrop-filter makes it the containing
+          block for fixed-position children, which clipped this overlay to the nav. */}
+      {open &&
+        createPortal(
         <div
-          className="fixed inset-0 z-[70] bg-ink/40 backdrop-blur-sm flex items-start justify-center px-4 pt-20 sm:pt-24"
+          className="fixed inset-0 z-[70] bg-ink/40 backdrop-blur-sm flex items-start justify-center px-3 sm:px-4 pt-3 sm:pt-24"
           onMouseDown={(e) => e.target === e.currentTarget && close()}
           role="dialog"
           aria-modal="true"
@@ -353,7 +357,7 @@ export default function SiteSearch() {
                 }}
                 onKeyDown={onInputKey}
                 placeholder={askEnabled ? "Search or ask a question…" : "Search skills, vendors, companies…"}
-                className="flex-1 py-4 text-[0.95rem] text-ink placeholder:text-ink/40 bg-transparent outline-none"
+                className="flex-1 min-w-0 py-4 text-base sm:text-[0.95rem] text-ink placeholder:text-ink/40 bg-transparent outline-none"
                 aria-label="Search query"
                 aria-controls="site-search-results"
                 aria-activedescendant={optionCount && !asked ? `site-search-${active}` : undefined}
@@ -367,19 +371,19 @@ export default function SiteSearch() {
                     if (query.trim().length >= 3) setAsked(query.trim());
                     else inputRef.current?.focus();
                   }}
-                  className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 rounded-full px-2.5 py-1 transition-colors"
+                  className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-accent bg-accent/10 hover:bg-accent/20 rounded-full px-3 py-2 sm:px-2.5 sm:py-1 transition-colors"
                   title="Ask the AI a question about my experience"
                 >
                   <FontAwesomeIcon icon={faWandMagicSparkles} className="text-[0.65rem]" />
                   Ask AI
                 </button>
               )}
-              <button onClick={close} className="text-ink/50 hover:text-ink p-1.5 -mr-1.5" aria-label="Close search">
+              <button onClick={close} className="shrink-0 text-ink/50 hover:text-ink p-2.5 -mr-2.5" aria-label="Close search">
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
 
-            <div className="max-h-[60vh] overflow-y-auto">
+            <div className="max-h-[70dvh] sm:max-h-[60vh] overflow-y-auto">
               {asked ? (
                 <>
                   <button
@@ -464,8 +468,9 @@ export default function SiteSearch() {
               </span>
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+          document.body
+        )}
     </>
   );
 }

@@ -1,0 +1,4 @@
+
+# LinkedIn data exports (personal data): read locally by the linkedin-profile importer, never committed.
+*LinkedInDataExport*/
+*LinkedInDataExport*.zip
