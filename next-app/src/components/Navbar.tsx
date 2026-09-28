@@ -7,6 +7,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { navLinks } from "@/lib/nav-links";
+import SiteSearch from "@/components/SiteSearch";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -39,7 +40,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <ul className="hidden lg:flex items-center gap-5">
+        <ul className="hidden lg:flex items-center gap-5 ml-auto mr-3">
           {navLinks.map((link) => (
             <li key={link.label}>
               <Link
@@ -52,13 +53,16 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="lg:hidden text-ink/70 hover:text-ink p-2 -mr-2 rounded-lg hover:bg-paper transition-all"
-          aria-label="Toggle navigation"
-        >
-          <FontAwesomeIcon icon={open ? faXmark : faBars} className="text-lg" />
-        </button>
+        <div className="flex items-center gap-1 lg:-mr-2">
+          <SiteSearch />
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="lg:hidden text-ink/70 hover:text-ink p-2 -mr-2 rounded-lg hover:bg-paper transition-all"
+            aria-label="Toggle navigation"
+          >
+            <FontAwesomeIcon icon={open ? faXmark : faBars} className="text-lg" />
+          </button>
+        </div>
       </div>
 
       {open && (

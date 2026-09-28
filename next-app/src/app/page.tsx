@@ -15,6 +15,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ContactForm from "@/components/ContactForm";
 import ResumeDownloadButton from "@/components/ResumeDownloadButton";
 import HeroBackground from "@/components/HeroBackground";
+import HeroSearch from "@/components/HeroSearch";
 import { experience, vendorGroups } from "@/lib/content";
 import { getCredlyBadgeCount } from "@/lib/credly";
 
@@ -102,11 +103,11 @@ export default async function Home() {
   return (
     <>
       {/* HERO */}
-      <header id="home" className="bg-paper border-b border-line relative overflow-hidden">
+      <header id="home" className="bg-paper border-b border-line relative z-10 overflow-x-clip">
         <HeroBackground />
         <div className="max-w-6xl mx-auto px-4 py-16 lg:py-24 relative">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-            <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
+            <div className="flex-1 w-full min-w-0 text-center lg:text-left order-2 lg:order-1">
               <div className="eyebrow mb-5 justify-center lg:justify-start">
                 <span className="relative flex h-2 w-2 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
@@ -133,6 +134,8 @@ export default async function Home() {
                   <span className="pill">CompTIA Security+</span>
                 </a>
               </div>
+
+              <HeroSearch />
 
               <div className="flex flex-wrap gap-2.5 justify-center lg:justify-start">
                 <ResumeDownloadButton />
@@ -223,7 +226,7 @@ export default async function Home() {
       <Reveal>
         <div className="bg-ink text-center py-4 px-4">
           <div className="inline-flex flex-wrap justify-center gap-x-2 gap-y-1.5 max-w-[95%] mx-auto">
-            {["CISSP Certified", "Pursuing CISM", "Targeting IT Manager & CISO Roles", "Available for Leadership Opportunities"].map(
+            {["CISSP Certified", "Pursuing CISM", "Targeting IT Manager & CTO Roles", "Available for Leadership Opportunities"].map(
               (item, i, arr) => (
                 <span key={item} className="inline-flex items-center gap-2">
                   <span className="inline-block px-2.5 py-1 rounded-full bg-white/8 text-white/90 font-medium text-sm">{item}</span>

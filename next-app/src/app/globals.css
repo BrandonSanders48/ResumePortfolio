@@ -255,3 +255,26 @@ textarea.form-input {
   resize: vertical;
   min-height: 130px;
 }
+
+/* Site search: briefly highlights the block a search result jumped to. */
+@keyframes search-flash {
+  0%,
+  60% {
+    background-color: rgba(63, 107, 102, 0.16);
+    box-shadow: 0 0 0 4px rgba(63, 107, 102, 0.16);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+.search-flash {
+  border-radius: 6px;
+  animation: search-flash 2.4s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-flash {
+    animation-duration: 0.01s;
+    outline: 2px solid rgba(63, 107, 102, 0.5);
+  }
+}
