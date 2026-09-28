@@ -18,6 +18,7 @@ import ContactForm from "@/components/ContactForm";
 import ResumeDownloadButton from "@/components/ResumeDownloadButton";
 import HeroBackground from "@/components/HeroBackground";
 import { experience } from "@/lib/content";
+import { getCredlyBadgeCount } from "@/lib/credly";
 
 const metrics = [
   { value: "5+", label: "Years IT Leadership" },
@@ -83,6 +84,7 @@ const skillGroups = [
 const certifications = [
   {
     name: "CISSP",
+    badge: "/files/images/badge-cissp.png",
     issuer: "(ISC)²",
     description: "Certified Information Systems Security Professional",
     tags: ["Risk", "Security Strategy", "Architecture"],
@@ -90,6 +92,7 @@ const certifications = [
   },
   {
     name: "CC",
+    badge: "/files/images/badge-cc.png",
     issuer: "(ISC)²",
     description: "Certified in Cybersecurity",
     tags: ["Foundations", "Security Controls", "Best Practices"],
@@ -97,6 +100,7 @@ const certifications = [
   },
   {
     name: "Security+",
+    badge: "/files/images/badge-securityplus.png",
     issuer: "CompTIA",
     description: "Baseline cybersecurity knowledge and operations",
     tags: ["Ops", "Defense", "Incidents"],
@@ -104,7 +108,9 @@ const certifications = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const credlyBadgeCount = await getCredlyBadgeCount();
+
   return (
     <>
       {/* HERO */}
@@ -207,14 +213,14 @@ export default function Home() {
                 and regulatory requirements.
               </p>
               <p className="text-ink/70 leading-relaxed mb-4">
-                In my current role, I serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, approximately
+                In my current role, I serve as the IT and security lead for a multi-site healthcare organization (4 locations, approximately
                 200 users), managing infrastructure strategy, security operations, and compliance programs while sitting on the Safety and Security
                 Committees to contribute to governance at the organizational level. I have delivered full-scope IT programs from design through
-                implementation, including new facility buildouts, security modernization initiatives, and disaster recovery planning.
+                implementation, including new facility buildouts, security modernization initiatives, and disaster recovery planning & implementation.
               </p>
               <p className="text-ink/70 leading-relaxed mb-6">
                 I hold the CISSP designation and am actively pursuing CISM to deepen my security management expertise, alongside a B.S. in
-                Information Technology Management at Western Governors University. I am seeking IT Manager and CISO-track opportunities where I
+                Information Technology Management at Western Governors University. I am seeking IT Manager and CTO-track opportunities where I
                 can combine technical credibility with risk leadership to protect the organization and enable the business.
               </p>
               <Link href="/highlights" className="btn-primary">
@@ -402,9 +408,22 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               {certifications.map((cert) => (
                 <div key={cert.name} className="bg-white rounded-2xl border border-line p-6 flex flex-col">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="font-serif text-xl text-ink">{cert.name}</div>
-                    <span className="pill">{cert.issuer}</span>
+                  {/* Same badge-beside-text layout as the ISC2 Volunteer badge on
+                      /volunteer, scaled down to fit three across. */}
+                  <div className="flex items-center gap-4 mb-3">
+                    <a href={cert.href} target="_blank" rel="noopener" className="shrink-0 hover:opacity-85 transition-opacity">
+                      <Image
+                        src={cert.badge}
+                        alt={`${cert.name} badge, verified on Credly`}
+                        width={80}
+                        height={80}
+                        className="w-16 h-16 lg:w-20 lg:h-20"
+                      />
+                    </a>
+                    <div className="min-w-0">
+                      <div className="font-serif text-xl text-ink leading-tight">{cert.name}</div>
+                      <span className="pill mt-1.5">{cert.issuer}</span>
+                    </div>
                   </div>
                   <div className="text-ink/65 text-sm mb-4">{cert.description}</div>
                   <div className="flex flex-wrap gap-1.5 mb-4">
@@ -422,10 +441,19 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-ink/65 text-sm">More certifications and verifications on Credly.</p>
+              <p className="text-ink/65 text-sm">
+                {credlyBadgeCount ? (
+                  <>
+                    <span className="font-semibold text-ink">{credlyBadgeCount} verified badges</span> on Credly, including more
+                    certifications and training.
+                  </>
+                ) : (
+                  "More certifications and verifications on Credly."
+                )}
+              </p>
               <a href="https://www.credly.com/users/brandonsanders" target="_blank" rel="noopener" className="btn-outline">
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
-                View more on Credly
+                {credlyBadgeCount ? `View all ${credlyBadgeCount} on Credly` : "View more on Credly"}
               </a>
             </div>
           </div>
