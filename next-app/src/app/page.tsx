@@ -8,7 +8,6 @@ import {
   faShieldHalved,
   faServer,
   faArrowUpRightFromSquare,
-  faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faGithub } from "@fortawesome/free-brands-svg-icons";
 import Reveal from "@/components/Reveal";
@@ -33,17 +32,12 @@ const skillGroups = [
     title: "Leadership & Governance",
     subtitle: "Strategy, risk oversight, and organizational alignment",
     items: [
-      "IT Strategy & Program Management",
+      "IT Strategy, Budgeting & Procurement",
       "Risk Management & Governance (GRC)",
-      "HIPAA, SOC 2, NIST Framework Alignment",
-      "Security Policy & Procedure Development",
+      "HIPAA, SOC 2 & NIST Compliance",
+      "Policy Development & Audit Readiness",
       "Vendor Management & Contract Negotiation",
-      "Stakeholder Communication & Executive Reporting",
-      "Safety & Security Committee Leadership",
-      "Technology Procurement & Budget Planning",
-      "Audit Readiness & Regulatory Compliance",
-      "Cross-Functional Collaboration",
-      "IT Governance & Change Management",
+      "Executive Reporting & Committee Leadership",
     ],
   },
   {
@@ -51,17 +45,12 @@ const skillGroups = [
     title: "Security & Risk Operations",
     subtitle: "CISSP-aligned security program management",
     items: [
-      "Cybersecurity Program Management",
+      "Security Program Management",
       "Incident Response & Forensics",
-      "Vulnerability Assessment & Remediation",
-      "Network Security Architecture",
-      "Identity & Access Management (IAM / SSO / MFA)",
-      "Security Hardening & Patch Management",
-      "SIEM & Log Analysis (Elastic, Graylog)",
-      "Disaster Recovery & Business Continuity",
-      "Cloud Security (Azure, M365, Entra ID)",
-      "Endpoint Security & MDM (Intune)",
-      "Data Classification & Protection",
+      "Vulnerability & Patch Management",
+      "Identity & Access Management (SSO / MFA)",
+      "SIEM, Logging & Threat Detection",
+      "Cloud & Endpoint Security",
     ],
   },
   {
@@ -70,16 +59,11 @@ const skillGroups = [
     title: "Infrastructure & Operations",
     subtitle: "Architecture, reliability, and service delivery",
     items: [
-      "Network Architecture & Segmentation (VLANs, BGP, VPN)",
-      "High Availability & Hot-Site Disaster Recovery",
+      "Network Architecture & Segmentation",
+      "High Availability & Disaster Recovery",
       "Virtualization, Containers & Hybrid Cloud",
-      "Hybrid Identity & Directory Services",
-      "Multi-Site Rollouts & New Facility Buildouts",
-      "Automation & Scripting (PowerShell, Bash, Ansible)",
-      "Monitoring, Alerting & Capacity Planning",
-      "Help Desk, Ticketing & Service Delivery",
-      "VoIP & Unified Communications",
-      "Endpoint Lifecycle & Asset Management",
+      "Multi-Site Rollouts & Facility Buildouts",
+      "Automation, Monitoring & Service Delivery",
       "Licensing & Cost Optimization",
     ],
   },
@@ -141,7 +125,7 @@ export default async function Home() {
 
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
                 <span className="pill">Salina, KS</span>
-                <span className="pill pill-accent">IT Manager / CISO Track</span>
+                <span className="pill pill-accent">IT Manager / CTO Track</span>
                 <a href="https://www.credly.com/badges/3c84ffd0-0c4d-4551-bc52-2309e51f0597" target="_blank" rel="noopener noreferrer">
                   <span className="pill">(ISC)² CISSP</span>
                 </a>
@@ -548,12 +532,16 @@ export default async function Home() {
 
               <div className="bg-white rounded-2xl border border-line p-6 md:p-8 flex flex-col">
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-paper flex items-center justify-center text-accent shrink-0" aria-hidden="true">
-                    <FontAwesomeIcon icon={faLocationDot} />
-                  </div>
+                  <Image
+                    src="/files/images/logos/city-of-salina.png"
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="w-11 h-11 rounded-xl border border-line bg-white p-1.5 object-contain shrink-0"
+                  />
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Location</div>
-                    <div className="text-ink/65 text-xs">Salina, KS</div>
+                    <div className="text-ink/65 text-xs">Salina, Kansas, United States of America</div>
                   </div>
                 </div>
                 <div className="aspect-[4/3] overflow-hidden rounded-xl border border-line flex-1">
@@ -567,7 +555,7 @@ export default async function Home() {
                   />
                 </div>
                 <p className="text-ink/65 text-sm mt-4">
-                  Open to IT Manager, CISO, and senior cybersecurity leadership opportunities. Remote-friendly.
+                  Open to IT Manager, CTO, and senior cybersecurity leadership opportunities. Remote-friendly.
                 </p>
               </div>
             </div>

@@ -26,12 +26,12 @@ export const metadata: Metadata = {
     template: "%s | Brandon Sanders, CISSP",
   },
   description:
-    "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.",
+    "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CTO roles.",
   keywords: [
     "Brandon Sanders",
     "CISSP",
     "IT Manager",
-    "CISO",
+    "CTO",
     "Cybersecurity Leader",
     "Risk Management",
     "GRC",
@@ -55,13 +55,13 @@ export const metadata: Metadata = {
     siteName: "Brandon Sanders, CISSP",
     title: "Brandon Sanders, CISSP | IT Security Leader & Manager",
     description:
-      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.",
+      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CTO roles.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Brandon Sanders, CISSP | IT Security Leader & Manager",
     description:
-      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CISO roles.",
+      "Portfolio of Brandon Sanders, CISSP, IT Security Leader and Cybersecurity Professional with expertise in risk management, GRC, infrastructure strategy, and compliance. Targeting IT Manager and CTO roles.",
   },
 };
 

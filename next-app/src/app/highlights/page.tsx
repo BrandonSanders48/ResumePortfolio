@@ -20,7 +20,7 @@ const aiPoints = [
   },
   {
     title: "Security-minded, systems-level perspective",
-    body: "Focuses on reliability, process, and risk rather than quick fixes. The mindset of a strong architect or future CISO",
+    body: "Focuses on reliability, process, and risk rather than quick fixes. The mindset of a strong architect or future CTO",
   },
   {
     title: "Balances technical depth with service",
