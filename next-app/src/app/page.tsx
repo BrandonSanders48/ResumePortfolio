@@ -7,7 +7,6 @@ import {
   faUsersGear,
   faShieldHalved,
   faServer,
-  faGraduationCap,
   faArrowUpRightFromSquare,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +16,7 @@ import SectionHeading from "@/components/SectionHeading";
 import ContactForm from "@/components/ContactForm";
 import ResumeDownloadButton from "@/components/ResumeDownloadButton";
 import HeroBackground from "@/components/HeroBackground";
-import { experience } from "@/lib/content";
+import { experience, vendorGroups } from "@/lib/content";
 import { getCredlyBadgeCount } from "@/lib/credly";
 
 const metrics = [
@@ -67,16 +66,21 @@ const skillGroups = [
   },
   {
     icon: faServer,
-    title: "Technical Infrastructure",
-    subtitle: "Hands-on expertise across network, cloud, and systems",
+    // Capabilities, not products -- the vendor strip below the cards covers those.
+    title: "Infrastructure & Operations",
+    subtitle: "Architecture, reliability, and service delivery",
     items: [
-      "Network & Security: pfSense, Fortinet, Sophos, Cisco, VLANs, BGP",
-      "Microsoft Ecosystem: M365, Exchange, Entra ID, WSUS, Intune, MDT",
-      "Virtualization & Backup: Proxmox, VMware, Veeam, TrueNAS",
-      "Cloud & Containers: Azure, Kubernetes (6-node HA), Docker, Ansible",
-      "Monitoring: Prometheus, Grafana, Elastic SIEM, Graylog",
-      "Scripting & Automation: PowerShell, Bash, Git",
-      "Databases: Microsoft SQL, MySQL",
+      "Network Architecture & Segmentation (VLANs, BGP, VPN)",
+      "High Availability & Hot-Site Disaster Recovery",
+      "Virtualization, Containers & Hybrid Cloud",
+      "Hybrid Identity & Directory Services",
+      "Multi-Site Rollouts & New Facility Buildouts",
+      "Automation & Scripting (PowerShell, Bash, Ansible)",
+      "Monitoring, Alerting & Capacity Planning",
+      "Help Desk, Ticketing & Service Delivery",
+      "VoIP & Unified Communications",
+      "Endpoint Lifecycle & Asset Management",
+      "Licensing & Cost Optimization",
     ],
   },
 ];
@@ -305,6 +309,47 @@ export default async function Home() {
                 </div>
               ))}
             </div>
+
+            {/* Vendor logo strip: on mouse devices, grayscale until hovered so it
+                supports the skills above instead of competing with them; touch
+                devices can't hover, so they get full color. */}
+            <div className="mt-10 bg-white rounded-2xl border border-line p-6 md:p-8">
+              <div className="font-semibold text-ink text-[0.95rem]">Platforms I&apos;ve deployed &amp; managed</div>
+              <p className="text-ink/65 text-xs mt-1 mb-6">Vendors and platforms I&apos;ve selected, implemented, or run in production and lab environments.</p>
+              <div className="flex flex-col gap-6">
+                {vendorGroups.map((group) => (
+                  <div key={group.title}>
+                    <div className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-ink/50 mb-3">{group.title}</div>
+                    <ul className="flex flex-wrap gap-2">
+                      {group.vendors.map((vendor) => {
+                        // 20px tall; wordmark logos widen with their aspect ratio, capped so none dominate.
+                        const logoWidth = Math.round(Math.min(20 * (vendor.aspect ?? 1), 64));
+                        return (
+                        <li
+                          key={vendor.name}
+                          className="group flex items-center gap-2 rounded-full border border-line bg-white pl-2 pr-3.5 py-1.5 text-xs font-medium text-ink/70 hover:text-ink hover:border-accent/40 transition-colors"
+                        >
+                          <Image
+                            src={vendor.logo}
+                            alt=""
+                            width={logoWidth}
+                            height={20}
+                            style={{ width: logoWidth }}
+                            className="h-5 object-contain [@media(hover:hover)]:grayscale [@media(hover:hover)]:opacity-75 group-hover:grayscale-0 group-hover:opacity-100 transition"
+                          />
+                          {vendor.name}
+                        </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <p className="text-ink/55 text-xs italic mt-6 pt-5 border-t border-line">
+                This is not an exhaustive list; it highlights the platforms and vendors I&apos;ve worked with most. Categories are for
+                organization only; my experience with a vendor isn&apos;t limited to the category it&apos;s listed under.
+              </p>
+            </div>
           </div>
         </section>
       </Reveal>
@@ -326,7 +371,18 @@ export default async function Home() {
                   <div className={`flex-1 ${i < experience.length - 1 ? "pb-6" : ""}`}>
                     <div className="bg-white rounded-2xl border border-line p-5">
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <h3 className="font-semibold text-ink text-[0.95rem]">{job.role}</h3>
+                        <div className="flex items-center gap-3 min-w-0">
+                          {job.logo && (
+                            <Image
+                              src={job.logo}
+                              alt=""
+                              width={48}
+                              height={48}
+                              className="w-11 h-11 rounded-xl border border-line bg-white p-1 object-contain shrink-0"
+                            />
+                          )}
+                          <h3 className="font-semibold text-ink text-[0.95rem]">{job.role}</h3>
+                        </div>
                         <span className="pill whitespace-nowrap">{job.period}</span>
                       </div>
                       <ul className="check-list">
@@ -353,9 +409,13 @@ export default async function Home() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white rounded-2xl border border-line p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-paper flex items-center justify-center text-accent shrink-0" aria-hidden="true">
-                    <FontAwesomeIcon icon={faGraduationCap} />
-                  </div>
+                  <Image
+                    src="/files/images/logos/wgu.png"
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="w-11 h-11 rounded-xl border border-line bg-white p-1 object-contain shrink-0"
+                  />
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Western Governors University</div>
                     <div className="text-ink/65 text-xs">B.S., Information Technology Management · In Progress</div>
@@ -369,9 +429,13 @@ export default async function Home() {
 
               <div className="bg-white rounded-2xl border border-line p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-paper flex items-center justify-center text-accent shrink-0" aria-hidden="true">
-                    <FontAwesomeIcon icon={faGraduationCap} />
-                  </div>
+                  <Image
+                    src="/files/images/logos/salina-central.svg"
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="w-11 h-11 rounded-xl border border-line bg-white p-1 object-contain shrink-0"
+                  />
                   <div>
                     <div className="font-semibold text-ink text-[0.95rem]">Salina Central High School</div>
                     <div className="text-ink/65 text-xs">High School Diploma · 2014</div>

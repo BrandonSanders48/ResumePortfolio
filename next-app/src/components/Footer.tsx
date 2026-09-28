@@ -28,6 +28,11 @@ export default function Footer() {
           </span>
         </div>
       </div>
+      {/* Covers the vendor logos on the homepage (and any brand named elsewhere). */}
+      <p className="max-w-6xl mx-auto px-4 mt-6 pt-5 border-t border-white/[.06] text-white/55 text-[0.7rem] leading-relaxed text-center">
+        All product names, logos, and brands are property of their respective owners and are used for identification purposes only. Their
+        use does not imply endorsement.
+      </p>
     </footer>
   );
 }

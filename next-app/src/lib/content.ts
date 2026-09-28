@@ -88,7 +88,6 @@ export const technicalHighlights: string[] = [
   "Deployed read-only domain controllers at remote sites.",
   "Adopted modern conditional access policies to enforce location-based security.",
   "Implemented advanced vulnerability scanning and remediation for domain environments.",
-  "This list is not comprehensive but highlights some key achievements in IT infrastructure and security.",
 ];
 
 export type Project = {
@@ -197,12 +196,15 @@ export const volunteerRoles: VolunteerRole[] = [
 export type ExperienceItem = {
   role: string;
   period: string;
+  /** Company logo under /files/images/logos/, shown beside the role. */
+  logo?: string;
   bullets: string[];
 };
 
 export const experience: ExperienceItem[] = [
   {
     role: "Network Administrator, Salina Health Education Foundation",
+    logo: "/files/images/logos/salina-family-healthcare.png",
     period: "2023 – Present",
     bullets: [
       "Serve as the sole IT and security lead for a multi-site healthcare organization (4 locations, ~200 users), owning end-to-end infrastructure, operations, and the security program with full accountability for compliance, uptime, and organizational risk posture.",
@@ -218,6 +220,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "Cybersecurity Analyst, Saint Francis Ministries",
+    logo: "/files/images/logos/saint-francis-ministries.png",
     period: "2021 – 2022",
     bullets: [
       "Elected to the HIPAA Committee, collaborating cross-functionally to align data handling and privacy practices with regulatory requirements.",
@@ -229,6 +232,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "Network Administrator, SMG Unlimited",
+    logo: "/files/images/logos/smg-unlimited.png",
     period: "2020 – 2021",
     bullets: [
       "Administered network infrastructure and provided technical support across the organization, resolving issues and maintaining operational continuity.",
@@ -239,11 +243,158 @@ export const experience: ExperienceItem[] = [
   },
   {
     role: "IT Intern, Blue Beacon International",
+    logo: "/files/images/logos/blue-beacon.png",
     period: "2013 – 2016",
     bullets: [
       "Provided hardware, OS, and application support across the organization.",
       "Diagnosed and resolved technical issues; managed equipment repairs and servicing.",
       "Completed additional IT projects as assigned.",
+    ],
+  },
+];
+
+/** `aspect` (width / height) sizes wordmark-only logos, which have no square icon, so they stay legible. */
+export type Vendor = { name: string; logo: string; aspect?: number };
+export type VendorGroup = { title: string; vendors: Vendor[] };
+
+const v = (name: string, file: string, aspect?: number): Vendor => ({ name, logo: `/files/images/vendors/${file}`, ...(aspect && { aspect }) });
+
+/**
+ * Platforms shown in the homepage "Platforms I've deployed & managed" strip.
+ * Logos are self-hosted: Simple Icons (CC0) SVGs recolored to each brand's
+ * hex where available, otherwise the vendor's own site icon or Wikimedia
+ * Commons SVG.
+ */
+export const vendorGroups: VendorGroup[] = [
+  {
+    title: "Network & Security",
+    vendors: [
+      v("Cisco", "cisco.svg", 1.83),
+      v("Meraki", "meraki.png"),
+      v("Aruba", "aruba.svg", 1.97),
+      v("UniFi", "unifi.svg"),
+      v("Fortinet", "fortinet.svg", 1.38),
+      v("SonicWall", "sonicwall.png"),
+      v("Sophos", "sophos.png"),
+      v("Barracuda", "barracuda.svg", 3.75),
+      v("pfSense", "pfsense.svg"),
+      v("Pepwave", "pepwave.png"),
+      v("Cloudflare", "cloudflare.svg", 2.11),
+      v("Microsoft Defender", "defender.svg"),
+      v("Tenable / Nessus", "tenable.png"),
+      v("Okta", "okta.svg"),
+      v("Duo", "duo.png"),
+      v("Proofpoint", "proofpoint.png"),
+      v("Mimecast", "mimecast.png"),
+      v("Trustifi", "trustifi.png"),
+      v("KnowBe4", "knowbe4.png"),
+      v("Bitwarden", "bitwarden.svg"),
+      v("Tailscale", "tailscale.svg"),
+      v("OpenVPN", "openvpn.svg"),
+      v("WireGuard", "wireguard.svg"),
+    ],
+  },
+  {
+    title: "Cloud, SaaS & Communications",
+    vendors: [
+      v("Microsoft 365", "microsoft.svg"),
+      v("Azure", "azure.svg"),
+      v("AWS", "aws.svg", 1.63),
+      v("Google Cloud", "googlecloud.svg", 1.23),
+      v("RapidScale", "rapidscale.png"),
+      v("Wasabi", "wasabi.svg"),
+      v("Slack", "slack.svg"),
+      v("Zoom", "zoom.svg", 3.9),
+      v("Twilio", "twilio.svg", 3.06),
+      v("Zoho", "zoho.svg", 2.24),
+      v("Zapier", "zapier.png"),
+      v("BambooHR", "bamboohr.png"),
+      v("GoTo", "goto.png"),
+      v("Yealink", "yealink.png", 4.74),
+    ],
+  },
+  {
+    title: "Hardware, Virtualization & Backup",
+    vendors: [
+      v("Dell", "dell.svg"),
+      v("HP", "hp.svg"),
+      v("Lenovo", "lenovo.svg", 2.78),
+      v("Intel", "intel.svg", 2.44),
+      v("AMD", "amd.svg", 3.75),
+      v("NVIDIA", "nvidia.svg", 1.48),
+      v("Synology", "synology.svg", 3.49),
+      v("TrueNAS", "truenas.svg", 1.25),
+      v("Proxmox", "proxmox.svg"),
+      v("VMware", "vmware.svg", 5.26),
+      v("Citrix", "citrix.svg"),
+      v("Veeam", "veeam.svg", 4.76),
+      v("Acronis", "acronis.png"),
+      v("Datto", "datto.svg", 2.83),
+    ],
+  },
+  {
+    title: "IT Operations & Remote Management",
+    vendors: [
+      v("NinjaOne", "ninjaone.png"),
+      v("ConnectWise", "connectwise.png"),
+      v("Kaseya", "kaseya.png"),
+      v("ManageEngine", "manageengine.png"),
+      v("SolarWinds", "solarwinds.png"),
+      v("PRTG", "prtg.png"),
+      v("Jamf", "jamf.png"),
+      v("PagerDuty", "pagerduty.svg"),
+      v("TeamViewer", "teamviewer.svg"),
+      v("Devolutions", "devolutions.png"),
+      v("Chocolatey", "chocolatey.svg"),
+    ],
+  },
+  {
+    title: "Platforms & Monitoring",
+    vendors: [
+      v("Kubernetes", "kubernetes.svg"),
+      v("Calico", "calico.png"),
+      v("Docker", "docker.svg", 1.37),
+      v("Ansible", "ansible.svg"),
+      v("Linux", "linux.svg"),
+      v("Ubuntu", "ubuntu.svg"),
+      v("Rocky Linux", "rockylinux.svg"),
+      v("Apple", "apple.svg"),
+      v("ChromeOS", "chromeos.svg"),
+      v("GitHub", "github.svg"),
+      v("Prometheus", "prometheus.svg"),
+      v("Grafana", "grafana.svg"),
+      v("Elastic", "elastic.svg"),
+      v("Graylog", "graylog.svg"),
+      v("MySQL", "mysql.svg", 1.45),
+      v("Ollama", "ollama.svg"),
+    ],
+  },
+  {
+    title: "Physical Security, AV & Print",
+    vendors: [
+      v("Axis", "axis.svg", 2.61),
+      v("Hikvision", "hikvision.svg", 6.25),
+      v("HID Global", "hid.svg", 2.4),
+      v("Honeywell Access Control", "honeywell.png"),
+      v("Salto", "salto.png"),
+      v("BrightSign", "brightsign.png"),
+      v("Yodeck", "yodeck.png"),
+      v("Atlona", "atlona.png"),
+      v("Canon", "canon.svg", 4.17),
+      v("Xerox", "xerox.png"),
+      v("Konica Minolta", "konicaminolta.png"),
+    ],
+  },
+  {
+    title: "Carriers & Procurement",
+    vendors: [
+      v("AT&T", "att.svg"),
+      v("Verizon", "verizon.svg"),
+      v("Cox / Spectrum", "cox-spectrum.png"),
+      v("Nex-Tech", "nextech.png"),
+      v("CDW", "cdw.png"),
+      v("Insight", "insight.png"),
+      v("TechSoup", "techsoup.svg", 4.48),
     ],
   },
 ];

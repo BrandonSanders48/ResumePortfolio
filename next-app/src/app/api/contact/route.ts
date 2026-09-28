@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getMailTransport } from "@/lib/mailer";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { contactEmailHtml, contactEmailSubject, contactEmailText } from "@/lib/contact-email";
 
 // Sends a real email per successful submission -- caps how often one IP can
 // trigger that, independent of Turnstile (which only proves "not a bot",
@@ -62,12 +63,18 @@ export async function POST(req: NextRequest) {
   try {
     const { transport, user } = getMailTransport();
 
+    const submission = { name, email, company, message, remoteIp };
+    const receivedAt = new Date();
+
     await transport.sendMail({
-      from: `"brandonsanders.org contact form" <${user}>`,
+      from: { name: "brandonsanders.org contact form", address: user },
       to: user,
-      replyTo: `"${name}" <${email}>`,
-      subject: `BrandonSanders.org form submission from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nMessage:\n${message}\n`,
+      // Object form lets nodemailer encode the display name, rather than
+      // interpolating raw user input into a header string.
+      replyTo: { name, address: email },
+      subject: contactEmailSubject(submission),
+      text: contactEmailText(submission, receivedAt),
+      html: contactEmailHtml(submission, receivedAt),
     });
 
     return NextResponse.json({ success: true, message: "Thank you! Your message has been sent." });
