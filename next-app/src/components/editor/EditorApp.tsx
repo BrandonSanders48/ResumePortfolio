@@ -33,6 +33,32 @@ const PUBLISH_TARGETS: Record<string, string> = {
 
 const PAGE_HEIGHT_PX = 1056; // 11in at 96dpi, matches the export's letter-size PDF pages
 
+/**
+ * Page-end offsets for the preview, taken from the doc's own page elements
+ * (.resume, .page, ...) rather than assumed at every 1056px. On screen those
+ * pages are separated by a gray gap (e.g. .resume's 24px margin-bottom) that
+ * print drops, so fixed multiples of 11in drift further above each real page
+ * end -- which is very visible in the small, scaled-down mobile preview.
+ * An element taller than 11in still spills onto extra PDF pages, so it gets
+ * a guide at every 11in within it too. Returns null for docs that aren't
+ * built as page-sized blocks, so the caller falls back to fixed multiples.
+ */
+function measurePageMarkers(doc: Document): number[] | null {
+  const scrollY = doc.defaultView?.scrollY ?? 0;
+  const pages = Array.from(doc.body?.children ?? []).filter(
+    (el) => el.getBoundingClientRect().height >= PAGE_HEIGHT_PX - 1
+  );
+  if (pages.length === 0) return null;
+  const markers: number[] = [];
+  for (const el of pages) {
+    const rect = el.getBoundingClientRect();
+    const top = rect.top + scrollY;
+    const count = Math.max(1, Math.ceil((rect.height - 1) / PAGE_HEIGHT_PX));
+    for (let i = 1; i <= count; i++) markers.push(Math.round(top + i * PAGE_HEIGHT_PX));
+  }
+  return markers;
+}
+
 let toastId = 0;
 type Toast = { id: number; type: "success" | "error" | "info"; message: string };
 
@@ -116,6 +142,8 @@ export default function EditorApp({
   const previewRef = useRef<HTMLIFrameElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
   const [previewHeight, setPreviewHeight] = useState(420);
+  // Page-end offsets measured from the doc's own page elements (see measurePageMarkers).
+  const [measuredMarkers, setMeasuredMarkers] = useState<number[] | null>(null);
   const [contentWidth, setContentWidth] = useState(816); // 8.5in at 96dpi, matches the resume/cover width
   const contentRef = useRef(content);
   contentRef.current = content;
@@ -395,9 +423,10 @@ export default function EditorApp({
   }
 
   const pageMarkers = useMemo(() => {
+    if (measuredMarkers) return measuredMarkers;
     const count = Math.floor(previewHeight / PAGE_HEIGHT_PX);
     return Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT_PX);
-  }, [previewHeight]);
+  }, [measuredMarkers, previewHeight]);
 
   const editorExtensions = useMemo(() => {
     // CodeMirror's contentDOM (the role="textbox" element) doesn't pick up an
@@ -612,6 +641,7 @@ export default function EditorApp({
                         const measuredWidth = firstEl?.getBoundingClientRect().width || doc.documentElement.scrollWidth;
                         if (measuredWidth) setContentWidth(Math.ceil(measuredWidth));
                         setPreviewHeight(doc.documentElement.scrollHeight);
+                        setMeasuredMarkers(measurePageMarkers(doc));
                       };
                       measure();
 
