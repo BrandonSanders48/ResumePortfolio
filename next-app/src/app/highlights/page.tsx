@@ -6,6 +6,7 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import CompactHero from "@/components/CompactHero";
 import { technicalHighlights } from "@/lib/content";
+import TechnicalHighlightsList from "@/components/TechnicalHighlightsList";
 
 export const metadata: Metadata = {
   title: "Professional Highlights",
@@ -220,20 +221,10 @@ export default function HighlightsPage() {
             <SectionHeading number="03" eyebrow="The details" light>
               Technical Highlights
             </SectionHeading>
-            <p className="text-white/55 text-sm mb-6">A quick scan of infrastructure, security, and operational wins across my roles.</p>
-            <ul className="grid md:grid-cols-2 gap-3">
-              {technicalHighlights.map((item) => (
-                <li
-                  key={item}
-                  className="relative pl-12 pr-3.5 py-3.5 rounded-xl border border-white/12 bg-white/[0.04] text-white/80 text-sm leading-relaxed hover:border-accent/40 hover:bg-white/[0.06] transition-colors"
-                >
-                  <span className="absolute left-3.5 top-3.5 w-5 h-5 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-[0.65rem] text-white/70">
-                    ✓
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <TechnicalHighlightsList
+              items={technicalHighlights}
+              intro="A quick scan of infrastructure, security, and operational wins across my roles."
+            />
             <p className="text-white/55 text-sm italic mt-6">
               This is not an exhaustive list; it highlights some key achievements in IT infrastructure and security.
             </p>

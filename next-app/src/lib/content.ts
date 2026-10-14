@@ -1,93 +1,363 @@
-export const technicalHighlights: string[] = [
-  "Successfully deployed new Layer 2 switches across multiple networking closets, optimizing performance and stability.",
-  "Led a complete cabling initiative, introducing color-coded patching for improved organization and efficiency.",
-  "Designed and implemented a solution to integrate a modern phone system with existing infrastructure.",
-  "Identified gaps in the core network design and led the implementation of new core switches to resolve them.",
-  "Established firewall protections for disaster recovery environments, addressing a previously overlooked security requirement.",
-  "Advocated for the deployment of additional firewalls and redundant cores to strengthen resilience.",
-  "Reconfigured legacy equipment for redundancy, maximizing use of existing resources.",
-  "Resolved access point wiring and channel overlap issues to improve wireless reliability.",
-  "Configured trunking and VLAN routing for access points to enhance segmentation.",
-  "Identified and remediated firewall vulnerabilities, refining rulesets for efficiency.",
-  "Installed new security cameras with custom-designed mounts for optimized placement.",
-  "Standardized Wi-Fi SSIDs and credentials across all sites for ease of use.",
-  "Implemented a secure BYOD wireless solution.",
-  "Upgraded end-of-life virtual machines and addressed networking issues inherited from older setups.",
-  "Deployed advanced DNS and network detection tools for stronger defense.",
-  "Upgraded the ticketing system for improved security, reliability, and user experience.",
-  "Streamlined VPN configuration with DDNS and simplified setup.",
-  "Maintained thorough, up-to-date documentation for system operations.",
-  "Replaced legacy remote devices with modern site-to-site VPN connections.",
-  "Proposed and implemented solutions to resolve internet reliability issues in remote facilities.",
-  "Overhauled conference room networking to increase reliability and security.",
-  "Designed a dedicated VLAN for isolating compromised or internet-only devices.",
-  "Ensured proactive patching and version updates across infrastructure.",
-  "Developed a flexible phone VLAN solution allowing computers and phones to share wall ports securely.",
-  "Expanded VLANs to accommodate network growth.",
-  "Automated printer deployment using Active Directory group policies.",
-  "Resolved IP conflicts and optimized address management.",
-  "Recommended and executed a successful migration to a new primary ISP.",
-  "Established redundant DHCP servers for improved availability.",
-  "Resolved fax and VoIP issues with appliance reconfiguration.",
-  "Created a vendor Wi-Fi login system with rotating credentials for security.",
-  "Resolved domain-related bugs in Windows 11 deployments.",
-  "Configured multicast routing with rendezvous points for efficient data delivery.",
-  "Upgraded critical network links to fiber to prevent electrical interference.",
-  "Assisted in implementing and configuring a modern enterprise phone system.",
-  "Developed website updates that reduced operating costs.",
-  "Enhanced security by hardening Active Directory authentication methods.",
-  "Redesigned and streamlined the IT helpdesk system.",
-  "Deployed firewall solutions with cellular backup for business continuity.",
-  "Established a secure VPN infrastructure for external connectivity.",
-  "Restricted excessive computer joins to the domain, tightening security controls.",
-  "Developed IT security policies and procedures for ongoing governance.",
-  "Resolved SIP and routing issues with carrier equipment for seamless VoIP and faxing.",
-  "Implemented encryption solutions for portable storage media.",
-  "Enhanced ticketing system automation to process email replies efficiently.",
-  "Enabled DNS logging for network-wide monitoring.",
-  "Upgraded client machines to Windows 11 with full encryption support.",
-  "Added new VLANs to virtualization environments for improved segmentation.",
-  "Integrated MFA solutions at network entry points and VPN gateways.",
-  "Resolved legacy Active Directory misconfigurations related to account permissions.",
-  "Implemented domain-wide remote assistance for administrators.",
-  "Addressed deprovisioning gaps with third-party accounts.",
-  "Integrated security certificates into group policies for HTTPS inspection.",
-  "Established a central group policy store for consistency.",
-  "Configured syslog forwarding for centralized monitoring.",
-  "Transitioned ticketing system to new hosting with SSL support.",
-  "Enabled user self-service portals in security platforms to reduce IT overhead.",
-  "Integrated identity management platforms with single sign-on.",
-  "Deployed encrypted configuration backups for critical systems.",
-  "Standardized DNS naming conventions to streamline certificate deployment.",
-  "Implemented UPS monitoring and alerting across primary and DR environments.",
-  "Established an MDM solution for managing mobile devices using existing infrastructure.",
-  "Introduced ISP redundancy with automatic failover for critical services.",
-  "Developed a custom tool for Wi-Fi vendor account management with alerting and remote access features.",
-  "Optimized server drive layouts for better performance.",
-  "Negotiated savings on enterprise software renewals.",
-  "Deployed secure and modernized sign-on solutions for cloud services.",
-  "Integrated hybrid identity for seamless authentication between cloud and on-premises systems.",
-  "Deployed password management solutions for local accounts.",
-  "Restricted unauthorized device joins in the cloud directory.",
-  "Improved synchronization tools between cloud and on-premises directories.",
-  "Advocated for organization-wide MFA adoption.",
-  "Modernized legacy systems by building secure web redirection portals.",
-  "Optimized licensing, saving thousands annually.",
-  "Upgraded virtualization and Windows Server environments.",
-  "Strengthened SMB protocol security across file servers.",
-  "Upgraded network adapters for higher throughput.",
-  "Implemented secure digital signage on segmented networks.",
-  "Enhanced email security by updating policies (SPF, DKIM, DMARC).",
-  "Strengthened encryption protocols across directory controllers.",
-  "Rotated sensitive account credentials to close long-standing gaps.",
-  "Integrated phishing defense and user-awareness platforms.",
-  "Transitioned patch management from legacy WSUS to a modern RMM solution.",
-  "Automated OS deployment for new workstations.",
-  "Deployed centralized MDM/RMM for monitoring and policy enforcement.",
-  "Redesigned VPN solution with SSO integration.",
-  "Deployed read-only domain controllers at remote sites.",
-  "Adopted modern conditional access policies to enforce location-based security.",
-  "Implemented advanced vulnerability scanning and remediation for domain environments.",
+/** Each highlight in two wordings; the highlights page toggles between them. */
+export type TechnicalHighlight = { technical: string; plain: string };
+
+export const technicalHighlights: TechnicalHighlight[] = [
+  {
+    technical: "Successfully deployed new Layer 2 switches across multiple networking closets, optimizing performance and stability.",
+    plain: "Installed new network switches in several equipment rooms, making the network faster and more stable.",
+  },
+  {
+    technical: "Led a complete cabling initiative, introducing color-coded patching for improved organization and efficiency.",
+    plain: "Led a full re-cabling project with color-coded cables, making the network easier to manage and troubleshoot.",
+  },
+  {
+    technical: "Designed and implemented a solution to integrate a modern phone system with existing infrastructure.",
+    plain: "Designed a way for a new phone system to work with the organization's existing equipment.",
+  },
+  {
+    technical: "Identified gaps in the core network design and led the implementation of new core switches to resolve them.",
+    plain: "Found weak points in the network's central design and replaced the core equipment to fix them.",
+  },
+  {
+    technical: "Established firewall protections for disaster recovery environments, addressing a previously overlooked security requirement.",
+    plain: "Added firewall protection to the backup (disaster recovery) systems, which had been overlooked.",
+  },
+  {
+    technical: "Advocated for the deployment of additional firewalls and redundant cores to strengthen resilience.",
+    plain: "Made the case for extra firewalls and backup network hardware so the network stays up if something fails.",
+  },
+  {
+    technical: "Reconfigured legacy equipment for redundancy, maximizing use of existing resources.",
+    plain: "Reused older equipment as backups, getting more value out of what the organization already owned.",
+  },
+  {
+    technical: "Resolved access point wiring and channel overlap issues to improve wireless reliability.",
+    plain: "Fixed Wi-Fi wiring and interference problems so wireless works more reliably.",
+  },
+  {
+    technical: "Configured trunking and VLAN routing for access points to enhance segmentation.",
+    plain: "Set up the Wi-Fi network so different kinds of traffic stay separated for better security.",
+  },
+  {
+    technical: "Identified and remediated firewall vulnerabilities, refining rulesets for efficiency.",
+    plain: "Found and fixed security gaps in firewall settings, and cleaned up the rules.",
+  },
+  {
+    technical: "Installed new security cameras with custom-designed mounts for optimized placement.",
+    plain: "Installed new security cameras, including custom mounts for the best viewing angles.",
+  },
+  {
+    technical: "Standardized Wi-Fi SSIDs and credentials across all sites for ease of use.",
+    plain: "Made Wi-Fi names and passwords the same at every location so staff can connect easily anywhere.",
+  },
+  {
+    technical: "Implemented a secure BYOD wireless solution.",
+    plain: "Set up secure Wi-Fi for staff's personal devices.",
+  },
+  {
+    technical: "Upgraded end-of-life virtual machines and addressed networking issues inherited from older setups.",
+    plain: "Replaced outdated virtual servers and fixed network problems left over from older setups.",
+  },
+  {
+    technical: "Deployed advanced DNS and network detection tools for stronger defense.",
+    plain: "Added tools that spot suspicious network activity for stronger defense.",
+  },
+  {
+    technical: "Upgraded the ticketing system for improved security, reliability, and user experience.",
+    plain: "Upgraded the IT help desk ticketing system to be more secure, reliable, and easier to use.",
+  },
+  {
+    technical: "Streamlined VPN configuration with DDNS and simplified setup.",
+    plain: "Made remote access (VPN) simpler to set up and more dependable.",
+  },
+  {
+    technical: "Maintained thorough, up-to-date documentation for system operations.",
+    plain: "Kept clear, up-to-date documentation of how systems work and are run.",
+  },
+  {
+    technical: "Replaced legacy remote devices with modern site-to-site VPN connections.",
+    plain: "Replaced outdated remote-office equipment with modern, secure connections between sites.",
+  },
+  {
+    technical: "Proposed and implemented solutions to resolve internet reliability issues in remote facilities.",
+    plain: "Fixed unreliable internet at remote locations.",
+  },
+  {
+    technical: "Overhauled conference room networking to increase reliability and security.",
+    plain: "Rebuilt the conference room network to be more reliable and secure.",
+  },
+  {
+    technical: "Designed a dedicated VLAN for isolating compromised or internet-only devices.",
+    plain: "Created an isolated network area for infected devices, or devices that only need internet access, so they can't reach anything important.",
+  },
+  {
+    technical: "Ensured proactive patching and version updates across infrastructure.",
+    plain: "Kept systems up to date with security patches before problems arose.",
+  },
+  {
+    technical: "Developed a flexible phone VLAN solution allowing computers and phones to share wall ports securely.",
+    plain: "Let computers and desk phones safely share the same wall jacks.",
+  },
+  {
+    technical: "Expanded VLANs to accommodate network growth.",
+    plain: "Expanded the network's structure to support growth.",
+  },
+  {
+    technical: "Automated printer deployment using Active Directory group policies.",
+    plain: "Automated printer setup so staff get the right printers without IT installing them by hand.",
+  },
+  {
+    technical: "Resolved IP conflicts and optimized address management.",
+    plain: "Fixed network address conflicts and organized how devices get their addresses.",
+  },
+  {
+    technical: "Recommended and executed a successful migration to a new primary ISP.",
+    plain: "Recommended and carried out a successful switch to a new primary internet provider.",
+  },
+  {
+    technical: "Established redundant DHCP servers for improved availability.",
+    plain: "Added backup servers so devices can still connect to the network if one goes down.",
+  },
+  {
+    technical: "Resolved fax and VoIP issues with appliance reconfiguration.",
+    plain: "Fixed fax and internet-phone problems by reconfiguring the equipment.",
+  },
+  {
+    technical: "Created a vendor Wi-Fi login system with rotating credentials for security.",
+    plain: "Created a vendor Wi-Fi login system with regularly changing passwords for security.",
+  },
+  {
+    technical: "Resolved domain-related bugs in Windows 11 deployments.",
+    plain: "Fixed bugs affecting new Windows 11 computers on the company network.",
+  },
+  {
+    technical: "Configured multicast routing with rendezvous points for efficient data delivery.",
+    plain: "Configured the network to send the same data to many devices at once more efficiently.",
+  },
+  {
+    technical: "Upgraded critical network links to fiber to prevent electrical interference.",
+    plain: "Upgraded key network connections to fiber-optic cable to avoid electrical interference.",
+  },
+  {
+    technical: "Assisted in implementing and configuring a modern enterprise phone system.",
+    plain: "Helped set up and configure a modern business phone system.",
+  },
+  {
+    technical: "Developed website updates that reduced operating costs.",
+    plain: "Updated the website in ways that lowered operating costs.",
+  },
+  {
+    technical: "Enhanced security by hardening Active Directory authentication methods.",
+    plain: "Strengthened how staff sign in to company systems, making accounts harder to break into.",
+  },
+  {
+    technical: "Redesigned and streamlined the IT helpdesk system.",
+    plain: "Redesigned and simplified the IT help desk.",
+  },
+  {
+    technical: "Deployed firewall solutions with cellular backup for business continuity.",
+    plain: "Set up firewalls with a cellular backup connection so the business stays online if the main internet goes down.",
+  },
+  {
+    technical: "Established a secure VPN infrastructure for external connectivity.",
+    plain: "Built secure remote access for connecting from outside the office.",
+  },
+  {
+    technical: "Restricted excessive computer joins to the domain, tightening security controls.",
+    plain: "Limited who can add computers to the company network, tightening security.",
+  },
+  {
+    technical: "Developed IT security policies and procedures for ongoing governance.",
+    plain: "Wrote IT security policies and procedures to guide ongoing governance.",
+  },
+  {
+    technical: "Resolved SIP and routing issues with carrier equipment for seamless VoIP and faxing.",
+    plain: "Fixed issues with the phone carrier's equipment so internet phones and faxing work smoothly.",
+  },
+  {
+    technical: "Implemented encryption solutions for portable storage media.",
+    plain: "Added encryption for USB drives and other portable storage, so a lost device doesn't expose data.",
+  },
+  {
+    technical: "Enhanced ticketing system automation to process email replies efficiently.",
+    plain: "Automated the help desk so email replies are added to tickets automatically.",
+  },
+  {
+    technical: "Enabled DNS logging for network-wide monitoring.",
+    plain: "Turned on logging of website lookups so suspicious activity can be monitored across the network.",
+  },
+  {
+    technical: "Upgraded client machines to Windows 11 with full encryption support.",
+    plain: "Upgraded staff computers to Windows 11 with full drive encryption.",
+  },
+  {
+    technical: "Added new VLANs to virtualization environments for improved segmentation.",
+    plain: "Added separate network zones for virtual servers to improve security.",
+  },
+  {
+    technical: "Integrated MFA solutions at network entry points and VPN gateways.",
+    plain: "Required multi-factor authentication (a second login step) for network and remote access.",
+  },
+  {
+    technical: "Resolved legacy Active Directory misconfigurations related to account permissions.",
+    plain: "Fixed long-standing account permission problems in the company directory.",
+  },
+  {
+    technical: "Implemented domain-wide remote assistance for administrators.",
+    plain: "Set up company-wide remote support so IT can help staff without being on-site.",
+  },
+  {
+    technical: "Addressed deprovisioning gaps with third-party accounts.",
+    plain: "Closed gaps where outside vendors' accounts weren't removed when no longer needed.",
+  },
+  {
+    technical: "Integrated security certificates into group policies for HTTPS inspection.",
+    plain: "Rolled out security certificates so encrypted web traffic can be inspected for threats.",
+  },
+  {
+    technical: "Established a central group policy store for consistency.",
+    plain: "Created one central place for managing computer settings so they stay consistent.",
+  },
+  {
+    technical: "Configured syslog forwarding for centralized monitoring.",
+    plain: "Sent system logs to one central place for easier monitoring.",
+  },
+  {
+    technical: "Transitioned ticketing system to new hosting with SSL support.",
+    plain: "Moved the help desk system to new hosting with encrypted (HTTPS) connections.",
+  },
+  {
+    technical: "Enabled user self-service portals in security platforms to reduce IT overhead.",
+    plain: "Let users handle some security tasks themselves, freeing up IT time.",
+  },
+  {
+    technical: "Integrated identity management platforms with single sign-on.",
+    plain: "Connected identity systems to single sign-on, so staff log in once to reach many apps.",
+  },
+  {
+    technical: "Deployed encrypted configuration backups for critical systems.",
+    plain: "Set up encrypted backups of critical system settings.",
+  },
+  {
+    technical: "Standardized DNS naming conventions to streamline certificate deployment.",
+    plain: "Standardized system naming to make security certificates easier to manage.",
+  },
+  {
+    technical: "Implemented UPS monitoring and alerting across primary and DR environments.",
+    plain: "Set up monitoring and alerts for battery backup (UPS) units at the main and disaster recovery sites.",
+  },
+  {
+    technical: "Established an MDM solution for managing mobile devices using existing infrastructure.",
+    plain: "Set up management for company mobile devices using existing tools.",
+  },
+  {
+    technical: "Introduced ISP redundancy with automatic failover for critical services.",
+    plain: "Added a backup internet connection that takes over automatically for critical services.",
+  },
+  {
+    technical: "Developed a custom tool for Wi-Fi vendor account management with alerting and remote access features.",
+    plain: "Built a custom tool to manage vendor Wi-Fi accounts, with alerts and remote access.",
+  },
+  {
+    technical: "Optimized server drive layouts for better performance.",
+    plain: "Reorganized server storage for better performance.",
+  },
+  {
+    technical: "Negotiated savings on enterprise software renewals.",
+    plain: "Negotiated savings on business software renewals.",
+  },
+  {
+    technical: "Deployed secure and modernized sign-on solutions for cloud services.",
+    plain: "Rolled out modern, secure sign-in for cloud services.",
+  },
+  {
+    technical: "Integrated hybrid identity for seamless authentication between cloud and on-premises systems.",
+    plain: "Linked cloud and on-site accounts so staff use one login everywhere.",
+  },
+  {
+    technical: "Deployed password management solutions for local accounts.",
+    plain: "Set up secure password management for local computer accounts.",
+  },
+  {
+    technical: "Restricted unauthorized device joins in the cloud directory.",
+    plain: "Blocked unauthorized devices from joining the company's cloud directory.",
+  },
+  {
+    technical: "Improved synchronization tools between cloud and on-premises directories.",
+    plain: "Improved how accounts sync between cloud and on-site systems.",
+  },
+  {
+    technical: "Advocated for organization-wide MFA adoption.",
+    plain: "Championed multi-factor authentication for the whole organization.",
+  },
+  {
+    technical: "Modernized legacy systems by building secure web redirection portals.",
+    plain: "Made older systems easier and safer to reach through secure web portals.",
+  },
+  {
+    technical: "Optimized licensing, saving thousands annually.",
+    plain: "Optimized software licensing, saving thousands of dollars a year.",
+  },
+  {
+    technical: "Upgraded virtualization and Windows Server environments.",
+    plain: "Upgraded server and virtualization systems.",
+  },
+  {
+    technical: "Strengthened SMB protocol security across file servers.",
+    plain: "Strengthened security on shared file servers.",
+  },
+  {
+    technical: "Upgraded network adapters for higher throughput.",
+    plain: "Upgraded network cards for faster data transfer.",
+  },
+  {
+    technical: "Implemented secure digital signage on segmented networks.",
+    plain: "Set up digital signage on its own isolated network for security.",
+  },
+  {
+    technical: "Enhanced email security by updating policies (SPF, DKIM, DMARC).",
+    plain: "Improved email security settings to make spoofing and phishing harder.",
+  },
+  {
+    technical: "Strengthened encryption protocols across directory controllers.",
+    plain: "Strengthened encryption on the servers that manage logins and accounts.",
+  },
+  {
+    technical: "Rotated sensitive account credentials to close long-standing gaps.",
+    plain: "Changed passwords on sensitive accounts that hadn't been updated in a long time.",
+  },
+  {
+    technical: "Integrated phishing defense and user-awareness platforms.",
+    plain: "Added phishing protection and security awareness training for staff.",
+  },
+  {
+    technical: "Transitioned patch management from legacy WSUS to a modern RMM solution.",
+    plain: "Moved software updates from an outdated tool to a modern management platform.",
+  },
+  {
+    technical: "Automated OS deployment for new workstations.",
+    plain: "Automated setting up new computers.",
+  },
+  {
+    technical: "Deployed centralized MDM/RMM for monitoring and policy enforcement.",
+    plain: "Set up central monitoring and policy enforcement for company devices.",
+  },
+  {
+    technical: "Redesigned VPN solution with SSO integration.",
+    plain: "Redesigned remote access so staff sign in once with single sign-on.",
+  },
+  {
+    technical: "Deployed read-only domain controllers at remote sites.",
+    plain: "Set up secure, read-only login servers at remote sites.",
+  },
+  {
+    technical: "Adopted modern conditional access policies to enforce location-based security.",
+    plain: "Added sign-in rules that allow or block access based on location.",
+  },
+  {
+    technical: "Implemented advanced vulnerability scanning and remediation for domain environments.",
+    plain: "Added advanced vulnerability scanning and fixed the issues it found.",
+  },
 ];
 
 export type Project = {
