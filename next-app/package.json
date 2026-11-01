@@ -17,7 +17,7 @@
     "@uiw/react-codemirror": "^4.25.11",
     "bcryptjs": "^3.0.3",
     "next": "^16.4.1",
-    "nodemailer": "^10.0.10",
+    "nodemailer": "^10.1.4",
     "pdf-lib": "^1.17.1",
     "puppeteer": "^25.11.0",
     "react": "19.2.8",
