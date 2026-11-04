@@ -24,6 +24,7 @@ import {
   faFileZipper,
 } from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc, HistoryEntry } from "@/lib/editor-docs";
+import AiTextEditor from "./AiTextEditor";
 
 // Docs whose PDF export corresponds to a file actually linked from the live
 // site, and the /files/ filename each one should publish as.
@@ -518,6 +519,7 @@ export default function EditorApp({
                 </button>
               </div>
             </div>
+            <AiTextEditor key={activeDoc} content={content} onApply={setContent} />
             <div className="h-[50vh] lg:h-[75vh] min-h-[320px] rounded-xl border border-line overflow-hidden min-w-0">
               <CodeMirror
                 value={content}

@@ -22,7 +22,7 @@ import { getCredlyBadgeCount } from "@/lib/credly";
 const metrics = [
   { value: "5+", label: "Years IT Leadership" },
   { value: "3", label: "Organizations Secured" },
-  { value: "HIPAA", label: "& SOC 2 Compliance" },
+  { value: "HIPAA", label: "& SOC 2 Experience" },
   { value: "3", label: "Governance Committees" },
   { value: "CISSP", label: "Certified · CISM Pursuing" },
 ];
@@ -126,7 +126,7 @@ export default async function Home() {
 
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
                 <span className="pill">Salina, KS</span>
-                <span className="pill pill-accent">IT Manager / CTO Track</span>
+                <span className="pill pill-accent">IT Leadership &amp; Security Strategy</span>
                 <a href="https://www.credly.com/badges/3c84ffd0-0c4d-4551-bc52-2309e51f0597" target="_blank" rel="noopener noreferrer">
                   <span className="pill">(ISC)² CISSP</span>
                 </a>
@@ -200,7 +200,7 @@ export default async function Home() {
               <p className="text-ink/70 leading-relaxed mb-4">
                 I&apos;m an IT and cybersecurity leader with a track record of building secure, compliant, and resilient technology environments
                 across healthcare and nonprofit organizations. I bridge technical depth with strategic oversight, translating organizational risk
-                into policy, leading cross-functional security committees, and driving initiatives that align IT operations with business goals
+                into policy, serving on cross-functional security committees, and driving initiatives that align IT operations with business goals
                 and regulatory requirements.
               </p>
               <p className="text-ink/70 leading-relaxed mb-4">
