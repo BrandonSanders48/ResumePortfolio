@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { readEditorAiResponse } from "@/lib/editor-ai-response";
 
 type Target = { jobName: string; companyName: string };
 type Proposal = { original: string; originalTarget: string; content: string; edits: { before: string; after: string }[]; target: Target | null };
@@ -31,22 +32,22 @@ export default function AiTextEditor({ content, target, onApply, onTargetChange,
     try {
       const response = await fetch("/api/editor/ai", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         signal: controller.current.signal,
         body: JSON.stringify({ content: original, instruction: request, target }),
       });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "AI editing failed.");
+      const result = await readEditorAiResponse(response);
       if (result.question) {
-        setConversation(`${request}\nAI: ${result.question}`);
-        setQuestion(result.question);
+        const followUp = result.question;
+        setConversation(`${request}\nAI: ${followUp}`);
+        setQuestion(followUp);
         setInstruction("");
-        setMessages((previous) => [...previous, { role: "assistant", text: result.question }]);
+        setMessages((previous) => [...previous, { role: "assistant", text: followUp }]);
       } else {
         setQuestion("");
         setConversation("");
         if (!result.edits.length && !result.target) setMessage("No text changes suggested. Try a more specific request.");
-        else setProposal({ original, originalTarget, content: result.content, edits: result.edits, target: result.target });
+        else setProposal({ original, originalTarget, content: result.content!, edits: result.edits, target: result.target ?? null });
       }
     } catch (error) {
       if (!controller.current?.signal.aborted) setMessage(error instanceof Error ? error.message : "AI editing failed.");
