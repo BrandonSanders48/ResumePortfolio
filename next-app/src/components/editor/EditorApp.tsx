@@ -10,7 +10,6 @@ import {
   faFilePdf,
   faFileImage,
   faRightFromBracket,
-  faCloudArrowUp,
   faMagnifyingGlassPlus,
   faMagnifyingGlassMinus,
   faArrowUpRightFromSquare,
@@ -21,12 +20,11 @@ import {
   faClockRotateLeft,
   faTextWidth,
   faRulerHorizontal,
-  faFileZipper,
-  faSliders,
   faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc, HistoryEntry } from "@/lib/editor-docs";
 import AiTextEditor from "./AiTextEditor";
+import ExportSettings from "./ExportSettings";
 
 // Docs whose PDF export corresponds to a file actually linked from the live
 // site, and the /files/ filename each one should publish as.
@@ -693,130 +691,13 @@ export default function EditorApp({
           </div>
         </div>
 
-        {/* Export */}
-        <div className="bg-white rounded-2xl border border-line overflow-hidden mt-4">
-          <button onClick={() => setExportOpen((open) => !open)} aria-expanded={exportOpen} aria-controls="export-settings" className="w-full px-5 py-4 min-h-14 flex items-center justify-between text-left gap-3">
-            <span className="flex items-center gap-3 text-sm font-medium"><FontAwesomeIcon icon={faSliders} className="text-accent" /> Export settings <span className="hidden sm:inline text-xs font-normal text-ink/55">{isBanner ? exportFormat.toUpperCase() : exportMode === "both" ? "Combined PDF" : "PDF"}</span></span>
-            <span className="text-xs text-ink/60">{exportOpen ? "Hide −" : "Customize +"}</span>
-          </button>
-          <div id="export-settings" hidden={!exportOpen}>
-          <div className="px-5 pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
-            {isBanner && (
-              <div className="flex items-center gap-0.5 border border-line rounded-lg p-0.5 bg-paper" role="group" aria-label="Export format">
-                <button
-                  onClick={() => setExportFormat("image")}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
-                    exportFormat === "image" ? "bg-ink text-white" : "text-ink/60 hover:text-ink"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faFileImage} className="text-[11px]" /> PNG
-                </button>
-                <button
-                  onClick={() => setExportFormat("pdf")}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
-                    exportFormat === "pdf" ? "bg-ink text-white" : "text-ink/60 hover:text-ink"
-                  }`}
-                >
-                  <FontAwesomeIcon icon={faFilePdf} className="text-[11px]" /> PDF
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="p-5">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <div className="flex flex-wrap items-end gap-3">
-                {!isBanner && (
-                  <>
-                    <div className="w-full sm:w-auto">
-                      <label htmlFor="exportMode" className="block text-sm font-medium text-ink/70 mb-1.5">
-                        Scope
-                      </label>
-                      <select
-                        id="exportMode"
-                        className="form-input w-full sm:w-auto"
-                        value={exportMode}
-                        onChange={(e) => {
-                          const mode = e.target.value as "current" | "both";
-                          setExportMode(mode);
-                          if (mode !== "current") setPublish(false);
-                        }}
-                      >
-                        <option value="current">This document</option>
-                        <option value="both">This + another</option>
-                      </select>
-                    </div>
-                    {exportMode === "both" && (
-                      <div className="w-full sm:w-auto">
-                        <label htmlFor="exportOther" className="block text-sm font-medium text-ink/70 mb-1.5">
-                          Combine with
-                        </label>
-                        <select
-                          id="exportOther"
-                          className="form-input w-full sm:w-auto"
-                          value={exportOther}
-                          onChange={(e) => setExportOther(e.target.value)}
-                        >
-                          {docList
-                            .filter((d) => d.filename !== activeDoc)
-                            .map((d) => (
-                              <option key={d.filename} value={d.filename}>
-                                {d.label}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-
-              <button onClick={handleExport} disabled={exporting} className="btn-primary justify-center w-full sm:w-auto disabled:opacity-60">
-                <FontAwesomeIcon icon={isBanner && exportFormat === "image" ? faFileImage : faFilePdf} className="text-xs" />
-                {exporting ? "Exporting…" : isBanner ? (exportFormat === "image" ? "Export PNG" : "Export PDF") : "Export PDF"}
-              </button>
-            </div>
-
-            {!isBanner && (
-              <div className="flex flex-col gap-3 mt-5 pt-4 border-t border-line">
-                <label className="flex items-center gap-2 text-sm text-ink/70">
-                  <input type="checkbox" checked={pdfAlert} onChange={(e) => setPdfAlert(e.target.checked)} />
-                  Enable PDF app alert (when configured)
-                </label>
-
-                <label className="flex items-center gap-2 text-sm text-ink/70">
-                  <input type="checkbox" checked={compress} onChange={(e) => setCompress(e.target.checked)} />
-                  <FontAwesomeIcon icon={faFileZipper} className="text-xs text-accent" />
-                  Compress images (much smaller file, slightly softer photo)
-                </label>
-
-                {exportMode === "current" && PUBLISH_TARGETS[activeDoc] && (
-                  <label className="flex items-center gap-2 text-sm text-ink/70">
-                    <input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} />
-                    <FontAwesomeIcon icon={faCloudArrowUp} className="text-xs text-accent" />
-                    Also publish this export as the live{" "}
-                    <code className="text-xs bg-paper px-1 py-0.5 rounded">/files/{PUBLISH_TARGETS[activeDoc]}</code> download
-                  </label>
-                )}
-              </div>
-            )}
-
-            {isBanner && exportFormat === "image" && (
-              <p className="text-xs text-ink/65 mt-4">
-                PNG is recommended here: the banner is flat colors and sharp text/logo edges, exactly what JPEG&apos;s lossy compression
-                smudges. PNG stays pixel-perfect at a full 1584&times;396.
-              </p>
-            )}
-
-            {isDirty && (
-              <p className="text-xs text-amber-600 flex items-center gap-1 mt-3">
-                <FontAwesomeIcon icon={faCircleExclamation} className="text-[11px]" />
-                Unsaved edits export too, but won&apos;t be on disk until you Save.
-              </p>
-            )}
-          </div>
-          </div>
-        </div>
+        <ExportSettings open={exportOpen} onToggle={() => setExportOpen((open) => !open)}
+          isBanner={isBanner} format={exportFormat} onFormatChange={setExportFormat}
+          mode={exportMode} onModeChange={(mode) => { setExportMode(mode); if (mode !== "current") setPublish(false); }}
+          otherDoc={exportOther} onOtherDocChange={setExportOther} otherDocs={docList.filter((doc) => doc.filename !== activeDoc)}
+          pdfAlert={pdfAlert} onPdfAlertChange={setPdfAlert} compress={compress} onCompressChange={setCompress}
+          publish={publish} onPublishChange={setPublish} publishTarget={PUBLISH_TARGETS[activeDoc]}
+          dirty={isDirty} exporting={exporting || switching} onExport={handleExport} />
       </div>
 
       {historyOpen && (
