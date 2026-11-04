@@ -1,11 +1,13 @@
 # ---- deps: install dependencies once, cached separately from source ----
-FROM node:20-bookworm-slim AS deps
+FROM node:24-bookworm-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
+# Runtime uses system Chromium; do not download a second browser during npm ci.
+ENV PUPPETEER_SKIP_DOWNLOAD=1
 RUN npm ci
 
 # ---- builder: production build with standalone output ----
-FROM node:20-bookworm-slim AS builder
+FROM node:24-bookworm-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -13,7 +15,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # ---- runner: minimal image with system Chromium for Puppeteer PDF export ----
-FROM node:20-bookworm-slim AS runner
+FROM node:24-bookworm-slim AS runner
 WORKDIR /app
 
 # Chromium + the libraries it needs at runtime (same set as the PHP site's
