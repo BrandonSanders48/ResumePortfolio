@@ -22,6 +22,8 @@ import {
   faTextWidth,
   faRulerHorizontal,
   faFileZipper,
+  faSliders,
+  faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import type { EditorDoc, HistoryEntry } from "@/lib/editor-docs";
 import AiTextEditor from "./AiTextEditor";
@@ -120,6 +122,9 @@ export default function EditorApp({
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [switching, setSwitching] = useState(false);
+  const [mobileView, setMobileView] = useState<"chat" | "preview" | "source">("chat");
+  const [documentView, setDocumentView] = useState<"preview" | "source">("preview");
+  const [exportOpen, setExportOpen] = useState(false);
 
   const [jobName, setJobName] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -170,7 +175,7 @@ export default function EditorApp({
 
   const recomputeFit = useCallback(() => {
     const container = previewContainerRef.current;
-    if (!container || !effectiveContentWidth) return;
+    if (!container || !effectiveContentWidth || !container.clientWidth) return;
     const available = container.clientWidth - 4; // small breathing room
     const fit = Math.min(1.5, Math.max(0.15, available / effectiveContentWidth));
     setZoom(+fit.toFixed(3));
@@ -189,8 +194,9 @@ export default function EditorApp({
     function onResize() {
       if (autoFit) recomputeFit();
     }
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    const observer = new ResizeObserver(onResize);
+    if (previewContainerRef.current) observer.observe(previewContainerRef.current);
+    return () => observer.disconnect();
   }, [autoFit, recomputeFit]);
 
   // Switching documents resets to fit-to-width, since a manually-picked zoom
@@ -443,7 +449,7 @@ export default function EditorApp({
   }, [wordWrap]);
 
   return (
-    <div className="bg-paper min-h-[80vh] py-8 overflow-x-hidden">
+    <div className="bg-paper min-h-[80vh] py-5 sm:py-8 overflow-x-hidden">
       {/* Toasts */}
       <div className="fixed top-20 right-4 z-[60] flex flex-col gap-2 w-[calc(100%-2rem)] max-w-sm">
         {toasts.map((t) => (
@@ -465,19 +471,23 @@ export default function EditorApp({
         ))}
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
           <div>
-            <h1 className="font-serif text-2xl text-ink">Resume Editor</h1>
-            <p className="text-ink/65 text-sm">Edit the raw HTML, preview it live, then save or export a PDF.</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] font-semibold text-accent mb-1">Your next opportunity</p>
+            <h1 className="font-serif text-3xl text-ink">Resume workspace</h1>
+            <p className="text-ink/65 text-sm mt-1">Make it yours. Ask, refine, and review.</p>
           </div>
-          <button onClick={handleLogout} className="btn-outline">
-            <FontAwesomeIcon icon={faRightFromBracket} className="text-xs" /> Logout
-          </button>
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <button onClick={openHistory} className="btn-outline min-h-11" title="Version history"><FontAwesomeIcon icon={faClockRotateLeft} /> <span className="hidden sm:inline">History</span></button>
+            <button onClick={handleSave} disabled={saving || switching} className="btn-outline min-h-11 disabled:opacity-60"><FontAwesomeIcon icon={faFloppyDisk} /> {saving ? "Saving…" : "Save"}</button>
+            <button onClick={handleExport} disabled={exporting || switching} className="btn-primary min-h-11 flex-1 sm:flex-none justify-center disabled:opacity-60"><FontAwesomeIcon icon={isBanner && exportFormat === "image" ? faFileImage : faFilePdf} /> {exporting ? "Exporting…" : isBanner && exportFormat === "image" ? "Download PNG" : "Download PDF"}</button>
+            <button onClick={handleLogout} className="btn-outline min-h-11" aria-label="Log out" title="Log out"><FontAwesomeIcon icon={faRightFromBracket} /></button>
+          </div>
         </div>
 
         {/* Doc tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 mb-4 border-b border-line pb-3">
+        <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-line pb-4">
           {docList.map((d) => {
             const isActive = d.filename === activeDoc;
             return (
@@ -485,7 +495,8 @@ export default function EditorApp({
                 key={d.filename}
                 onClick={() => switchDoc(d.filename)}
                 disabled={switching}
-                className={`relative px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors disabled:opacity-60 ${
+                aria-pressed={isActive}
+                className={`relative px-3.5 min-h-11 rounded-xl text-sm font-medium transition-colors disabled:opacity-60 ${
                   isActive ? "bg-ink text-white" : "bg-white text-ink/60 hover:text-ink border border-line"
                 }`}
               >
@@ -496,15 +507,35 @@ export default function EditorApp({
               </button>
             );
           })}
-          <span className="ml-auto flex items-center gap-1.5 text-xs text-ink/65">
+          <span className="w-full sm:w-auto sm:ml-auto flex items-center gap-1.5 text-xs text-ink/65" role="status">
             <FontAwesomeIcon icon={faClock} className="text-[10px]" />
             {isDirty ? "Unsaved changes" : `Saved ${formatRelativeTime(activeDocMeta?.updatedAt ?? null)}`}
           </span>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 min-w-0">
+        <div className="grid grid-cols-3 gap-1 rounded-xl bg-white border border-line p-1 mb-4 lg:hidden" role="group" aria-label="Workspace view">
+          {(["chat", "preview", "source"] as const).map((view) => <button key={view} aria-pressed={mobileView === view}
+            onClick={() => { setMobileView(view); if (view !== "chat") setDocumentView(view); }}
+            className={`min-h-11 rounded-lg text-sm font-medium capitalize ${mobileView === view ? "bg-ink text-white" : "text-ink/65"}`}>{view}</button>)}
+        </div>
+
+        <div className="grid lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[380px_minmax(0,1fr)] gap-4 xl:gap-6 min-w-0 items-start">
+          <aside aria-label="AI assistant" className={`${mobileView === "chat" ? "block" : "hidden"} lg:block bg-white rounded-2xl border border-line overflow-hidden min-w-0`}>
+            <div className="px-5 py-4 border-b border-line flex items-center gap-3">
+              <span className="w-9 h-9 rounded-xl bg-accent/10 text-accent flex items-center justify-center"><FontAwesomeIcon icon={faWandMagicSparkles} /></span>
+              <div><h2 className="font-semibold text-ink text-sm">Writing assistant</h2><p className="text-xs text-ink/60">A stronger story, in your words.</p></div>
+            </div>
+            <AiTextEditor key={activeDoc} content={content} onApply={setContent}
+              onReview={() => { setMobileView("preview"); setDocumentView("preview"); }}
+              target={{ jobName, companyName }} onTargetChange={(target) => { setJobName(target.jobName); setCompanyName(target.companyName); }} />
+          </aside>
+          <div className={`${mobileView !== "chat" ? "block" : "hidden"} lg:block min-w-0`}>
+            <div className="hidden lg:flex gap-1 mb-3" role="group" aria-label="Document view">
+              {(["preview", "source"] as const).map((view) => <button key={view} aria-pressed={documentView === view} onClick={() => { setDocumentView(view); setMobileView(view); }}
+                className={`min-h-11 px-5 rounded-xl text-sm font-medium ${documentView === view ? "bg-white border border-line text-ink" : "text-ink/60 hover:text-ink"}`}>{view === "preview" ? "Document preview" : "Edit source"}</button>)}
+            </div>
           {/* Editor */}
-          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col min-w-0">
+          <div className={`${documentView === "source" ? "flex" : "hidden"} bg-white rounded-2xl border border-line p-3 sm:p-5 flex-col min-w-0`}>
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-semibold text-ink text-sm">HTML</h2>
               <div className="flex items-center gap-3">
@@ -519,7 +550,6 @@ export default function EditorApp({
                 </button>
               </div>
             </div>
-            <AiTextEditor key={activeDoc} content={content} onApply={setContent} />
             <div className="h-[50vh] lg:h-[75vh] min-h-[320px] rounded-xl border border-line overflow-hidden min-w-0">
               <CodeMirror
                 value={content}
@@ -539,25 +569,17 @@ export default function EditorApp({
                 }}
               />
             </div>
-            <div className="flex items-center gap-3 mt-4">
-              <button onClick={handleSave} disabled={saving} className="btn-primary justify-center disabled:opacity-60">
-                <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" /> {saving ? "Saving…" : "Save"}
-              </button>
-              <button onClick={openHistory} className="btn-outline justify-center" title="View and restore earlier saved versions">
-                <FontAwesomeIcon icon={faClockRotateLeft} className="text-xs" /> History
-              </button>
-              <span className="hidden sm:inline text-xs text-ink/65">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to export</span>
-            </div>
+            <p className="text-xs text-ink/60 mt-3">Ctrl/Cmd+S to save &middot; Ctrl/Cmd+Enter to download</p>
           </div>
 
           {/* Preview */}
-          <div className="bg-white rounded-2xl border border-line p-5 flex flex-col min-w-0">
+          <div className={`${documentView === "preview" ? "flex" : "hidden"} bg-white rounded-2xl border border-line p-3 sm:p-5 flex-col min-w-0`}>
             <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
               <h2 className="font-semibold text-ink text-sm">
                 Preview
                 {isBanner && <span className="ml-2 text-xs font-normal text-ink/65">1584 &times; 396px design, not paginated</span>}
               </h2>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {!isBanner && (
                   <button
                     onClick={() => setShowPageGuides((v) => !v)}
@@ -575,7 +597,7 @@ export default function EditorApp({
                       setAutoFit(false);
                       setZoom((z) => Math.max(0.15, +(z - 0.1).toFixed(2)));
                     }}
-                    className="px-2 py-1 text-ink/60 hover:text-ink"
+                    className="px-3 min-h-11 text-ink/60 hover:text-ink"
                     title="Zoom out"
                   >
                     <FontAwesomeIcon icon={faMagnifyingGlassMinus} className="text-[11px]" />
@@ -595,7 +617,7 @@ export default function EditorApp({
                       setAutoFit(false);
                       setZoom((z) => Math.min(1.5, +(z + 0.1).toFixed(2)));
                     }}
-                    className="px-2 py-1 text-ink/60 hover:text-ink"
+                    className="px-3 min-h-11 text-ink/60 hover:text-ink"
                     title="Zoom in"
                   >
                     <FontAwesomeIcon icon={faMagnifyingGlassPlus} className="text-[11px]" />
@@ -603,7 +625,7 @@ export default function EditorApp({
                 </div>
                 <button
                   onClick={openPreviewInNewTab}
-                  className="px-2 py-1 text-ink/60 hover:text-ink border border-line rounded-md"
+                  className="px-3 min-h-11 text-ink/60 hover:text-ink border border-line rounded-md"
                   title="Open preview in a new tab, at full size"
                 >
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[11px]" />
@@ -668,17 +690,17 @@ export default function EditorApp({
               </div>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Export */}
-        <div className="bg-white rounded-2xl border border-line overflow-hidden mt-6">
-          <div className="px-5 py-4 border-b border-line flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="font-semibold text-ink text-sm">Export</h2>
-              <p className="text-xs text-ink/65 mt-0.5">
-                {isBanner ? "Download the banner as an image, ready to upload to LinkedIn." : "Tailor it to a role, then export a PDF."}
-              </p>
-            </div>
+        <div className="bg-white rounded-2xl border border-line overflow-hidden mt-4">
+          <button onClick={() => setExportOpen((open) => !open)} aria-expanded={exportOpen} aria-controls="export-settings" className="w-full px-5 py-4 min-h-14 flex items-center justify-between text-left gap-3">
+            <span className="flex items-center gap-3 text-sm font-medium"><FontAwesomeIcon icon={faSliders} className="text-accent" /> Export settings <span className="hidden sm:inline text-xs font-normal text-ink/55">{isBanner ? exportFormat.toUpperCase() : exportMode === "both" ? "Combined PDF" : "PDF"}</span></span>
+            <span className="text-xs text-ink/60">{exportOpen ? "Hide −" : "Customize +"}</span>
+          </button>
+          <div id="export-settings" hidden={!exportOpen}>
+          <div className="px-5 pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
             {isBanner && (
               <div className="flex items-center gap-0.5 border border-line rounded-lg p-0.5 bg-paper" role="group" aria-label="Export format">
                 <button
@@ -702,42 +724,6 @@ export default function EditorApp({
           </div>
 
           <div className="p-5">
-            {!isBanner && (
-              <>
-                <div className="grid sm:grid-cols-2 gap-4 mb-5">
-                  <div>
-                    <label htmlFor="jobName" className="block text-sm font-medium text-ink/70 mb-1.5">
-                      Job title
-                    </label>
-                    <input
-                      id="jobName"
-                      type="text"
-                      className="form-input"
-                      placeholder="e.g., Senior Cybersecurity Analyst"
-                      value={jobName}
-                      onChange={(e) => setJobName(e.target.value)}
-                      maxLength={120}
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="companyName" className="block text-sm font-medium text-ink/70 mb-1.5">
-                      Company name
-                    </label>
-                    <input
-                      id="companyName"
-                      type="text"
-                      className="form-input"
-                      placeholder="e.g., Example Health"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      maxLength={120}
-                    />
-                  </div>
-                </div>
-                <div className="h-px bg-line mb-5" />
-              </>
-            )}
-
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div className="flex flex-wrap items-end gap-3">
                 {!isBanner && (
@@ -828,6 +814,7 @@ export default function EditorApp({
                 Unsaved edits export too, but won&apos;t be on disk until you Save.
               </p>
             )}
+          </div>
           </div>
         </div>
       </div>
